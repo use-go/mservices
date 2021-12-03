@@ -20,8 +20,12 @@ func Debug(ctx context.Context, action string, req, rsp interface{}) func() {
 	logger.Infof(">>>>> Received %v request %v\n%v", action, traceID, reqStr)
 	v := reflect.Indirect(reflect.ValueOf(rsp))
 	reqv := v.FieldByName("RequestId")
+	codeV := v.FieldByName("Code")
 	if reqv.CanSet() {
 		reqv.SetString(traceID)
+	}
+	if codeV.CanSet() {
+		codeV.SetInt(200)
 	}
 	return func() {
 		rspByte, _ := json.Marshal(rsp)
