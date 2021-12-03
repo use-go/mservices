@@ -9,5 +9,5 @@ make proto
 Run the service
 
 ```
-micro run .
+make up
 ```
