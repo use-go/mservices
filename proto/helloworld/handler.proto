@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package helloworld;
+
+option go_package = "./proto;helloworld";
+
+import "proto/helloworld/helloworld.proto";
+
+service HelloworldService {
+	rpc DeleteHelloworld (HelloworldFilter) returns (Helloworld) {}
+    rpc UpdateHelloworld (Helloworld) returns (Helloworld) {}
+    rpc InsertHelloworld (Helloworld) returns (Helloworld) {}
+    rpc QueryHelloworldDetail (HelloworldFilter) returns (Helloworld) {}
+    rpc QueryHelloworld (HelloworldFilter) returns (HelloworldList) {}
+}

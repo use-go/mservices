@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"name": "comm",
+			"path": "comm"
+		},
+		{
+			"name": "proto",
+			"path": "proto"
+		},
+		{
+			"name": "helloworld-service",
+			"path": "helloworld-service"
+		},
+		{
+			"name": "go-service",
+			"path": "."
+		}
+	],
+	"settings": {}
+}
