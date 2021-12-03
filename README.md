@@ -3,7 +3,7 @@
 Install micro with the following commands:
 
 ```shell
-go install github.com/2637309949/go-service/comm/micro
+git clone github.com/2637309949/go-service.git && cd go-service/comm/micro && go install
 ```
 
 #### Usage
