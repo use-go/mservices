@@ -4,22 +4,22 @@ var (
 	MainSRV = `package main
 
 import (
-	"{{.Dir}}/handler"
-	pb "{{.Dir}}/proto"
+	"comm/logger"
+	"comm/service"
 
-	"github.com/micro/micro/v3/service"
-	"github.com/micro/micro/v3/service/logger"
+	"{{.Dir}}-service/handler"
+	{{dehyphen .Alias}} "proto/{{.Dir}}"
 )
 
 func main() {
+	// Create handler
+	hdl := handler.Handler{}
+
 	// Create service
-	srv := service.New(
-		service.Name("{{lower .Alias}}"),
-		service.Version("latest"),
-	)
+	srv := service.New(service.Name("{{lower .Alias}}"))
 
 	// Register handler
-	pb.Register{{title .Alias}}Handler(srv.Server(), new(handler.{{title .Alias}}))
+	{{dehyphen .Alias}}.Register{{title .Alias}}ServiceHandler(srv.Server(), &hdl)
 
 	// Run service
 	if err := srv.Run(); err != nil {

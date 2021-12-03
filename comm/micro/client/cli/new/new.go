@@ -105,7 +105,7 @@ func create(c config) error {
 
 	// write the files
 	for _, file := range c.Files {
-		f := filepath.Join(c.Dir, file.Path)
+		f := filepath.Join(c.Dir+"-service", file.Path)
 		dir := filepath.Dir(f)
 
 		if _, err := os.Stat(dir); os.IsNotExist(err) {
@@ -192,9 +192,10 @@ func Run(ctx *cli.Context) error {
 		Files: []file{
 			{"micro.mu", tmpl.Service},
 			{"main.go", tmpl.MainSRV},
-			{"generate.go", tmpl.GenerateFile},
-			{"handler/" + dir + ".go", tmpl.HandlerSRV},
-			{"proto/" + dir + ".proto", tmpl.ProtoSRV},
+			{"handler/handler.go", tmpl.HandlerSRV},
+			{"handler/" + dir + "_handler.go", tmpl.HandlerAPISRV},
+			{"../proto/" + dir + "/" + dir + ".proto", tmpl.ProtoModelSRV},
+			{"../proto/" + dir + "/handler.proto", tmpl.ProtoServiceSRV},
 			{"Dockerfile", tmpl.DockerSRV},
 			{"Makefile", tmpl.Makefile},
 			{"README.md", tmpl.Readme},
