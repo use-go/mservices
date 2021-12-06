@@ -3,6 +3,7 @@ package service
 import (
 	"comm/trace"
 	"context"
+	"fmt"
 
 	"github.com/micro/micro/v3/service"
 	"github.com/micro/micro/v3/service/server"
@@ -11,7 +12,9 @@ import (
 var (
 	debugWrapper = service.WrapHandler(func(call server.HandlerFunc) server.HandlerFunc {
 		return func(ctx context.Context, req server.Request, rsp interface{}) error {
-			defer trace.Debug(ctx, req.Endpoint(), req.Body(), rsp)()
+			endpoint, body := req.Endpoint(), req.Body()
+			fmt.Println("------", req.Header())
+			defer trace.Debug(ctx, endpoint, body, rsp)()
 			return call(ctx, req, rsp)
 		}
 	})

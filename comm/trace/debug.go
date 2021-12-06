@@ -2,8 +2,8 @@ package trace
 
 import (
 	"comm/logger"
+	"comm/util/json"
 	"context"
-	"encoding/json"
 	"reflect"
 	"strings"
 	"time"
@@ -11,9 +11,9 @@ import (
 
 // panics if no exit `RequestId``
 func Debug(ctx context.Context, action string, req, rsp interface{}) func() {
+	traceID := ExtractTraceID(ctx)
 	startTime := time.Now()
-	traceID, _, _ := Extract(ctx)
-	reqByte, _ := json.Marshal(req)
+	reqByte := json.MustByte(req)
 	reqStr := strings.Replace(strings.Replace(string(reqByte), " ", "", -1), "\n", "", -1)
 	logger.Init(logger.WithCallerSkipCount(2))
 	defer logger.Init(logger.WithCallerSkipCount(logger.DefaultCallerSkipCount))
@@ -28,7 +28,7 @@ func Debug(ctx context.Context, action string, req, rsp interface{}) func() {
 		codeV.SetInt(200)
 	}
 	return func() {
-		rspByte, _ := json.Marshal(rsp)
+		rspByte := json.MustByte(rsp)
 		rspStr := strings.Replace(strings.Replace(string(rspByte), " ", "", -1), "\n", "", -1)
 		cost := int(time.Since(startTime) / time.Microsecond)
 		logger.Init(logger.WithCallerSkipCount(2))

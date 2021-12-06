@@ -579,6 +579,7 @@ pre {padding: 20px;}
               {{ range $endpoint := $endpoints }}
               	<div><a id="{{$endpoint.Name}}" href="#{{$endpoint.Name}}" onclick="setEndpoint(this)">&nbsp;&nbsp;{{Last $endpoint.Name}}</a></div>
               {{end}}
+			  <hr align="left" width="220" color="#ccc" size="1"/>
 	    {{end}}
     </div>
 	<div class="col-sm-4">

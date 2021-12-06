@@ -21,7 +21,7 @@ build:
 
 .PHONY: up
 up:
-	go run . server
+	go run . server --name=helloworld
 
 .PHONY: test
 test:

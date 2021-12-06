@@ -6,7 +6,10 @@ import (
 	"github.com/micro/micro/v3/service/logger"
 )
 
-var DefaultCallerSkipCount int = 2
+var (
+	DefaultCallerSkipCount int = 2
+	DefaultLogger          logger.Logger
+)
 
 func init() {
 	lvl, err := logger.GetLevel(os.Getenv("MICRO_LOG_LEVEL"))
@@ -20,7 +23,3 @@ func init() {
 func WithCallerSkipCount(c int) logger.Option {
 	return logger.WithCallerSkipCount(c)
 }
-
-var (
-	DefaultLogger logger.Logger
-)

@@ -1,4 +1,4 @@
-module github.com/2637309949/go-service/comm/micro
+module github.com/micro/micro/v3
 
 go 1.15
 

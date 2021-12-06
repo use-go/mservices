@@ -439,9 +439,12 @@ func (s *srv) serviceHandler(w http.ResponseWriter, r *http.Request) {
 	serviceMap := make(map[string][]*registry.Endpoint)
 
 	for _, service := range services {
-		if len(service.Endpoints) > 0 {
-			serviceMap[service.Name] = service.Endpoints
-			continue
+		for _, endpoint := range service.Endpoints {
+			service := strings.Split(endpoint.Name, ".")[0]
+			if _, ok := serviceMap[service]; !ok {
+				serviceMap[service] = []*registry.Endpoint{}
+			}
+			serviceMap[service] = append(serviceMap[service], endpoint)
 		}
 	}
 
