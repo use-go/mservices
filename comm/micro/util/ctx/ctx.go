@@ -20,7 +20,9 @@ import (
 	"net/textproto"
 	"strings"
 
+	"github.com/google/uuid"
 	"github.com/micro/micro/v3/service/context/metadata"
+	"github.com/micro/micro/v3/service/debug/trace"
 )
 
 func FromRequest(r *http.Request) context.Context {
@@ -39,5 +41,11 @@ func FromRequest(r *http.Request) context.Context {
 	if r.URL != nil {
 		md["URL"] = r.URL.String()
 	}
-	return metadata.NewContext(ctx, md)
+	// attach trace
+	ctx = metadata.NewContext(ctx, md)
+	if _, _, ok := trace.FromContext(ctx); !ok {
+		ctx = trace.ToContext(ctx, uuid.New().String(), uuid.New().String())
+	}
+
+	return ctx
 }

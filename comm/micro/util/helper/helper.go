@@ -10,7 +10,9 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/google/uuid"
 	"github.com/micro/micro/v3/service/context/metadata"
+	"github.com/micro/micro/v3/service/debug/trace"
 	"github.com/urfave/cli/v2"
 )
 
@@ -30,7 +32,11 @@ func RequestToContext(r *http.Request) context.Context {
 	for k, v := range r.Header {
 		md[k] = strings.Join(v, ",")
 	}
-	return metadata.NewContext(ctx, md)
+	ctx = metadata.NewContext(ctx, md)
+	if _, _, ok := trace.FromContext(ctx); !ok {
+		ctx = trace.ToContext(ctx, uuid.New().String(), uuid.New().String())
+	}
+	return ctx
 }
 
 func TLSConfig(ctx *cli.Context) (*tls.Config, error) {

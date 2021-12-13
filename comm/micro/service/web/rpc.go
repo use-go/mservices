@@ -1,8 +1,9 @@
 package web
 
 import (
+	bts "bytes"
+	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -13,6 +14,7 @@ import (
 	"github.com/micro/micro/v3/service/api/resolver/subdomain"
 	cors "github.com/micro/micro/v3/service/api/server/http"
 	"github.com/micro/micro/v3/service/client"
+	"github.com/micro/micro/v3/service/debug/trace"
 	"github.com/micro/micro/v3/service/errors"
 	"github.com/micro/micro/v3/util/helper"
 )
@@ -32,6 +34,24 @@ type rpcHandler struct {
 
 func (h *rpcHandler) String() string {
 	return "internal/rpc"
+}
+
+// see https://stackoverflow.com/questions/28595664/how-to-stop-json-marshal-from-escaping-and/28596225
+func jsonMarshal(ctx context.Context, t interface{}) ([]byte, error) {
+	buffer := &bts.Buffer{}
+	traceID, _, _ := trace.FromContext(ctx)
+	encoder := json.NewEncoder(buffer)
+	encoder.SetEscapeHTML(false)
+	err := encoder.Encode(t)
+	rsp := bts.TrimRight(buffer.Bytes(), "\n")
+	if strings.HasPrefix(string(rsp), "{") {
+		rsp = []byte(strings.Replace(
+			strings.Replace(string(rsp), "{", "{\"code\": 200,", 1),
+			"{",
+			"{\"request_id\": \""+traceID+"\",", 1),
+		)
+	}
+	return rsp, err
 }
 
 // ServeHTTP passes on a JSON or form encoded RPC request to a service.
@@ -131,7 +151,6 @@ func (h *rpcHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// create context
 	ctx := helper.RequestToContext(r)
-
 	var opts []client.CallOption
 
 	timeout, _ := strconv.Atoi(r.Header.Get("Timeout"))
@@ -155,7 +174,6 @@ func (h *rpcHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	// remote call
 	err = h.client.Call(ctx, req, &response, opts...)
-	fmt.Println("request", req.Service(), err)
 	if err != nil {
 		ce := errors.Parse(err.Error())
 		switch ce.Code {
@@ -173,7 +191,7 @@ func (h *rpcHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	b, _ := response.MarshalJSON()
+	b, _ := jsonMarshal(ctx, response)
 	w.Header().Set("Content-Length", strconv.Itoa(len(b)))
 	w.Write(b)
 }

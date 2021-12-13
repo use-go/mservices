@@ -612,7 +612,7 @@ func newRouter(opts ...router.Option) *registryRouter {
 		opts:        options,
 		rc:          cache.New(options.Registry),
 		namespaces: map[string]*namespaceEntry{
-			namespace.DefaultNamespace: &namespaceEntry{
+			namespace.DefaultNamespace: {
 				eps:  make(map[string]*api.Service),
 				ceps: make(map[string]*endpoint),
 			}},

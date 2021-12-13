@@ -19,6 +19,7 @@ package rpc
 
 import (
 	bts "bytes"
+	"context"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -28,6 +29,7 @@ import (
 	"github.com/micro/micro/v3/service/api"
 	"github.com/micro/micro/v3/service/api/handler"
 	"github.com/micro/micro/v3/service/client"
+	"github.com/micro/micro/v3/service/debug/trace"
 	"github.com/micro/micro/v3/service/errors"
 	"github.com/micro/micro/v3/service/logger"
 	"github.com/micro/micro/v3/util/codec/bytes"
@@ -72,12 +74,21 @@ func (b *buffer) Write(_ []byte) (int, error) {
 }
 
 // see https://stackoverflow.com/questions/28595664/how-to-stop-json-marshal-from-escaping-and/28596225
-func jsonMarshal(t interface{}) ([]byte, error) {
+func jsonMarshal(ctx context.Context, t interface{}) ([]byte, error) {
 	buffer := &bts.Buffer{}
+	traceID, _, _ := trace.FromContext(ctx)
 	encoder := json.NewEncoder(buffer)
 	encoder.SetEscapeHTML(false)
 	err := encoder.Encode(t)
-	return bts.TrimRight(buffer.Bytes(), "\n"), err
+	rsp := bts.TrimRight(buffer.Bytes(), "\n")
+	if strings.HasPrefix(string(rsp), "{") {
+		rsp = []byte(strings.Replace(
+			strings.Replace(string(rsp), "{", "{\"code\": 200,", 1),
+			"{",
+			"{\"request_id\": \""+traceID+"\",", 1),
+		)
+	}
+	return rsp, err
 }
 
 func (h *rpcHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -196,7 +207,7 @@ func (h *rpcHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 		// marshall response
 		// see https://play.golang.org/p/oBNxUjVTzus
-		rsp, err = jsonMarshal(response)
+		rsp, err = jsonMarshal(cx, response)
 		if err != nil {
 			writeError(w, r, err)
 			return
@@ -279,7 +290,6 @@ func writeResponse(w http.ResponseWriter, r *http.Request, rsp []byte) {
 			logger.Error(err)
 		}
 	}
-
 }
 
 func NewHandler(opts ...handler.Option) handler.Handler {
