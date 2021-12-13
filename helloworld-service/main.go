@@ -5,6 +5,8 @@ import (
 	"comm/service"
 	"helloworld-service/handler"
 	"proto/helloworld"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
