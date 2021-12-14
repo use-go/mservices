@@ -26,6 +26,7 @@ import (
 	"github.com/micro/micro/v3/service/client"
 	"github.com/micro/micro/v3/service/errors"
 	"github.com/micro/micro/v3/util/ctx"
+	"github.com/micro/micro/v3/util/encoding"
 	"github.com/micro/micro/v3/util/router"
 )
 
@@ -50,7 +51,7 @@ func (a *apiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		er := errors.InternalServerError("go.micro.api", err.Error())
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(500)
+		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(er.Error()))
 		return
 	}
@@ -66,7 +67,7 @@ func (a *apiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			er := errors.InternalServerError("go.micro.api", err.Error())
 			w.Header().Set("Content-Type", "application/json")
-			w.WriteHeader(500)
+			w.WriteHeader(http.StatusOK)
 			w.Write([]byte(er.Error()))
 			return
 		}
@@ -75,7 +76,7 @@ func (a *apiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		// we have no way of routing the request
 		er := errors.InternalServerError("go.micro.api", "no route found")
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(500)
+		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(er.Error()))
 		return
 	}
@@ -90,14 +91,8 @@ func (a *apiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	if err := c.Call(cx, req, rsp, client.WithRouter(router.New(service.Services))); err != nil {
 		w.Header().Set("Content-Type", "application/json")
-		ce := errors.Parse(err.Error())
-		switch ce.Code {
-		case 0:
-			w.WriteHeader(500)
-		default:
-			w.WriteHeader(int(ce.Code))
-		}
-		w.Write([]byte(ce.Error()))
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(err.Error()))
 		return
 	} else if rsp.StatusCode == 0 {
 		rsp.StatusCode = http.StatusOK
@@ -114,7 +109,8 @@ func (a *apiHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(int(rsp.StatusCode))
-	w.Write([]byte(rsp.Body))
+	body, _ := encoding.JSONMarshal(cx, rsp.Body)
+	w.Write(body)
 }
 
 func (a *apiHandler) String() string {

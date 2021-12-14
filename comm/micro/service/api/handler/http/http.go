@@ -18,8 +18,10 @@
 package http
 
 import (
-	"errors"
+	"bytes"
 	"fmt"
+	"io"
+	"io/ioutil"
 	"math/rand"
 	"net/http"
 	"net/http/httputil"
@@ -27,7 +29,9 @@ import (
 
 	"github.com/micro/micro/v3/service/api"
 	"github.com/micro/micro/v3/service/api/handler"
+	"github.com/micro/micro/v3/service/errors"
 	"github.com/micro/micro/v3/service/registry"
+	"github.com/micro/micro/v3/util/encoding"
 )
 
 const (
@@ -44,22 +48,41 @@ type httpHandler struct {
 func (h *httpHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	service, err := h.getService(r)
 	if err != nil {
-		w.WriteHeader(500)
+		er := errors.InternalServerError("go.micro.api", err.Error())
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(er.Error()))
 		return
 	}
 
 	if len(service) == 0 {
-		w.WriteHeader(404)
+		er := errors.InternalServerError("go.micro.api", "not found service")
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(er.Error()))
 		return
 	}
 
 	rp, err := url.Parse(service)
 	if err != nil {
-		w.WriteHeader(500)
+		er := errors.InternalServerError("go.micro.api", err.Error())
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte(er.Error()))
 		return
 	}
 
-	httputil.NewSingleHostReverseProxy(rp).ServeHTTP(w, r)
+	proxy := httputil.NewSingleHostReverseProxy(rp)
+	proxy.ModifyResponse = func(r *http.Response) error {
+		bodyBytes, err := io.ReadAll(r.Body)
+		if err != nil {
+			return err
+		}
+		bodyBytes, _ = encoding.JSONMarshal(r.Request.Context(), string(bodyBytes))
+		r.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
+		return nil
+	}
+	proxy.ServeHTTP(w, r)
 }
 
 // getService returns the service for this request from the selector
@@ -78,7 +101,7 @@ func (h *httpHandler) getService(r *http.Request) (string, error) {
 		service = s
 	} else {
 		// we have no way of routing the request
-		return "", errors.New("no route found")
+		return "", errors.InternalServerError("go.micro.api", "no route found")
 	}
 
 	// get the nodes for this service
@@ -89,7 +112,7 @@ func (h *httpHandler) getService(r *http.Request) (string, error) {
 
 	// select a random node
 	if len(nodes) == 0 {
-		return "", errors.New("no route found")
+		return "", errors.InternalServerError("go.micro.api", "no route found")
 	}
 	node := nodes[rand.Int()%len(nodes)]
 

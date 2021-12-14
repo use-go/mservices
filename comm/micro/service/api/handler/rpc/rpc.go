@@ -18,8 +18,6 @@
 package rpc
 
 import (
-	bts "bytes"
-	"context"
 	"encoding/json"
 	"io"
 	"net/http"
@@ -29,11 +27,11 @@ import (
 	"github.com/micro/micro/v3/service/api"
 	"github.com/micro/micro/v3/service/api/handler"
 	"github.com/micro/micro/v3/service/client"
-	"github.com/micro/micro/v3/service/debug/trace"
 	"github.com/micro/micro/v3/service/errors"
 	"github.com/micro/micro/v3/service/logger"
 	"github.com/micro/micro/v3/util/codec/bytes"
 	"github.com/micro/micro/v3/util/ctx"
+	"github.com/micro/micro/v3/util/encoding"
 	"github.com/micro/micro/v3/util/router"
 )
 
@@ -71,24 +69,6 @@ type buffer struct {
 
 func (b *buffer) Write(_ []byte) (int, error) {
 	return 0, nil
-}
-
-// see https://stackoverflow.com/questions/28595664/how-to-stop-json-marshal-from-escaping-and/28596225
-func jsonMarshal(ctx context.Context, t interface{}) ([]byte, error) {
-	buffer := &bts.Buffer{}
-	traceID, _, _ := trace.FromContext(ctx)
-	encoder := json.NewEncoder(buffer)
-	encoder.SetEscapeHTML(false)
-	err := encoder.Encode(t)
-	rsp := bts.TrimRight(buffer.Bytes(), "\n")
-	if strings.HasPrefix(string(rsp), "{") {
-		rsp = []byte(strings.Replace(
-			strings.Replace(string(rsp), "{", "{\"code\": 200,", 1),
-			"{",
-			"{\"request_id\": \""+traceID+"\",", 1),
-		)
-	}
-	return rsp, err
 }
 
 func (h *rpcHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -207,7 +187,7 @@ func (h *rpcHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 		// marshall response
 		// see https://play.golang.org/p/oBNxUjVTzus
-		rsp, err = jsonMarshal(cx, response)
+		rsp, err = encoding.JSONMarshal(cx, response)
 		if err != nil {
 			writeError(w, r, err)
 			return
@@ -245,7 +225,7 @@ func writeError(w http.ResponseWriter, r *http.Request, err error) {
 		ce.Id = "go.micro.api"
 		ce.Status = http.StatusText(500)
 		ce.Detail = "error during request: " + ce.Detail
-		w.WriteHeader(500)
+		w.WriteHeader(http.StatusOK)
 	default:
 		w.WriteHeader(int(ce.Code))
 	}

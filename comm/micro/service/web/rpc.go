@@ -1,8 +1,6 @@
 package web
 
 import (
-	bts "bytes"
-	"context"
 	"encoding/json"
 	"net/http"
 	"strconv"
@@ -14,8 +12,8 @@ import (
 	"github.com/micro/micro/v3/service/api/resolver/subdomain"
 	cors "github.com/micro/micro/v3/service/api/server/http"
 	"github.com/micro/micro/v3/service/client"
-	"github.com/micro/micro/v3/service/debug/trace"
 	"github.com/micro/micro/v3/service/errors"
+	"github.com/micro/micro/v3/util/encoding"
 	"github.com/micro/micro/v3/util/helper"
 )
 
@@ -36,24 +34,6 @@ func (h *rpcHandler) String() string {
 	return "internal/rpc"
 }
 
-// see https://stackoverflow.com/questions/28595664/how-to-stop-json-marshal-from-escaping-and/28596225
-func jsonMarshal(ctx context.Context, t interface{}) ([]byte, error) {
-	buffer := &bts.Buffer{}
-	traceID, _, _ := trace.FromContext(ctx)
-	encoder := json.NewEncoder(buffer)
-	encoder.SetEscapeHTML(false)
-	err := encoder.Encode(t)
-	rsp := bts.TrimRight(buffer.Bytes(), "\n")
-	if strings.HasPrefix(string(rsp), "{") {
-		rsp = []byte(strings.Replace(
-			strings.Replace(string(rsp), "{", "{\"code\": 200,", 1),
-			"{",
-			"{\"request_id\": \""+traceID+"\",", 1),
-		)
-	}
-	return rsp, err
-}
-
 // ServeHTTP passes on a JSON or form encoded RPC request to a service.
 func (h *rpcHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "OPTIONS" {
@@ -69,7 +49,7 @@ func (h *rpcHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	badRequest := func(description string) {
 		e := errors.BadRequest("go.micro.rpc", description)
-		w.WriteHeader(400)
+		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(e.Error()))
 	}
 
@@ -183,15 +163,15 @@ func (h *rpcHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			ce.Id = "go.micro.rpc"
 			ce.Status = http.StatusText(500)
 			ce.Detail = "error during request: " + ce.Detail
-			w.WriteHeader(500)
+			w.WriteHeader(http.StatusOK)
 		default:
-			w.WriteHeader(int(ce.Code))
+			w.WriteHeader(http.StatusOK)
 		}
 		w.Write([]byte(ce.Error()))
 		return
 	}
 
-	b, _ := jsonMarshal(ctx, response)
+	b, _ := encoding.JSONMarshal(ctx, response)
 	w.Header().Set("Content-Length", strconv.Itoa(len(b)))
 	w.Write(b)
 }
