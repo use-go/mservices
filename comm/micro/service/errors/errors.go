@@ -23,10 +23,10 @@ import (
 )
 
 type Error struct {
-	Id     string `json:"id"`
-	Code   int32  `json:"code"`
-	Detail string `json:"detail"`
-	Status string `json:"status"`
+	Id     string `json:"id,omitempty"`
+	Code   int32  `json:"code,omitempty"`
+	Detail string `json:"detail,omitempty"`
+	Status string `json:"status,omitempty"`
 }
 
 func (e *Error) Error() string {

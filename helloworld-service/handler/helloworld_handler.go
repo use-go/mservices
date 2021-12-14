@@ -1,9 +1,9 @@
 package handler
 
 import (
+	"comm/errors"
 	"comm/logger"
 	"context"
-	"errors"
 	"proto/helloworld"
 )
 
@@ -11,7 +11,7 @@ import (
 func (h *Handler) DeleteHelloworld(ctx context.Context, req *helloworld.HelloworldFilter, rsp *helloworld.Helloworld) error {
 	logger.Infof("Do something")
 	rsp.Name = "Hello " + req.Name
-	return errors.New("delete error")
+	return errors.New("helloworld.DeleteHelloworld", "test error", int32(50001))
 }
 
 // UpdateHelloworld defined TODO
