@@ -4,8 +4,8 @@ import (
 	"comm/trace"
 	"context"
 
-	"github.com/micro/micro/v3/service"
-	"github.com/micro/micro/v3/service/server"
+	"github.com/2637309949/micro/v3/service"
+	"github.com/2637309949/micro/v3/service/server"
 )
 
 var (
