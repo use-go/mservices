@@ -8,9 +8,8 @@ import (
 )
 
 // New generates a custom error.
-func New(id, detail string, code int32) error {
+func New(detail string, code int32) error {
 	return &errors.Error{
-		Id:     id,
 		Code:   code,
 		Detail: detail,
 		Status: http.StatusText(int(code)),
@@ -18,9 +17,8 @@ func New(id, detail string, code int32) error {
 }
 
 // InternalServerError generates a 500 error.
-func InternalServerError(id, format string, a ...interface{}) error {
+func InternalServerError(format string, a ...interface{}) error {
 	return &errors.Error{
-		Id:     id,
 		Code:   500,
 		Detail: fmt.Sprintf(format, a...),
 		Status: http.StatusText(500),

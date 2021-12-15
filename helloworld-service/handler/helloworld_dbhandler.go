@@ -16,7 +16,7 @@ func (s *Handler) QueryHelloworldDB(ctx context.Context, session *gorm.DB, where
 	}
 	if errs := session.GetErrors(); len(errs) != 0 {
 		logger.Errorf("QueryHelloworldDB failed. [%v]", errs)
-		return errors.InternalServerError("helloworld.QueryHelloworldDB", "QueryHelloworldDB fail. [%v]", errs)
+		return errors.InternalServerError("QueryHelloworldDB fail. [%v]", errs)
 	}
 	return nil
 }
@@ -30,7 +30,7 @@ func (s *Handler) QueryHelloworldDetailDB(ctx context.Context, session *gorm.DB,
 	}
 	if len(lst) == 0 {
 		logger.Warn("QueryHelloworldDetailDB empty.")
-		return errors.InternalServerError("helloworld.QueryHelloworldDetailDB", "QueryHelloworldDetailDB empty.")
+		return errors.InternalServerError("QueryHelloworldDetailDB empty.")
 	}
 	*data = lst[0]
 	return nil
@@ -40,7 +40,7 @@ func (s *Handler) InsertHelloworldDB(ctx context.Context, session *gorm.DB, data
 	err := session.Create(data).Error
 	if err != nil {
 		logger.Errorf("InsertHelloworldDB failed. [%s]", err.Error())
-		return errors.InternalServerError("helloworld.InsertHelloworldDB", "InsertHelloworldDB fail. [%v]", err)
+		return errors.InternalServerError("InsertHelloworldDB fail. [%v]", err)
 	}
 	return nil
 }
@@ -49,7 +49,7 @@ func (s *Handler) UpdateHelloworldDB(ctx context.Context, session *gorm.DB, data
 	err := session.Table(data.TableName()).Model(&data).Updates(&data).Error
 	if err != nil {
 		logger.Errorf("UpdateHelloworldDB failed. [%s]", err.Error())
-		return errors.InternalServerError("helloworld.UpdateHelloworldDB", "UpdateHelloworldDB fail. [%v]", err)
+		return errors.InternalServerError("UpdateHelloworldDB fail. [%v]", err)
 	}
 	return nil
 }
@@ -58,7 +58,7 @@ func (s *Handler) SaveHelloworldDB(ctx context.Context, session *gorm.DB, data *
 	err := session.Save(data).Error
 	if err != nil {
 		logger.Errorf("SaveHelloworldDB failed. [%s]", err.Error())
-		return errors.InternalServerError("helloworld.SaveHelloworldDB", "SaveHelloworldDB fail. [%v]", err)
+		return errors.InternalServerError("SaveHelloworldDB fail. [%v]", err)
 	}
 	return nil
 }
@@ -67,7 +67,7 @@ func (s *Handler) DeleteHelloworldDB(ctx context.Context, session *gorm.DB, data
 	err := session.Where(data).Delete(&data).Error
 	if err != nil {
 		logger.Errorf("DeleteHelloworldDB failed. [%s]", err.Error())
-		return errors.InternalServerError("helloworld.DeleteHelloworldDB", "DeleteHelloworldDB fail. [%v]", err)
+		return errors.InternalServerError("DeleteHelloworldDB fail. [%v]", err)
 	}
 	return nil
 }

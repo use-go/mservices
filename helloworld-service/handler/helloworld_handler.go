@@ -11,7 +11,7 @@ import (
 func (h *Handler) DeleteHelloworld(ctx context.Context, req *helloworld.HelloworldFilter, rsp *helloworld.Helloworld) error {
 	logger.Infof("Do something")
 	rsp.Name = "Hello " + req.Name
-	return errors.New("helloworld.DeleteHelloworld", "test error", int32(50001))
+	return errors.New("test error", int32(50001))
 }
 
 // UpdateHelloworld defined TODO
