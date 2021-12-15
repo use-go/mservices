@@ -1,107 +1,107 @@
 {
   "components": {
     "requestBodies": {
-      "HelloworldServiceDeleteHelloworldRequest": {
+      "HelloworldDeleteInfoRequest": {
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/HelloworldFilter"
+              "$ref": "#/components/schemas/InfoFilter"
             }
           }
         },
-        "description": "HelloworldServiceDeleteHelloworldRequest"
+        "description": "HelloworldDeleteInfoRequest"
       },
-      "HelloworldServiceInsertHelloworldRequest": {
+      "HelloworldInsertInfoRequest": {
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/Helloworld"
+              "$ref": "#/components/schemas/Info"
             }
           }
         },
-        "description": "HelloworldServiceInsertHelloworldRequest"
+        "description": "HelloworldInsertInfoRequest"
       },
-      "HelloworldServiceQueryHelloworldDetailRequest": {
+      "HelloworldQueryInfoDetailRequest": {
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/HelloworldFilter"
+              "$ref": "#/components/schemas/InfoFilter"
             }
           }
         },
-        "description": "HelloworldServiceQueryHelloworldDetailRequest"
+        "description": "HelloworldQueryInfoDetailRequest"
       },
-      "HelloworldServiceQueryHelloworldRequest": {
+      "HelloworldQueryInfoRequest": {
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/HelloworldFilter"
+              "$ref": "#/components/schemas/InfoFilter"
             }
           }
         },
-        "description": "HelloworldServiceQueryHelloworldRequest"
+        "description": "HelloworldQueryInfoRequest"
       },
-      "HelloworldServiceUpdateHelloworldRequest": {
+      "HelloworldUpdateInfoRequest": {
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/Helloworld"
+              "$ref": "#/components/schemas/Info"
             }
           }
         },
-        "description": "HelloworldServiceUpdateHelloworldRequest"
+        "description": "HelloworldUpdateInfoRequest"
       }
     },
     "responses": {
-      "HelloworldServiceDeleteHelloworldResponse": {
+      "HelloworldDeleteInfoResponse": {
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/Helloworld"
+              "$ref": "#/components/schemas/Info"
             }
           }
         },
-        "description": "HelloworldServiceDeleteHelloworldResponse"
+        "description": "HelloworldDeleteInfoResponse"
       },
-      "HelloworldServiceInsertHelloworldResponse": {
+      "HelloworldInsertInfoResponse": {
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/Helloworld"
+              "$ref": "#/components/schemas/Info"
             }
           }
         },
-        "description": "HelloworldServiceInsertHelloworldResponse"
+        "description": "HelloworldInsertInfoResponse"
       },
-      "HelloworldServiceQueryHelloworldDetailResponse": {
+      "HelloworldQueryInfoDetailResponse": {
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/Helloworld"
+              "$ref": "#/components/schemas/Info"
             }
           }
         },
-        "description": "HelloworldServiceQueryHelloworldDetailResponse"
+        "description": "HelloworldQueryInfoDetailResponse"
       },
-      "HelloworldServiceQueryHelloworldResponse": {
+      "HelloworldQueryInfoResponse": {
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/HelloworldList"
+              "$ref": "#/components/schemas/InfoList"
             }
           }
         },
-        "description": "HelloworldServiceQueryHelloworldResponse"
+        "description": "HelloworldQueryInfoResponse"
       },
-      "HelloworldServiceUpdateHelloworldResponse": {
+      "HelloworldUpdateInfoResponse": {
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/Helloworld"
+              "$ref": "#/components/schemas/Info"
             }
           }
         },
-        "description": "HelloworldServiceUpdateHelloworldResponse"
+        "description": "HelloworldUpdateInfoResponse"
       },
       "MicroAPIError": {
         "content": {
@@ -137,17 +137,21 @@
       }
     },
     "schemas": {
-      "Helloworld": {
+      "Info": {
         "properties": {
           "name": {
             "type": "string"
           }
         },
-        "title": "Helloworld",
+        "title": "Info",
         "type": "object"
       },
-      "HelloworldFilter": {
+      "InfoFilter": {
         "properties": {
+          "id": {
+            "format": "int32",
+            "type": "number"
+          },
           "name": {
             "type": "string"
           },
@@ -164,10 +168,10 @@
             "type": "number"
           }
         },
-        "title": "HelloworldFilter",
+        "title": "InfoFilter",
         "type": "object"
       },
-      "HelloworldList": {
+      "InfoList": {
         "properties": {
           "data": {
             "items": {
@@ -193,7 +197,7 @@
             "type": "number"
           }
         },
-        "title": "HelloworldList",
+        "title": "InfoList",
         "type": "object"
       }
     },
@@ -218,7 +222,7 @@
   },
   "openapi": "3.0.0",
   "paths": {
-    "/helloworld/HelloworldService/DeleteHelloworld": {
+    "/helloworld/Helloworld/DeleteInfo": {
       "parameters": [
         {
           "in": "header",
@@ -232,11 +236,11 @@
       ],
       "post": {
         "requestBody": {
-          "$ref": "#/components/requestBodies/HelloworldServiceDeleteHelloworldRequest"
+          "$ref": "#/components/requestBodies/HelloworldDeleteInfoRequest"
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/HelloworldServiceDeleteHelloworldResponse"
+            "$ref": "#/components/responses/HelloworldDeleteInfoResponse"
           },
           "default": {
             "$ref": "#/components/responses/MicroAPIError"
@@ -247,10 +251,10 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "HelloworldService.DeleteHelloworld(HelloworldFilter)"
+        "summary": "Helloworld.DeleteInfo(InfoFilter)"
       }
     },
-    "/helloworld/HelloworldService/InsertHelloworld": {
+    "/helloworld/Helloworld/InsertInfo": {
       "parameters": [
         {
           "in": "header",
@@ -264,11 +268,11 @@
       ],
       "post": {
         "requestBody": {
-          "$ref": "#/components/requestBodies/HelloworldServiceInsertHelloworldRequest"
+          "$ref": "#/components/requestBodies/HelloworldInsertInfoRequest"
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/HelloworldServiceInsertHelloworldResponse"
+            "$ref": "#/components/responses/HelloworldInsertInfoResponse"
           },
           "default": {
             "$ref": "#/components/responses/MicroAPIError"
@@ -279,10 +283,10 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "HelloworldService.InsertHelloworld(Helloworld)"
+        "summary": "Helloworld.InsertInfo(Info)"
       }
     },
-    "/helloworld/HelloworldService/QueryHelloworld": {
+    "/helloworld/Helloworld/QueryInfo": {
       "parameters": [
         {
           "in": "header",
@@ -296,11 +300,11 @@
       ],
       "post": {
         "requestBody": {
-          "$ref": "#/components/requestBodies/HelloworldServiceQueryHelloworldRequest"
+          "$ref": "#/components/requestBodies/HelloworldQueryInfoRequest"
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/HelloworldServiceQueryHelloworldResponse"
+            "$ref": "#/components/responses/HelloworldQueryInfoResponse"
           },
           "default": {
             "$ref": "#/components/responses/MicroAPIError"
@@ -311,10 +315,10 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "HelloworldService.QueryHelloworld(HelloworldFilter)"
+        "summary": "Helloworld.QueryInfo(InfoFilter)"
       }
     },
-    "/helloworld/HelloworldService/QueryHelloworldDetail": {
+    "/helloworld/Helloworld/QueryInfoDetail": {
       "parameters": [
         {
           "in": "header",
@@ -328,11 +332,11 @@
       ],
       "post": {
         "requestBody": {
-          "$ref": "#/components/requestBodies/HelloworldServiceQueryHelloworldDetailRequest"
+          "$ref": "#/components/requestBodies/HelloworldQueryInfoDetailRequest"
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/HelloworldServiceQueryHelloworldDetailResponse"
+            "$ref": "#/components/responses/HelloworldQueryInfoDetailResponse"
           },
           "default": {
             "$ref": "#/components/responses/MicroAPIError"
@@ -343,10 +347,10 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "HelloworldService.QueryHelloworldDetail(HelloworldFilter)"
+        "summary": "Helloworld.QueryInfoDetail(InfoFilter)"
       }
     },
-    "/helloworld/HelloworldService/UpdateHelloworld": {
+    "/helloworld/Helloworld/UpdateInfo": {
       "parameters": [
         {
           "in": "header",
@@ -360,11 +364,11 @@
       ],
       "post": {
         "requestBody": {
-          "$ref": "#/components/requestBodies/HelloworldServiceUpdateHelloworldRequest"
+          "$ref": "#/components/requestBodies/HelloworldUpdateInfoRequest"
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/HelloworldServiceUpdateHelloworldResponse"
+            "$ref": "#/components/responses/HelloworldUpdateInfoResponse"
           },
           "default": {
             "$ref": "#/components/responses/MicroAPIError"
@@ -375,7 +379,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "HelloworldService.UpdateHelloworld(Helloworld)"
+        "summary": "Helloworld.UpdateInfo(Info)"
       }
     }
   },

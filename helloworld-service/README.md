@@ -15,5 +15,5 @@ make up
 Request the service
 
 ```
-curl http://192.168.202.128:8080/helloworld/helloworldService/UpdateHelloworld
+curl http://192.168.202.128:8080/helloworld/helloworld/UpdateInfo
 ```

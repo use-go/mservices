@@ -11,6 +11,6 @@ require (
 
 replace (
 	comm => ../comm
+	github.com/micro/micro/v3 => github.com/2637309949/micro/v3 v3.8.0
 	proto => ../proto
-  	github.com/micro/micro/v3 => ../../micro
 )
