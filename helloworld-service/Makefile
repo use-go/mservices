@@ -2,12 +2,18 @@ include ../.env
 NAME := helloworld
 VARS:=$(shell sed -ne 's/ *\#.*$$//; /./ s/=.*$$// p' ../.env)
 GOPATH:=$(shell go env GOPATH)
+GIT_COMMIT=$(shell git rev-parse --short HEAD)
+GIT_TAG=$(shell git describe --abbrev=0 --tags --always --match "v*")
+GIT_IMPORT=github.com/2637309949/go-service
+CGO_ENABLED=0
+BUILD_DATE=$(shell date +%s)
+LDFLAGS=-X $(GIT_IMPORT).BuildDate=$(BUILD_DATE) -X $(GIT_IMPORT).GitCommit=$(GIT_COMMIT) -X $(GIT_IMPORT).GitTag=$(GIT_TAG)
 PROTO_FLAGS=--go_opt=paths=source_relative --micro_opt=paths=source_relative
 PROTO_PATH=..:.
 SRC_DIR=..
 $(foreach v,$(VARS),$(eval $(shell echo export $(v)="$($(v))")))
-.PHONY: all
-all: proto api build
+
+all: build
 
 .PHONY: proto
 proto:
@@ -20,7 +26,7 @@ api:
 
 .PHONY: build
 build:
-	go build -o $(NAME) *.go
+	go build -a -installsuffix cgo -ldflags "-s -w ${LDFLAGS}" -o $(NAME)
 
 .PHONY: up
 up:
@@ -33,3 +39,8 @@ test:
 .PHONY: docker
 docker:
 	docker build . -t $(NAME):latest
+
+clean:
+	rm -rf $(NAME)
+
+.PHONY: proto api build
