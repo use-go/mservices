@@ -19,16 +19,16 @@ func New(detail string, code int32) error {
 // BadRequest generates a 400 error.
 func BadRequest(format string, a ...interface{}) error {
 	return &errors.Error{
-		Code:   400,
+		Code:   http.StatusBadRequest,
 		Detail: fmt.Sprintf(format, a...),
-		Status: http.StatusText(400),
+		Status: http.StatusText(http.StatusBadRequest),
 	}
 }
 
 // Unauthorized generates a 401 error.
 func Unauthorized(format string, a ...interface{}) error {
 	return &errors.Error{
-		Code:   401,
+		Code:   http.StatusUnauthorized,
 		Detail: fmt.Sprintf(format, a...),
 		Status: http.StatusText(http.StatusUnauthorized),
 	}
@@ -37,7 +37,7 @@ func Unauthorized(format string, a ...interface{}) error {
 // Forbidden generates a 403 error.
 func Forbidden(format string, a ...interface{}) error {
 	return &errors.Error{
-		Code:   403,
+		Code:   http.StatusForbidden,
 		Detail: fmt.Sprintf(format, a...),
 		Status: http.StatusText(http.StatusForbidden),
 	}
@@ -46,7 +46,7 @@ func Forbidden(format string, a ...interface{}) error {
 // NotFound generates a 404 error.
 func NotFound(format string, a ...interface{}) error {
 	return &errors.Error{
-		Code:   404,
+		Code:   http.StatusNotFound,
 		Detail: fmt.Sprintf(format, a...),
 		Status: http.StatusText(http.StatusNotFound),
 	}
@@ -55,7 +55,7 @@ func NotFound(format string, a ...interface{}) error {
 // MethodNotAllowed generates a 405 error.
 func MethodNotAllowed(format string, a ...interface{}) error {
 	return &errors.Error{
-		Code:   405,
+		Code:   http.StatusMethodNotAllowed,
 		Detail: fmt.Sprintf(format, a...),
 		Status: http.StatusText(http.StatusMethodNotAllowed),
 	}
@@ -64,7 +64,7 @@ func MethodNotAllowed(format string, a ...interface{}) error {
 // Timeout generates a 408 error.
 func Timeout(format string, a ...interface{}) error {
 	return &errors.Error{
-		Code:   408,
+		Code:   http.StatusRequestTimeout,
 		Detail: fmt.Sprintf(format, a...),
 		Status: http.StatusText(http.StatusRequestTimeout),
 	}
@@ -73,7 +73,7 @@ func Timeout(format string, a ...interface{}) error {
 // Conflict generates a 409 error.
 func Conflict(format string, a ...interface{}) error {
 	return &errors.Error{
-		Code:   409,
+		Code:   http.StatusConflict,
 		Detail: fmt.Sprintf(format, a...),
 		Status: http.StatusText(http.StatusConflict),
 	}
@@ -82,7 +82,7 @@ func Conflict(format string, a ...interface{}) error {
 // InternalServerError generates a 500 error.
 func InternalServerError(format string, a ...interface{}) error {
 	return &errors.Error{
-		Code:   500,
+		Code:   http.StatusInternalServerError,
 		Detail: fmt.Sprintf(format, a...),
 		Status: http.StatusText(http.StatusInternalServerError),
 	}
@@ -91,7 +91,7 @@ func InternalServerError(format string, a ...interface{}) error {
 // NotImplemented generates a 501 error
 func NotImplemented(format string, a ...interface{}) error {
 	return &errors.Error{
-		Code:   501,
+		Code:   http.StatusNotImplemented,
 		Detail: fmt.Sprintf(format, a...),
 		Status: http.StatusText(http.StatusNotImplemented),
 	}
@@ -100,7 +100,7 @@ func NotImplemented(format string, a ...interface{}) error {
 // BadGateway generates a 502 error
 func BadGateway(format string, a ...interface{}) error {
 	return &errors.Error{
-		Code:   502,
+		Code:   http.StatusBadGateway,
 		Detail: fmt.Sprintf(format, a...),
 		Status: http.StatusText(http.StatusBadGateway),
 	}
@@ -109,7 +109,7 @@ func BadGateway(format string, a ...interface{}) error {
 // ServiceUnavailable generates a 503 error
 func ServiceUnavailable(format string, a ...interface{}) error {
 	return &errors.Error{
-		Code:   503,
+		Code:   http.StatusServiceUnavailable,
 		Detail: fmt.Sprintf(format, a...),
 		Status: http.StatusText(http.StatusServiceUnavailable),
 	}
@@ -118,7 +118,7 @@ func ServiceUnavailable(format string, a ...interface{}) error {
 // GatewayTimeout generates a 504 error
 func GatewayTimeout(format string, a ...interface{}) error {
 	return &errors.Error{
-		Code:   504,
+		Code:   http.StatusGatewayTimeout,
 		Detail: fmt.Sprintf(format, a...),
 		Status: http.StatusText(http.StatusGatewayTimeout),
 	}

@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-// panics if no exit `RequestId``
+// Debug defined TODO
 func Debug(ctx context.Context, action string, req, rsp interface{}) func() {
 	traceID := ExtractTraceID(ctx)
 	startTime := time.Now()
