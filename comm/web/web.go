@@ -57,6 +57,7 @@ func New(opts ...service.Option) *Service {
 	opts = append(opts, service.Version("latest"))
 	opts = append(opts, service.RegisterTTL(5*time.Second))
 	opts = append(opts, service.RegisterInterval(5*time.Second))
+	opts = append(opts, service.Metadata(map[string]string{"protocol": "http"}))
 	opts = append(opts, debugWrapper)
 	mux := Mux{
 		Router: mux.NewRouter(),
