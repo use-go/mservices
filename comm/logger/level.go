@@ -3,7 +3,7 @@ package logger
 import (
 	"os"
 
-	"github.com/micro/micro/v3/service/logger"
+	"github.com/2637309949/micro/v3/service/logger"
 )
 
 func Info(args ...interface{}) {
@@ -54,6 +54,15 @@ func Fatal(args ...interface{}) {
 func Fatalf(template string, args ...interface{}) {
 	DefaultLogger.Logf(logger.FatalLevel, template, args...)
 	os.Exit(1)
+}
+
+// Returns true if the given level is at or lower the current logger level
+func V(lvl logger.Level, log Logger) bool {
+	l := DefaultLogger
+	if log != nil {
+		l = log
+	}
+	return l.Options().Level <= lvl
 }
 
 func Init(opts ...logger.Option) {

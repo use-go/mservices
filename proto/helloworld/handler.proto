@@ -4,12 +4,12 @@ package helloworld;
 
 option go_package = "./proto;helloworld";
 
-import "proto/helloworld/helloworld.proto";
+import "proto/helloworld/info.proto";
 
-service HelloworldService {
-	rpc DeleteHelloworld (HelloworldFilter) returns (Helloworld) {}
-    rpc UpdateHelloworld (Helloworld) returns (Helloworld) {}
-    rpc InsertHelloworld (Helloworld) returns (Helloworld) {}
-    rpc QueryHelloworldDetail (HelloworldFilter) returns (Helloworld) {}
-    rpc QueryHelloworld (HelloworldFilter) returns (HelloworldList) {}
+service Helloworld {
+    rpc InsertInfo (Info) returns (Info) {}
+	rpc DeleteInfo (InfoFilter) returns (Info) {}
+    rpc UpdateInfo (Info) returns (Info) {}
+    rpc QueryInfo (InfoFilter) returns (InfoList) {}
+    rpc QueryInfoDetail (InfoFilter) returns (Info) {}
 }

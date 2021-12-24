@@ -1,15 +1,15 @@
 {
 	"folders": [
 		{
-			"name": "comm",
 			"path": "comm"
 		},
 		{
-			"name": "proto",
+			"path": "../micro"
+		},
+		{
 			"path": "proto"
 		},
 		{
-			"name": "helloworld-service",
 			"path": "helloworld-service"
 		},
 		{

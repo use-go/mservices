@@ -3,7 +3,7 @@ package service
 import (
 	"time"
 
-	"github.com/micro/micro/v3/service"
+	"github.com/2637309949/micro/v3/service"
 )
 
 func New(opts ...service.Option) *service.Service {

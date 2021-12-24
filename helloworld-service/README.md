@@ -11,3 +11,9 @@ Run the service
 ```
 make up
 ```
+
+Request the service
+
+```
+curl http://192.168.202.128:8080/helloworld/helloworld/UpdateInfo
+```

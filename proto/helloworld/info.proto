@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package helloworld;
+
+option go_package = "./proto;helloworld";
+
+message Info {
+	string name = 1 [json_name = "name"];
+}
+
+message InfoList {
+	int32 page = 1 [json_name = "page"];
+	int32 size = 2 [json_name = "size"];
+	int32 total_count = 3 [json_name = "total_count"];
+    repeated Info data = 4 [json_name = "data"];
+}
+
+message InfoFilter {
+	int32 page = 1 [json_name = "page"];
+	int32 size = 2 [json_name = "size"];
+	int32 order = 3 [json_name = "order"];
+	int32 id = 4 [json_name = "id"];
+	string name = 5 [json_name = "name"];
+}
