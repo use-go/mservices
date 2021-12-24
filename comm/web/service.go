@@ -1,4 +1,4 @@
-package api
+package web
 
 import (
 	"crypto/tls"
@@ -16,11 +16,17 @@ import (
 
 	"comm/logger"
 
-	mhttp "comm/api/http"
+	mhttp "comm/web/http"
 
+	apiAuth "github.com/2637309949/micro/v3/service/api/auth"
+	"github.com/2637309949/micro/v3/service/api/resolver"
 	meta "github.com/2637309949/micro/v3/service/context/metadata"
 	"github.com/2637309949/micro/v3/service/registry"
+	"github.com/2637309949/micro/v3/service/router"
+	regRouter "github.com/2637309949/micro/v3/service/router/registry"
+	"github.com/2637309949/micro/v3/service/web"
 	maddr "github.com/2637309949/micro/v3/util/addr"
+	"github.com/2637309949/micro/v3/util/backoff"
 	mnet "github.com/2637309949/micro/v3/util/net"
 	mls "github.com/2637309949/micro/v3/util/tls"
 )
@@ -30,6 +36,8 @@ type Service struct {
 
 	mux *http.ServeMux
 	srv *registry.Service
+
+	registered bool
 
 	sync.Mutex
 	running bool
@@ -44,6 +52,11 @@ func newService(opts ...Option) *Service {
 		mux:    http.NewServeMux(),
 		static: true,
 	}
+
+	if s.opts.RegisterCheck == nil {
+		s.opts.RegisterCheck = DefaultRegisterCheck
+	}
+
 	s.srv = s.genSrv()
 	return s
 }
@@ -87,7 +100,7 @@ func (s *Service) genSrv() *registry.Service {
 		Name:    s.opts.Name,
 		Version: s.opts.Version,
 		Nodes: []*registry.Node{{
-			Id:       s.opts.Id,
+			Id:       s.opts.Name + "-" + s.opts.Id,
 			Address:  fmt.Sprintf("%s:%d", addr, port),
 			Metadata: md,
 		}},
@@ -104,7 +117,29 @@ func (s *Service) run(exit chan bool) {
 	for {
 		select {
 		case <-t.C:
-			s.register()
+			registered := s.registered
+			rerr := s.opts.RegisterCheck(s.opts.Context)
+			if rerr != nil && registered {
+				if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
+					logger.Errorf("Server %s-%s register check error: %s, deregister it", s.opts.Name, s.srv.Nodes[0].Id, rerr)
+				}
+				// deregister self in case of error
+				if err := s.deregister(); err != nil {
+					if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
+						logger.Errorf("Server %s-%s deregister error: %s", s.opts.Name, s.srv.Nodes[0].Id, err)
+					}
+				}
+			} else if rerr != nil && !registered {
+				if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
+					logger.Errorf("Server %s-%s register check error: %s", s.opts.Name, s.srv.Nodes[0].Id, rerr)
+				}
+				continue
+			}
+			if err := s.register(); err != nil {
+				if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
+					logger.Errorf("Server %s-%s register error: %s", s.opts.Name, s.srv.Nodes[0].Id, err)
+				}
+			}
 		case <-exit:
 			t.Stop()
 			return
@@ -123,11 +158,57 @@ func (s *Service) register() error {
 		r = s.opts.Registry
 	}
 
+	regFunc := func(service *registry.Service) error {
+		// create registry options
+		rOpts := []registry.RegisterOption{
+			registry.RegisterTTL(s.opts.RegisterTTL),
+		}
+
+		var regErr error
+
+		for i := 0; i < 3; i++ {
+			// attempt to register
+			if err := r.Register(service, rOpts...); err != nil {
+				// set the error
+				regErr = err
+				// backoff then retry
+				time.Sleep(backoff.Do(i + 1))
+				continue
+			}
+			// success so nil error
+			regErr = nil
+			break
+		}
+
+		return regErr
+	}
+
 	// service node need modify, node address maybe changed
 	srv := s.genSrv()
 	srv.Endpoints = s.srv.Endpoints
 	s.srv = srv
-	return r.Register(s.srv, registry.RegisterTTL(s.opts.RegisterTTL))
+
+	// get registered value
+	registered := s.registered
+
+	if !registered {
+		if logger.V(logger.InfoLevel, logger.DefaultLogger) {
+			logger.Infof("Registry [%s] Registering node: %s", r.String(), s.srv.Nodes[0].Id)
+		}
+	}
+
+	// register the service
+	if err := regFunc(s.srv); err != nil {
+		return err
+	}
+
+	// already registered? don't need to register subscribers
+	if registered {
+		return nil
+	}
+	s.registered = true
+
+	return nil
 }
 
 func (s *Service) deregister() error {
@@ -139,6 +220,10 @@ func (s *Service) deregister() error {
 	// switch to option if specified
 	if s.opts.Registry != nil {
 		r = s.opts.Registry
+	}
+
+	if logger.V(logger.InfoLevel, logger.DefaultLogger) {
+		logger.Infof("Deregistering node: %s", s.srv.Nodes[0].Id)
 	}
 	return r.Deregister(s.srv)
 }
@@ -223,8 +308,6 @@ func (s *Service) start() error {
 	if logger.V(logger.InfoLevel, logger.DefaultLogger) {
 		logger.Infof("HTTP API Listening on %s", l.Addr().String())
 	}
-
-	logger.Infof("HTTP API Listening on %v", l.Addr().String())
 	return nil
 }
 
@@ -246,8 +329,6 @@ func (s *Service) stop() error {
 	s.exit <- ch
 	s.running = false
 
-	logger.Info("Stopping")
-
 	for _, fn := range s.opts.AfterStop {
 		if err := fn(); err != nil {
 			if chErr := <-ch; chErr != nil {
@@ -262,7 +343,7 @@ func (s *Service) stop() error {
 
 func (s *Service) Client() *http.Client {
 	rt := mhttp.NewRoundTripper(
-		mhttp.WithRegistry(registry.DefaultRegistry),
+		mhttp.WithRegistry(s.opts.Registry),
 		mhttp.WithService(s.srv),
 	)
 	return &http.Client{
@@ -317,6 +398,24 @@ func (s *Service) HandleFunc(pattern string, handler func(http.ResponseWriter, *
 }
 
 func (s *Service) Run() error {
+	// default to service registry
+	r := registry.DefaultRegistry
+	// switch to option if specified
+	if s.opts.Registry != nil {
+		r = s.opts.Registry
+	}
+
+	resolver := &web.WebResolver{
+		Router:  regRouter.NewRouter(router.Registry(r)),
+		Options: resolver.NewOptions(resolver.WithServicePrefix(Namespace)),
+	}
+	aw := apiAuth.Wrapper(resolver, Namespace)
+	s.Handle("/", aw(s.mux))
+
+	if logger.V(logger.InfoLevel, logger.DefaultLogger) {
+		logger.Infof("Starting [service] %s", s.opts.Name)
+	}
+
 	if err := s.start(); err != nil {
 		return err
 	}
@@ -334,18 +433,19 @@ func (s *Service) Run() error {
 
 	select {
 	// wait on kill signal
-	case sig := <-ch:
-		logger.Infof("Received signal %s", sig)
+	case <-ch:
 	// wait on context cancel
 	case <-s.opts.Context.Done():
-		logger.Infof("Received context shutdown")
 	}
 
 	// exit reg loop
 	close(ex)
 
-	if err := s.deregister(); err != nil {
-		return err
+	registered := s.registered
+	if registered {
+		if err := s.deregister(); err != nil {
+			return err
+		}
 	}
 
 	return s.stop()

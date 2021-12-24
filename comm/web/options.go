@@ -1,4 +1,4 @@
-package api
+package web
 
 import (
 	"context"
@@ -22,6 +22,7 @@ type Options struct {
 	Action func(*cli.Context)
 	Flags  []cli.Flag
 
+	RegisterCheck    func(context.Context) error
 	RegisterTTL      time.Duration
 	RegisterInterval time.Duration
 
@@ -141,6 +142,13 @@ func RegisterTTL(t time.Duration) Option {
 func RegisterInterval(t time.Duration) Option {
 	return func(o *Options) {
 		o.RegisterInterval = t
+	}
+}
+
+// RegisterCheck run func before registry service
+func RegisterCheck(fn func(context.Context) error) Option {
+	return func(o *Options) {
+		o.RegisterCheck = fn
 	}
 }
 

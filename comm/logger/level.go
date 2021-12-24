@@ -6,6 +6,47 @@ import (
 	"github.com/2637309949/micro/v3/service/logger"
 )
 
+type Level int8
+
+const (
+	// TraceLevel level. Designates finer-grained informational events than the Debug.
+	TraceLevel Level = iota - 2
+	// DebugLevel level. Usually only enabled when debugging. Very verbose logging.
+	DebugLevel
+	// InfoLevel is the default logging priority.
+	// General operational entries about what's going on inside the application.
+	InfoLevel
+	// WarnLevel level. Non-critical entries that deserve eyes.
+	WarnLevel
+	// ErrorLevel level. Logs. Used for errors that should definitely be noted.
+	ErrorLevel
+	// FatalLevel level. Logs and then calls `logger.Exit(1)`. highest level of severity.
+	FatalLevel
+)
+
+func (l Level) String() string {
+	switch l {
+	case TraceLevel:
+		return "trace"
+	case DebugLevel:
+		return "debug"
+	case InfoLevel:
+		return "info"
+	case WarnLevel:
+		return "warn"
+	case ErrorLevel:
+		return "error"
+	case FatalLevel:
+		return "fatal"
+	}
+	return ""
+}
+
+// Enabled returns true if the given level is at or above this level.
+func (l Level) Enabled(lvl Level) bool {
+	return lvl >= l
+}
+
 func Info(args ...interface{}) {
 	DefaultLogger.Log(logger.InfoLevel, args...)
 }
@@ -57,12 +98,12 @@ func Fatalf(template string, args ...interface{}) {
 }
 
 // Returns true if the given level is at or lower the current logger level
-func V(lvl logger.Level, log Logger) bool {
+func V(lvl Level, log logger.Logger) bool {
 	l := DefaultLogger
 	if log != nil {
 		l = log
 	}
-	return l.Options().Level <= lvl
+	return l.Options().Level <= logger.Level(lvl)
 }
 
 func Init(opts ...logger.Option) {
