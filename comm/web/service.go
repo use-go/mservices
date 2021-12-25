@@ -57,6 +57,10 @@ func newService(opts ...Option) *Service {
 		s.opts.RegisterCheck = DefaultRegisterCheck
 	}
 
+	if s.opts.Registry == nil {
+		s.opts.Registry = registry.DefaultRegistry
+	}
+
 	s.srv = s.genSrv()
 	return s
 }
@@ -94,6 +98,9 @@ func (s *Service) genSrv() *registry.Service {
 	}
 	cmd := make(meta.Metadata, 1)
 	cmd["protocol"] = "http"
+	cmd["registry"] = "service"
+	cmd["server"] = "http"
+	cmd["transport"] = "grpc"
 	md := meta.Merge(s.opts.Metadata, cmd, false)
 
 	return &registry.Service{
@@ -151,12 +158,6 @@ func (s *Service) register() error {
 	if s.srv == nil {
 		return nil
 	}
-	// default to service registry
-	r := registry.DefaultRegistry
-	// switch to option if specified
-	if s.opts.Registry != nil {
-		r = s.opts.Registry
-	}
 
 	regFunc := func(service *registry.Service) error {
 		// create registry options
@@ -168,7 +169,7 @@ func (s *Service) register() error {
 
 		for i := 0; i < 3; i++ {
 			// attempt to register
-			if err := r.Register(service, rOpts...); err != nil {
+			if err := s.opts.Registry.Register(service, rOpts...); err != nil {
 				// set the error
 				regErr = err
 				// backoff then retry
@@ -193,7 +194,7 @@ func (s *Service) register() error {
 
 	if !registered {
 		if logger.V(logger.InfoLevel, logger.DefaultLogger) {
-			logger.Infof("Registry [%s] Registering node: %s", r.String(), s.srv.Nodes[0].Id)
+			logger.Infof("Registry [%s] Registering node: %s", s.opts.Registry.String(), s.srv.Nodes[0].Id)
 		}
 	}
 
@@ -215,17 +216,11 @@ func (s *Service) deregister() error {
 	if s.srv == nil {
 		return nil
 	}
-	// default to service registry
-	r := registry.DefaultRegistry
-	// switch to option if specified
-	if s.opts.Registry != nil {
-		r = s.opts.Registry
-	}
 
 	if logger.V(logger.InfoLevel, logger.DefaultLogger) {
 		logger.Infof("Deregistering node: %s", s.srv.Nodes[0].Id)
 	}
-	return r.Deregister(s.srv)
+	return s.opts.Registry.Deregister(s.srv)
 }
 
 func (s *Service) start() error {
@@ -352,20 +347,6 @@ func (s *Service) Client() *http.Client {
 }
 
 func (s *Service) Handle(pattern string, handler http.Handler) {
-	var seen bool
-	for _, ep := range s.srv.Endpoints {
-		if ep.Name == pattern {
-			seen = true
-			break
-		}
-	}
-
-	// if its unseen then add an endpoint
-	if !seen {
-		s.srv.Endpoints = append(s.srv.Endpoints, &registry.Endpoint{
-			Name: pattern,
-		})
-	}
 
 	// disable static serving
 	if pattern == "/" {
@@ -375,38 +356,18 @@ func (s *Service) Handle(pattern string, handler http.Handler) {
 	}
 
 	// register the handler
-	pattern = "/" + s.opts.Name + pattern
-	s.mux.Handle(pattern, handler)
+	s.mux.Handle("/"+s.opts.Name+pattern, handler)
 }
 
 func (s *Service) HandleFunc(pattern string, handler func(http.ResponseWriter, *http.Request)) {
-	var seen bool
-	for _, ep := range s.srv.Endpoints {
-		if ep.Name == pattern {
-			seen = true
-			break
-		}
-	}
-	if !seen {
-		s.srv.Endpoints = append(s.srv.Endpoints, &registry.Endpoint{
-			Name: pattern,
-		})
-	}
 
-	pattern = "/" + s.opts.Name + pattern
-	s.mux.HandleFunc(pattern, handler)
+	// register the handler
+	s.mux.HandleFunc("/"+s.opts.Name+pattern, handler)
 }
 
 func (s *Service) Run() error {
-	// default to service registry
-	r := registry.DefaultRegistry
-	// switch to option if specified
-	if s.opts.Registry != nil {
-		r = s.opts.Registry
-	}
-
 	resolver := &web.WebResolver{
-		Router:  regRouter.NewRouter(router.Registry(r)),
+		Router:  regRouter.NewRouter(router.Registry(s.opts.Registry)),
 		Options: resolver.NewOptions(resolver.WithServicePrefix(Namespace)),
 	}
 	aw := apiAuth.Wrapper(resolver, Namespace)
