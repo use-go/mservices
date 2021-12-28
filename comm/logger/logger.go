@@ -31,3 +31,7 @@ func WithCallerSkipCount(c int) logger.Option {
 func WithOutput(out io.Writer) logger.Option {
 	return logger.WithOutput(out)
 }
+
+func WithFields(fields map[string]interface{}) logger.Option {
+	return logger.WithFields(fields)
+}
