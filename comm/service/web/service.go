@@ -18,7 +18,7 @@ import (
 
 	"comm/logger"
 
-	mhttp "comm/web/http"
+	mhttp "comm/service/web/http"
 
 	apiAuth "github.com/2637309949/micro/v3/service/api/auth"
 	"github.com/2637309949/micro/v3/service/api/resolver"

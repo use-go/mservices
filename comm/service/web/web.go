@@ -28,5 +28,8 @@ type Option func(o *Options)
 // NewService returns a new web.Service
 func New(opts ...Option) *Service {
 	opts = append(opts, Wrapper(debugWrapper))
+	opts = append(opts, Version("latest"))
+	opts = append(opts, RegisterTTL(5*time.Second))
+	opts = append(opts, RegisterInterval(5*time.Second))
 	return newService(opts...)
 }

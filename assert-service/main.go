@@ -3,7 +3,7 @@ package main
 import (
 	"assert-service/handler"
 	"comm/logger"
-	"comm/web"
+	"comm/service/web"
 )
 
 func main() {

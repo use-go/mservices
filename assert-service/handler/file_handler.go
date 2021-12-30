@@ -1,7 +1,7 @@
 package handler
 
 import (
-	whttp "comm/web/http"
+	whttp "comm/service/web/http"
 	"fmt"
 	"net/http"
 	"time"
@@ -22,7 +22,7 @@ func (h *Handler) FileDownload(rw http.ResponseWriter, r *http.Request) {
 	rw.Header().Set("Content-Disposition", disposition)
 	err := excel.Write(rw)
 	if err != nil {
-		writeError(rw, err)
+		whttp.WriteError(rw, r, err)
 		return
 	}
 }
