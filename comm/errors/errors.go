@@ -1,6 +1,7 @@
 package errors
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -14,6 +15,32 @@ func New(detail string, code int32) error {
 		Detail: detail,
 		Status: http.StatusText(int(code)),
 	}
+}
+
+// FromError try to convert go error to *Error
+func FromError(err error) *errors.Error {
+	if err == nil {
+		return nil
+	}
+	if verr, ok := err.(*errors.Error); ok && verr != nil {
+		return verr
+	}
+
+	return Parse(err.Error())
+}
+
+// Parse tries to parse a JSON string into an error. If that
+// fails, it will set the given string as the error detail.
+func Parse(err string, id ...string) *errors.Error {
+	e := new(errors.Error)
+	errr := json.Unmarshal([]byte(err), e)
+	if errr != nil {
+		e.Detail = err
+	}
+	if len(id) > 0 && e.RequestId == "" {
+		e.RequestId = id[0]
+	}
+	return e
 }
 
 // BadRequest generates a 400 error.
