@@ -13,6 +13,9 @@
 			"path": "helloworld-service"
 		},
 		{
+			"path": "web-service"
+		},
+		{
 			"name": "go-service",
 			"path": "."
 		}
