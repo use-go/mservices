@@ -20,13 +20,9 @@ import (
 
 	mhttp "comm/service/web/http"
 
-	apiAuth "github.com/2637309949/micro/v3/service/api/auth"
-	"github.com/2637309949/micro/v3/service/api/resolver"
 	meta "github.com/2637309949/micro/v3/service/context/metadata"
 	"github.com/2637309949/micro/v3/service/registry"
-	"github.com/2637309949/micro/v3/service/router"
-	regRouter "github.com/2637309949/micro/v3/service/router/registry"
-	"github.com/2637309949/micro/v3/service/web"
+
 	maddr "github.com/2637309949/micro/v3/util/addr"
 	"github.com/2637309949/micro/v3/util/backoff"
 	mnet "github.com/2637309949/micro/v3/util/net"
@@ -416,13 +412,6 @@ func (s *Service) Run() error {
 	if err != nil {
 		return nil
 	}
-
-	resolver := &web.WebResolver{
-		Router:  regRouter.NewRouter(router.Registry(s.opts.Registry)),
-		Options: resolver.NewOptions(resolver.WithServicePrefix(Namespace)),
-	}
-	aw := apiAuth.Wrapper(resolver, Namespace)
-	s.Handle("/", aw(s.mux))
 
 	if logger.V(logger.InfoLevel, logger.DefaultLogger) {
 		logger.Infof("Starting [service] %s", s.opts.Name)
