@@ -27,5 +27,6 @@ type Option func(o *Options)
 
 // NewService returns a new web.Service
 func New(opts ...Option) *Service {
+	opts = append(opts, Wrapper(debugWrapper))
 	return newService(opts...)
 }

@@ -1,6 +1,7 @@
 package handler
 
 import (
+	whttp "comm/web/http"
 	"fmt"
 	"net/http"
 	"time"
@@ -10,8 +11,7 @@ import (
 
 // FileUpload defined TODO
 func (h *Handler) FileUpload(rw http.ResponseWriter, r *http.Request) {
-	rw.Header().Set("Content-Type", "application/json")
-	rw.Write([]byte(`{"id": 10}`))
+	whttp.WriteJSON(rw, r, map[string]interface{}{"name": "hello 2012"})
 }
 
 // FileDownload defined TODO

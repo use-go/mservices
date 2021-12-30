@@ -3,6 +3,8 @@ package web
 import (
 	"crypto/tls"
 	"fmt"
+	"io"
+	"log"
 	"net"
 	"net/http"
 	"os"
@@ -29,6 +31,7 @@ import (
 	"github.com/2637309949/micro/v3/util/backoff"
 	mnet "github.com/2637309949/micro/v3/util/net"
 	mls "github.com/2637309949/micro/v3/util/tls"
+	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 )
 
 type Service struct {
@@ -65,6 +68,34 @@ func newService(opts ...Option) *Service {
 	return s
 }
 
+func (s *Service) streamOutput() error {
+	// make the logs directory
+	fp := logFile(s.Options().Name)
+	out := os.Stdout
+	rotate, err := rotatelogs.New(
+		fp+"/%Y%m%d%H",
+		rotatelogs.WithMaxAge(24*time.Hour),
+		rotatelogs.WithRotationTime(24*time.Hour),
+	)
+
+	if err != nil {
+		return err
+	}
+
+	mw := io.MultiWriter(out, rotate)
+
+	log.SetOutput(mw)
+	logger.Init(logger.WithOutput(mw))
+
+	// all writes to stdout,stderr will go through pipe instead (fmt.print, log)
+	r, w, err := os.Pipe()
+	os.Stdout = w
+	os.Stderr = w
+	go io.Copy(mw, r)
+
+	return err
+}
+
 func (s *Service) genSrv() *registry.Service {
 	// default host:port
 	parts := strings.Split(s.opts.Address, ":")
@@ -93,7 +124,6 @@ func (s *Service) genSrv() *registry.Service {
 
 	addr, err := maddr.Extract(host)
 	if err != nil {
-		// best effort localhost
 		addr = "127.0.0.1"
 	}
 	cmd := make(meta.Metadata, 1)
@@ -104,7 +134,7 @@ func (s *Service) genSrv() *registry.Service {
 	md := meta.Merge(s.opts.Metadata, cmd, false)
 
 	rsMeta := make(meta.Metadata, 1)
-	rsMeta["domain"] = "micro"
+	rsMeta["domain"] = Namespace
 	rsMeta["handler"] = "http"
 	return &registry.Service{
 		Name:     s.opts.Name,
@@ -364,12 +394,29 @@ func (s *Service) Handle(pattern string, handler http.Handler) {
 }
 
 func (s *Service) HandleFunc(pattern string, handler func(http.ResponseWriter, *http.Request)) {
+	var seen bool
+	for _, ep := range s.srv.Endpoints {
+		if ep.Name == pattern {
+			seen = true
+			break
+		}
+	}
+	if !seen {
+		s.srv.Endpoints = append(s.srv.Endpoints, &registry.Endpoint{
+			Name: pattern,
+		})
+	}
 
 	// register the handler
-	s.mux.HandleFunc("/"+s.opts.Name+pattern, handler)
+	s.mux.HandleFunc("/"+s.opts.Name+pattern, s.opts.wrapper(handler))
 }
 
 func (s *Service) Run() error {
+	err := s.streamOutput()
+	if err != nil {
+		return nil
+	}
+
 	resolver := &web.WebResolver{
 		Router:  regRouter.NewRouter(router.Registry(s.opts.Registry)),
 		Options: resolver.NewOptions(resolver.WithServicePrefix(Namespace)),
