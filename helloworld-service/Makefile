@@ -17,30 +17,30 @@ all: build
 
 .PHONY: proto
 proto:
-	find ../proto/ -name '*.proto' -exec protoc --proto_path=$(PROTO_PATH) $(PROTO_FLAGS) --micro_out=$(SRC_DIR) --go_out=:$(SRC_DIR) {} \;
+	@find ../proto/ -name '*.proto' -exec protoc --proto_path=$(PROTO_PATH) $(PROTO_FLAGS) --micro_out=$(SRC_DIR) --go_out=:$(SRC_DIR) {} \;
 
 .PHONY: api
 api:
-	protoc --openapi_out=. --proto_path=.. $(wildcard ../proto/$(NAME)/*.proto)
-	mv api-$(NAME).json api.json
+	@protoc --openapi_out=. --proto_path=.. $(wildcard ../proto/$(NAME)/*.proto)
+	@mv api-$(NAME).json api.json
 
 .PHONY: build
 build:
-	go build -a -installsuffix cgo -ldflags "-s -w ${LDFLAGS}" -o $(NAME)
+	@go build -a -installsuffix cgo -ldflags "-s -w ${LDFLAGS}" -o $(NAME)
 
 .PHONY: up
 up:
-	go run . server --name=helloworld
+	@go run . server --name=helloworld
 
 .PHONY: test
 test:
-	go test -v ./... -cover
+	@go test -v ./... -cover
 
 .PHONY: docker
 docker:
-	docker build . -t $(NAME):latest
+	@docker build . -t $(NAME):latest
 
 clean:
-	rm -rf $(NAME)
+	@rm -rf $(NAME)
 
 .PHONY: proto api build
