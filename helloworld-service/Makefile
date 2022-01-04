@@ -30,7 +30,7 @@ build:
 
 .PHONY: up
 up:
-	@go run . server --name=helloworld
+	@go run . server --name=$(NAME)
 
 .PHONY: test
 test:

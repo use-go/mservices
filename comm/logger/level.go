@@ -48,85 +48,58 @@ func (l Level) Enabled(lvl Level) bool {
 	return lvl >= l
 }
 
-func ExtraceContext(cxs ...context.Context) map[string]interface{} {
-	if len(cxs) == 0 {
-		return map[string]interface{}{}
-	}
-	return map[string]interface{}{"trace": ExtractTraceID(cxs[0])}
+func AttachFields(ctx context.Context) map[string]interface{} {
+	return map[string]interface{}{"trace": ExtractTraceID(ctx)}
 }
 
-func Info(args ...interface{}) func(cxs ...context.Context) {
-	return func(cxs ...context.Context) {
-		DefaultLogger.Fields(ExtraceContext(cxs...)).Log(logger.InfoLevel, args...)
-	}
+func Info(ctx context.Context, args ...interface{}) {
+	Fields(AttachFields(ctx)).Log(logger.InfoLevel, args...)
 }
 
-func Infof(template string, args ...interface{}) func(cxs ...context.Context) {
-	return func(cxs ...context.Context) {
-		DefaultLogger.Fields(ExtraceContext(cxs...)).Logf(logger.InfoLevel, template, args...)
-	}
+func Infof(ctx context.Context, template string, args ...interface{}) {
+	Fields(AttachFields(ctx)).Logf(logger.InfoLevel, template, args...)
 }
 
-func Trace(args ...interface{}) func(cxs ...context.Context) {
-	return func(cxs ...context.Context) {
-		DefaultLogger.Fields(ExtraceContext(cxs...)).Log(logger.TraceLevel, args...)
-	}
+func Trace(ctx context.Context, args ...interface{}) {
+	Fields(AttachFields(ctx)).Log(logger.TraceLevel, args...)
 }
 
-func Tracef(template string, args ...interface{}) func(cxs ...context.Context) {
-	return func(cxs ...context.Context) {
-		DefaultLogger.Fields(ExtraceContext(cxs...)).Logf(logger.TraceLevel, template, args...)
-	}
+func Tracef(ctx context.Context, template string, args ...interface{}) {
+	Fields(AttachFields(ctx)).Logf(logger.TraceLevel, template, args...)
 }
 
-func Debug(args ...interface{}) func(cxs ...context.Context) {
-	return func(cxs ...context.Context) {
-		DefaultLogger.Fields(ExtraceContext(cxs...)).Log(logger.DebugLevel, args...)
-	}
+func Debug(ctx context.Context, args ...interface{}) {
+	Fields(AttachFields(ctx)).Log(logger.DebugLevel, args...)
 }
 
-func Debugf(template string, args ...interface{}) func(cxs ...context.Context) {
-	return func(cxs ...context.Context) {
-		DefaultLogger.Fields(ExtraceContext(cxs...)).Logf(logger.DebugLevel, template, args...)
-	}
+func Debugf(ctx context.Context, template string, args ...interface{}) {
+	Fields(AttachFields(ctx)).Logf(logger.DebugLevel, template, args...)
 }
 
-func Warn(args ...interface{}) func(cxs ...context.Context) {
-	return func(cxs ...context.Context) {
-		DefaultLogger.Fields(ExtraceContext(cxs...)).Log(logger.WarnLevel, args...)
-	}
+func Warn(ctx context.Context, args ...interface{}) {
+	Fields(AttachFields(ctx)).Log(logger.WarnLevel, args...)
 }
 
-func Warnf(template string, args ...interface{}) func(cxs ...context.Context) {
-	return func(cxs ...context.Context) {
-		DefaultLogger.Fields(ExtraceContext(cxs...)).Logf(logger.WarnLevel, template, args...)
-	}
+func Warnf(ctx context.Context, template string, args ...interface{}) {
+	Fields(AttachFields(ctx)).Logf(logger.WarnLevel, template, args...)
 }
 
-func Error(args ...interface{}) func(cxs ...context.Context) {
-	return func(cxs ...context.Context) {
-		DefaultLogger.Fields(ExtraceContext(cxs...)).Log(logger.ErrorLevel, args...)
-	}
+func Error(ctx context.Context, args ...interface{}) {
+	Fields(AttachFields(ctx)).Log(logger.ErrorLevel, args...)
 }
 
-func Errorf(template string, args ...interface{}) func(cxs ...context.Context) {
-	return func(cxs ...context.Context) {
-		DefaultLogger.Fields(ExtraceContext(cxs...)).Logf(logger.ErrorLevel, template, args...)
-	}
+func Errorf(ctx context.Context, template string, args ...interface{}) {
+	Fields(AttachFields(ctx)).Logf(logger.ErrorLevel, template, args...)
 }
 
-func Fatal(args ...interface{}) func(cxs ...context.Context) {
-	return func(cxs ...context.Context) {
-		DefaultLogger.Fields(ExtraceContext(cxs...)).Log(logger.FatalLevel, args...)
-		os.Exit(1)
-	}
+func Fatal(ctx context.Context, args ...interface{}) {
+	Fields(AttachFields(ctx)).Log(logger.FatalLevel, args...)
+	os.Exit(1)
 }
 
-func Fatalf(template string, args ...interface{}) func(cxs ...context.Context) {
-	return func(cxs ...context.Context) {
-		DefaultLogger.Fields(ExtraceContext(cxs...)).Logf(logger.FatalLevel, template, args...)
-		os.Exit(1)
-	}
+func Fatalf(ctx context.Context, template string, args ...interface{}) {
+	Fields(AttachFields(ctx)).Logf(logger.FatalLevel, template, args...)
+	os.Exit(1)
 }
 
 func Fields(fields map[string]interface{}) logger.Logger {

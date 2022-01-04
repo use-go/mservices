@@ -9,7 +9,7 @@ import (
 
 // DeleteInfo defined TODO
 func (h *Handler) DeleteInfo(ctx context.Context, req *helloworld.InfoFilter, rsp *helloworld.Info) error {
-	logger.Infof("Do something")(ctx)
+	logger.Infof(ctx, "Do something")
 	rsp.Name = "Hello " + req.Name
 	return errors.New("test error", int32(50001))
 }
