@@ -15,13 +15,13 @@ func Debug(ctx context.Context, action string, req, rsp interface{}) func() {
 	reqStr := strings.Replace(strings.Replace(string(reqByte), " ", "", -1), "\n", "", -1)
 	logger.Init(logger.WithCallerSkipCount(2))
 	defer logger.Init(logger.WithCallerSkipCount(logger.DefaultCallerSkipCount))
-	logger.Infof(ctx, ">>>>> Received %v request\n%v", action, reqStr)
+	logger.Infof(ctx, ">>>>> Received %v request = %v", action, reqStr)
 	return func() {
 		rspByte := json.MustMarshal(rsp)
 		rspStr := strings.Replace(strings.Replace(string(rspByte), " ", "", -1), "\n", "", -1)
 		cost := int(time.Since(startTime) / time.Microsecond)
 		logger.Init(logger.WithCallerSkipCount(2))
 		defer logger.Init(logger.WithCallerSkipCount(logger.DefaultCallerSkipCount))
-		logger.Infof(ctx, "<<<<< Finished %v request %vms\n%v", action, cost, rspStr)
+		logger.Infof(ctx, "<<<<< Finished %v %vms response = %v", action, cost, rspStr)
 	}
 }
