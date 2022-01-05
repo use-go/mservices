@@ -1,4 +1,4 @@
-# Email Service
+## Email Service
 
 This is the Email service
 
@@ -8,7 +8,7 @@ Generated with
 micro new email
 ```
 
-## Usage
+### Usage
 
 Generate the proto code
 

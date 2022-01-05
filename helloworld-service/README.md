@@ -1,4 +1,14 @@
-## Usage
+## Email Service
+
+This is the Helloworld service
+
+Generated with
+
+```
+micro new helloworld
+```
+
+### Usage
 
 Generate the proto code
 
