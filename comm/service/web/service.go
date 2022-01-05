@@ -16,6 +16,7 @@ import (
 	"syscall"
 	"time"
 
+	"comm/define"
 	"comm/logger"
 
 	mhttp "comm/service/web/http"
@@ -158,23 +159,23 @@ func (s *Service) run(exit chan bool) {
 			rerr := s.opts.RegisterCheck(s.opts.Context)
 			if rerr != nil && registered {
 				if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
-					logger.Errorf("Server %s-%s register check error: %s, deregister it", s.opts.Name, s.srv.Nodes[0].Id, rerr)
+					logger.Errorf(define.TODO, "Server %s-%s register check error: %s, deregister it", s.opts.Name, s.srv.Nodes[0].Id, rerr)
 				}
 				// deregister self in case of error
 				if err := s.deregister(); err != nil {
 					if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
-						logger.Errorf("Server %s-%s deregister error: %s", s.opts.Name, s.srv.Nodes[0].Id, err)
+						logger.Errorf(define.TODO, "Server %s-%s deregister error: %s", s.opts.Name, s.srv.Nodes[0].Id, err)
 					}
 				}
 			} else if rerr != nil && !registered {
 				if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
-					logger.Errorf("Server %s-%s register check error: %s", s.opts.Name, s.srv.Nodes[0].Id, rerr)
+					logger.Errorf(define.TODO, "Server %s-%s register check error: %s", s.opts.Name, s.srv.Nodes[0].Id, rerr)
 				}
 				continue
 			}
 			if err := s.register(); err != nil {
 				if logger.V(logger.ErrorLevel, logger.DefaultLogger) {
-					logger.Errorf("Server %s-%s register error: %s", s.opts.Name, s.srv.Nodes[0].Id, err)
+					logger.Errorf(define.TODO, "Server %s-%s register error: %s", s.opts.Name, s.srv.Nodes[0].Id, err)
 				}
 			}
 		case <-exit:
@@ -224,7 +225,7 @@ func (s *Service) register() error {
 
 	if !registered {
 		if logger.V(logger.InfoLevel, logger.DefaultLogger) {
-			logger.Infof("Registry [%s] Registering node: %s", s.opts.Registry.String(), s.srv.Nodes[0].Id)
+			logger.Infof(define.TODO, "Registry [%s] Registering node: %s", s.opts.Registry.String(), s.srv.Nodes[0].Id)
 		}
 	}
 
@@ -248,7 +249,7 @@ func (s *Service) deregister() error {
 	}
 
 	if logger.V(logger.InfoLevel, logger.DefaultLogger) {
-		logger.Infof("Deregistering node: %s", s.srv.Nodes[0].Id)
+		logger.Infof(define.TODO, "Deregistering node: %s", s.srv.Nodes[0].Id)
 	}
 	return s.opts.Registry.Deregister(s.srv)
 }
@@ -292,7 +293,7 @@ func (s *Service) start() error {
 			if s.static {
 				_, err := os.Stat(static)
 				if err == nil {
-					logger.Infof("Enabling static file serving from %s", static)
+					logger.Infof(define.TODO, "Enabling static file serving from %s", static)
 					s.mux.Handle("/", http.FileServer(http.Dir(static)))
 				}
 			}
@@ -331,7 +332,7 @@ func (s *Service) start() error {
 	}()
 
 	if logger.V(logger.InfoLevel, logger.DefaultLogger) {
-		logger.Infof("HTTP API Listening on %s", l.Addr().String())
+		logger.Infof(define.TODO, "HTTP API Listening on %s", l.Addr().String())
 	}
 	return nil
 }
@@ -414,7 +415,7 @@ func (s *Service) Run() error {
 	}
 
 	if logger.V(logger.InfoLevel, logger.DefaultLogger) {
-		logger.Infof("Starting [service] %s", s.opts.Name)
+		logger.Infof(define.TODO, "Starting [service] %s", s.opts.Name)
 	}
 
 	if err := s.start(); err != nil {
