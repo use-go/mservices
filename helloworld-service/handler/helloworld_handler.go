@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"comm/auth"
 	"comm/errors"
 	"comm/logger"
 	"context"
@@ -9,7 +10,10 @@ import (
 
 // DeleteInfo defined TODO
 func (h *Handler) DeleteInfo(ctx context.Context, req *helloworld.InfoFilter, rsp *helloworld.Info) error {
-	logger.Infof(ctx, "%v Do something", req.OperatorId)
+	acc, ok := auth.FromContext(ctx)
+	if ok {
+		logger.Infof(ctx, "%v Do DeleteInfo", acc.Name)
+	}
 	rsp.Name = "Hello " + req.Name
 	return errors.New("test error", int32(50001))
 }

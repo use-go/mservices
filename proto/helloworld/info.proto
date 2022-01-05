@@ -6,9 +6,6 @@ option go_package = "./proto;helloworld";
 
 message Info {
 	string name = 1 [json_name = "name"];
-
-    string operator_id = 2 [json_name = "operator_id"];
-    string operator_name = 3 [json_name = "operator_name"];
 }
 
 message InfoList {
@@ -24,7 +21,4 @@ message InfoFilter {
 	int32 order = 3 [json_name = "order"];
 	int32 id = 4 [json_name = "id"];
 	string name = 5 [json_name = "name"];
-
-    string operator_id = 6 [json_name = "operator_id"];
-    string operator_name = 7 [json_name = "operator_name"];
 }

@@ -11,14 +11,7 @@ import (
 
 	"comm/errors"
 	"comm/logger"
-	"comm/store"
-	"comm/tenant"
 	"proto/email"
-)
-
-const (
-	prefixUserID     = "byUserID"
-	prefixSendgridID = "bySendgridID"
 )
 
 func validEmail(email string) bool {
@@ -128,30 +121,6 @@ func (h *Handler) sendEmail(ctx context.Context, req *email.SendRequest) error {
 		return fmt.Errorf("could not send email, error: %v", err)
 	}
 	defer rsp.Body.Close()
-
-	tnt, ok := tenant.FromContext(ctx)
-	if ok {
-		msgID := rsp.Header.Get("X-Message-ID")
-		if len(msgID) > 0 {
-			sent := Sent{
-				UserID:        tnt,
-				SendgridMsgID: msgID,
-			}
-			b, _ := json.Marshal(&sent)
-			if err := store.Write(&store.Record{
-				Key:   fmt.Sprintf("%s/%s/%s", prefixUserID, sent.UserID, sent.SendgridMsgID),
-				Value: b,
-			}); err != nil {
-				logger.Errorf(ctx, "Failed to persist mapping %+v %s", sent, err)
-			}
-			if err := store.Write(&store.Record{
-				Key:   fmt.Sprintf("%s/%s", prefixSendgridID, sent.SendgridMsgID),
-				Value: b,
-			}); err != nil {
-				logger.Errorf(ctx, "Failed to persist mapping %+v %s", sent, err)
-			}
-		}
-	}
 
 	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
 		bytes, err := ioutil.ReadAll(rsp.Body)
