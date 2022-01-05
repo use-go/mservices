@@ -11,8 +11,8 @@ import (
 )
 
 func main() {
-	hdl := handler.Handler{}
 	srv := service.New(service.Name("helloworld"))
+	hdl := handler.Handler{}
 	helloworld.RegisterHelloworldHandler(srv.Server(), &hdl)
 	if err := srv.Run(); err != nil {
 		logger.Fatal(define.TODO, err)

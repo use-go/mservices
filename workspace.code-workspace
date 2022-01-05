@@ -16,6 +16,9 @@
 			"path": "assert-service"
 		},
 		{
+			"path": "email-service"
+		},
+		{
 			"name": "go-service",
 			"path": "."
 		}
