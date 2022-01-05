@@ -130,13 +130,12 @@ func (s *Service) genSrv() *registry.Service {
 	cmd["transport"] = "grpc"
 	md := meta.Merge(s.opts.Metadata, cmd, false)
 
-	rsMeta := make(meta.Metadata, 1)
-	rsMeta["domain"] = Namespace
-	rsMeta["handler"] = "http"
+	smd := make(meta.Metadata, 1)
+	smd["domain"] = "Namespace"
 	return &registry.Service{
 		Name:     s.opts.Name,
 		Version:  s.opts.Version,
-		Metadata: rsMeta,
+		Metadata: smd,
 		Nodes: []*registry.Node{{
 			Id:       s.opts.Name + "-" + s.opts.Id,
 			Address:  fmt.Sprintf("%s:%d", addr, port),
@@ -399,8 +398,15 @@ func (s *Service) HandleFunc(pattern string, handler func(http.ResponseWriter, *
 		}
 	}
 	if !seen {
+		md := make(meta.Metadata, 1)
+		md["handler"] = "http"
+		md["endpoint"] = "pattern"
+		md["description"] = "todo"
+		md["method"] = "POST|GET"
+		md["path"] = "/" + s.opts.Name + pattern
 		s.srv.Endpoints = append(s.srv.Endpoints, &registry.Endpoint{
-			Name: pattern,
+			Name:     pattern,
+			Metadata: md,
 		})
 	}
 
