@@ -43,6 +43,7 @@ func NewEmailEndpoints() []*api.Endpoint {
 
 type EmailService interface {
 	Send(ctx context.Context, in *SendRequest, opts ...client.CallOption) (*SendResponse, error)
+	Classify(ctx context.Context, in *ClassifyRequest, opts ...client.CallOption) (*ClassifyResponse, error)
 }
 
 type emailService struct {
@@ -67,15 +68,27 @@ func (c *emailService) Send(ctx context.Context, in *SendRequest, opts ...client
 	return out, nil
 }
 
+func (c *emailService) Classify(ctx context.Context, in *ClassifyRequest, opts ...client.CallOption) (*ClassifyResponse, error) {
+	req := c.c.NewRequest(c.name, "Email.Classify", in)
+	out := new(ClassifyResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Email service
 
 type EmailHandler interface {
 	Send(context.Context, *SendRequest, *SendResponse) error
+	Classify(context.Context, *ClassifyRequest, *ClassifyResponse) error
 }
 
 func RegisterEmailHandler(s server.Server, hdlr EmailHandler, opts ...server.HandlerOption) error {
 	type email interface {
 		Send(ctx context.Context, in *SendRequest, out *SendResponse) error
+		Classify(ctx context.Context, in *ClassifyRequest, out *ClassifyResponse) error
 	}
 	type Email struct {
 		email
@@ -92,61 +105,6 @@ func (h *emailHandler) Send(ctx context.Context, in *SendRequest, out *SendRespo
 	return h.EmailHandler.Send(ctx, in, out)
 }
 
-// Api Endpoints for Spam service
-
-func NewSpamEndpoints() []*api.Endpoint {
-	return []*api.Endpoint{}
-}
-
-// Client API for Spam service
-
-type SpamService interface {
-	Classify(ctx context.Context, in *ClassifyRequest, opts ...client.CallOption) (*ClassifyResponse, error)
-}
-
-type spamService struct {
-	c    client.Client
-	name string
-}
-
-func NewSpamService(name string, c client.Client) SpamService {
-	return &spamService{
-		c:    c,
-		name: name,
-	}
-}
-
-func (c *spamService) Classify(ctx context.Context, in *ClassifyRequest, opts ...client.CallOption) (*ClassifyResponse, error) {
-	req := c.c.NewRequest(c.name, "Spam.Classify", in)
-	out := new(ClassifyResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// Server API for Spam service
-
-type SpamHandler interface {
-	Classify(context.Context, *ClassifyRequest, *ClassifyResponse) error
-}
-
-func RegisterSpamHandler(s server.Server, hdlr SpamHandler, opts ...server.HandlerOption) error {
-	type spam interface {
-		Classify(ctx context.Context, in *ClassifyRequest, out *ClassifyResponse) error
-	}
-	type Spam struct {
-		spam
-	}
-	h := &spamHandler{hdlr}
-	return s.Handle(s.NewHandler(&Spam{h}, opts...))
-}
-
-type spamHandler struct {
-	SpamHandler
-}
-
-func (h *spamHandler) Classify(ctx context.Context, in *ClassifyRequest, out *ClassifyResponse) error {
-	return h.SpamHandler.Classify(ctx, in, out)
+func (h *emailHandler) Classify(ctx context.Context, in *ClassifyRequest, out *ClassifyResponse) error {
+	return h.EmailHandler.Classify(ctx, in, out)
 }

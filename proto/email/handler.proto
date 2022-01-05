@@ -9,9 +9,5 @@ import "proto/email/spam.proto";
 
 service Email {
 	rpc Send(SendRequest) returns (SendResponse) {}
-}
-
-
-service Spam {
 	rpc Classify(ClassifyRequest) returns (ClassifyResponse) {}
 }
