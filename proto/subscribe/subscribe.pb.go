@@ -20,15 +20,12 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// Publish a message. Specify a topic to group messages for a specific topic.
 type PublishRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// The topic to publish to
-	Topic string `protobuf:"bytes,1,opt,name=topic,proto3" json:"topic,omitempty"`
-	// The json message to publish
+	Topic   string `protobuf:"bytes,1,opt,name=topic,proto3" json:"topic,omitempty"`
 	Message []byte `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 }
 
@@ -116,13 +113,11 @@ func (*PublishResponse) Descriptor() ([]byte, []int) {
 	return file_proto_subscribe_subscribe_proto_rawDescGZIP(), []int{1}
 }
 
-// Subscribe to messages for a given topic.
 type SubscribeRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// The topic to subscribe to
 	Topic string `protobuf:"bytes,1,opt,name=topic,proto3" json:"topic,omitempty"`
 }
 
@@ -170,9 +165,7 @@ type SubscribeResponse struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// The topic subscribed to
-	Topic string `protobuf:"bytes,1,opt,name=topic,proto3" json:"topic,omitempty"`
-	// The next json message on the topic
+	Topic   string `protobuf:"bytes,1,opt,name=topic,proto3" json:"topic,omitempty"`
 	Message []byte `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 }
 

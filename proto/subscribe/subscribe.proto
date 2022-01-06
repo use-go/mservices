@@ -4,25 +4,18 @@ package subscribe;
 
 option go_package = "./proto;subscribe";
 
-// Publish a message. Specify a topic to group messages for a specific topic.
 message PublishRequest {
-	// The topic to publish to
 	string topic = 1;
-	// The json message to publish
 	bytes message = 2;
 }
 
 message PublishResponse {}
 
-// Subscribe to messages for a given topic.
 message SubscribeRequest {
-	// The topic to subscribe to
 	string topic = 1;
 }
 
 message SubscribeResponse {
-	// The topic subscribed to
 	string topic = 1;
-	// The next json message on the topic
 	bytes message = 2;
 }

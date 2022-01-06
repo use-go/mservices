@@ -22,6 +22,9 @@
 			"path": "subscribe-service"
 		},
 		{
+			"path": "id-service"
+		},
+		{
 			"name": "go-service",
 			"path": "."
 		}

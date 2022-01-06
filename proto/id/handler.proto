@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package id;
+
+option go_package = "./proto;id";
+
+import "proto/id/id.proto";
+
+service Id {
+	rpc Generate(GenerateRequest) returns (GenerateResponse) {}
+	rpc Types(TypesRequest) returns (TypesResponse) {}
+}
