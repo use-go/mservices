@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package subscribe;
+
+option go_package = "./proto;subscribe";
+
+import "proto/subscribe/subscribe.proto";
+
+service Subscribe {
+	rpc Publish(PublishRequest) returns (PublishResponse) {}
+	rpc Subscribe(SubscribeRequest) returns (stream SubscribeResponse) {}
+}

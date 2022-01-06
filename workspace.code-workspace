@@ -19,6 +19,9 @@
 			"path": "email-service"
 		},
 		{
+			"path": "subscribe-service"
+		},
+		{
 			"name": "go-service",
 			"path": "."
 		}
