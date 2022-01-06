@@ -411,7 +411,11 @@ func (s *Service) HandleFunc(pattern string, handler func(http.ResponseWriter, *
 	}
 
 	// register the handler
-	s.mux.HandleFunc("/"+s.opts.Name+pattern, s.opts.wrapper(handler))
+	for i := len(s.opts.wrappers); i > 0; i-- {
+		handler = s.opts.wrappers[i-1](handler)
+	}
+
+	s.mux.HandleFunc("/"+s.opts.Name+pattern, handler)
 }
 
 func (s *Service) Run() error {

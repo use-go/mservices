@@ -25,7 +25,7 @@ type Options struct {
 	RegisterCheck    func(context.Context) error
 	RegisterTTL      time.Duration
 	RegisterInterval time.Duration
-	wrapper          func(func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request)
+	wrappers         []func(func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request)
 
 	Server  *http.Server
 	Handler http.Handler
@@ -122,7 +122,7 @@ func Advertise(a string) Option {
 // The address to advertise for discovery - host:port
 func Wrapper(wrapper func(func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request)) Option {
 	return func(o *Options) {
-		o.wrapper = wrapper
+		o.wrappers = append(o.wrappers, wrapper)
 	}
 }
 
