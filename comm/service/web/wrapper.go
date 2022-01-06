@@ -38,9 +38,7 @@ var (
 				req.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
 			}
 			w := &responseBodyWriter{body: &bytes.Buffer{}, ResponseWriter: res}
-			defer func() {
-				trace.Debug(cx.FromRequest(req), req.URL.Path, bodyBytes, w.body.Bytes())()
-			}()
+			defer trace.Debug(cx.FromRequest(req), req.URL.Path, bodyBytes, w.body)()
 			call(w, req)
 		}
 	}
