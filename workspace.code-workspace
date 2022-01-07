@@ -25,6 +25,9 @@
 			"path": "id-service"
 		},
 		{
+			"path": "cas-service"
+		},
+		{
 			"name": "go-service",
 			"path": "."
 		}

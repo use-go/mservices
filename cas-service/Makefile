@@ -1,5 +1,5 @@
 include ../.env
-NAME := assert
+NAME := cas
 VARS:=$(shell sed -ne 's/ *\#.*$$//; /./ s/=.*$$// p' ../.env)
 GOPATH:=$(shell go env GOPATH)
 GIT_COMMIT=$(shell git rev-parse --short HEAD)
