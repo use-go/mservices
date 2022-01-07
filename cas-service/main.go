@@ -87,10 +87,16 @@ func main() {
 		}
 	)
 	srv.HandleFunc("/oauth2/redirect", func(rw http.ResponseWriter, r *http.Request) {
-		u := config.AuthCodeURL("xyz",
-			oauth2.SetAuthURLParam("code_challenge", genCodeChallengeS256("s256example")),
-			oauth2.SetAuthURLParam("code_challenge_method", "S256"))
-		http.Redirect(rw, r, u, http.StatusFound)
+		v := url.Values{
+			"response_type":         {"code"},
+			"state":                 {"xyz"},
+			"redirect_uri":          {config.RedirectURL},
+			"code_challenge":        {genCodeChallengeS256("s256example")},
+			"code_challenge_method": {"S256"},
+			"scope":                 {strings.Join(config.Scopes, " ")},
+			"client_id":             {config.ClientID},
+		}
+		http.Redirect(rw, r, config.Endpoint.AuthURL+"?"+v.Encode(), http.StatusFound)
 	})
 	srv.HandleFunc("/oauth2/adduser", func(rw http.ResponseWriter, r *http.Request) {
 		r.ParseForm()
