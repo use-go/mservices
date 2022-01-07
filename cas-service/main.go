@@ -6,11 +6,13 @@ import (
 	"comm/define"
 	"comm/logger"
 	"comm/service/web"
-	"context"
 	"crypto/sha256"
 	"encoding/base64"
-	"encoding/json"
+	"io"
+	"io/ioutil"
 	"net/http"
+	"net/url"
+	"strings"
 
 	sAuth "github.com/2637309949/micro/v3/service/auth"
 	"github.com/2637309949/micro/v3/util/auth/token"
@@ -65,15 +67,15 @@ func main() {
 	clientStore.Set("000000", &models.Client{
 		ID:     "000000",
 		Secret: "999999",
-		Domain: "http://192.168.202.128:8080",
+		Domain: "http://127.0.0.1:8080",
 	})
 	var (
-		authServerURL = "http://192.168.202.128:8080"
+		authServerURL = "http://127.0.0.1:8080"
 		config        = oauth2.Config{
 			ClientID:     "000000",
 			ClientSecret: "999999",
 			Scopes:       []string{"all"},
-			RedirectURL:  "http://192.168.202.128:8080/cas/oauth2/adduser",
+			RedirectURL:  "http://127.0.0.1:8080/cas/oauth2/adduser",
 			Endpoint: oauth2.Endpoint{
 				AuthURL:  authServerURL + "/cas/oauth2/authorize",
 				TokenURL: authServerURL + "/cas/oauth2/token",
@@ -102,14 +104,30 @@ func main() {
 			http.Error(rw, "Code not found", http.StatusBadRequest)
 			return
 		}
-		token, err := config.Exchange(context.Background(), code, oauth2.SetAuthURLParam("code_verifier", "s256example"))
+		v := url.Values{
+			"grant_type":    {"authorization_code"},
+			"code_verifier": {"s256example"},
+			"client_id":     {config.ClientID},
+			"client_secret": {config.ClientSecret},
+			"redirect_uri":  {config.RedirectURL},
+			"code":          {code},
+		}
+		rsp, err := http.Post(config.Endpoint.TokenURL, "application/x-www-form-urlencoded", strings.NewReader(v.Encode()))
 		if err != nil {
 			http.Error(rw, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		e := json.NewEncoder(rw)
-		e.SetIndent("", "  ")
-		e.Encode(token)
+		body, err := ioutil.ReadAll(io.LimitReader(rsp.Body, 1<<20))
+		rsp.Body.Close()
+		if err != nil {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		if code := rsp.StatusCode; code < 200 || code > 299 {
+			http.Error(rw, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		rw.Write(body)
 	})
 
 	if err := srv.Run(); err != nil {
