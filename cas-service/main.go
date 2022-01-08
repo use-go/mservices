@@ -67,7 +67,7 @@ func main() {
 	clientStore.Set("000000", &models.Client{
 		ID:     "000000",
 		Secret: "999999",
-		Domain: "http://127.0.0.1:8080",
+		Domain: "http://127.0.0.1:8888",
 	})
 	var (
 		authServerURL = "http://127.0.0.1:8080"

@@ -17,3 +17,15 @@ micro server
 ```shell
 micro new test && cd test-service && make proto && make up
 ```
+
+
+#### VerifyAccess
+
+```shell
+micro auth create rule --access=granted --scope='*' --resource="*:*:*" onlyloggedin
+micro auth create rule --access=granted --resource="service:auth:*" auth-public
+micro auth create rule --access=granted --resource="service:micro.:*" micro-public
+micro auth create rule --access=granted --resource="service:assert:*" assert-public
+micro auth create rule --access=granted --resource="service:cas:*" cas-public
+```
+
