@@ -1,22 +1,30 @@
 <script src="https://cdn.bootcdn.net/ajax/libs/fetch/3.6.2/fetch.min.js"></script>
 <script>
-var url = 'http://127.0.0.1:8080/helloworld/updateInfo'
-var grant_type = 'authorization_code'
 var client_id = '000000'
-var code_verifier = 's256example'
 var client_secret = '999999'
+var grant_type = 'authorization_code'
+var code_verifier = 's256example'
 var response_type = 'code'
 var redirect_uri = window.location.href.replaceAll(window.location.search, '')
 var authorize_url = 'http://127.0.0.1:8080/cas/oauth2/authorize'
+var token_url = 'http://127.0.0.1:8080/cas/oauth2/token'
 var code_challenge = 'Qn3Kywp0OiU4NK_AFzGPlmrcYJDJ13Abj_jdL08Ahg8='
 var code_challenge_method = 'S256'
-var token_url = 'http://127.0.0.1:8080/cas/oauth2/token'
+var state = 'xyz'
 
 function setCookie(name,value) { 
     var hour = 8; 
     var exp = new Date(); 
     exp.setTime(exp.getTime() + hour*60*60*1000); 
     document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString()+";path=/"; 
+}
+
+function getCookie(name) {
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+    if(arr=document.cookie.match(reg))
+        return unescape(arr[2]);
+    else
+        return null;
 }
 
 function getQueryString(name) {
@@ -28,36 +36,67 @@ function getQueryString(name) {
   return null;
 }
 
+function urlDelParams(name) {
+  var loca = window.location
+  var baseUrl = loca.origin + loca.pathname + '?'
+  var query = loca.search.substr(1)
+  if (query.indexOf(name) > -1) {
+    var obj = {}
+    var arr = query.split('&')
+    for (var i = 0; i < arr.length; i++) {
+      arr[i] = arr[i].split('=')
+      obj[arr[i][0]] = arr[i][1]
+    }
+    delete obj[name]
+    var url =
+      baseUrl +
+      JSON.stringify(obj)
+        .replace(/[\"\{\}]/g, '')
+        .replace(/\:/g, '=')
+        .replace(/\,/g, '&')
+    return url
+  }
+}
+
 function request(url, params = { credentials: 'include' }) {
     return fetch(url, params).then(function(response) {
         if (response.status === 401) {
-            var code = getQueryString("code") 
-            if(!code) {
-                window.location.href= authorize_url +"?response_type=code&state=xyz&redirect_uri="+encodeURIComponent(redirect_uri)+"&code_challenge=" + encodeURIComponent(code_challenge) + "&code_challenge_method="+code_challenge_method+"&scope=all&client_id="+client_id
-            } else {
-                var data = new URLSearchParams()
-                data.append('grant_type', grant_type)
-                data.append('client_id', client_id)
-                data.append('code_verifier', code_verifier)
-                data.append('client_secret', client_secret)
-                data.append('redirect_uri',redirect_uri)
-                data.append('code', code)
-                return fetch(token_url, { method: 'POST', body: data }).then(function(response) {
-                    return response.json()
-                }).then(function(json) {
-                    setCookie('micro-token', json.access_token)
-                    return request(url,params)
-                })
-            }
+            window.location.href= authorize_url +"?response_type=" + response_type + "&state="+ state + "&redirect_uri="+encodeURIComponent(redirect_uri)+"&code_challenge=" + encodeURIComponent(code_challenge) + "&code_challenge_method="+code_challenge_method+"&scope=all&client_id="+client_id
+            throw new Error('unauthorized request') 
         }
         return response.json()
     })
 }
 
-request(url).then(function(json) {
-    document.body.innerHTML = JSON.stringify(json)
-}).catch(function(ex) {
-    document.body.innerHTML = JSON.stringify(ex)
-})
+function updateInfo() {
+    request('http://127.0.0.1:8080/helloworld/updateInfo').then(function(json) {
+        document.body.innerHTML = JSON.stringify(json)
+    }).catch(function(ex) {
+        console.error(ex)
+    })
+}
+
+window.onload = function() {
+    var code = getQueryString("code")
+    if (!!code && !getCookie('micro-token')) {
+        var data = new URLSearchParams()
+        data.append('grant_type', grant_type)
+        data.append('client_id', client_id)
+        data.append('code_verifier', code_verifier)
+        data.append('client_secret', client_secret)
+        data.append('redirect_uri',redirect_uri)
+        data.append('code', code)
+        return fetch(token_url, { method: 'POST', body: data }).then(function(response) {
+            return response.json()
+        }).then(function(json) {
+            if (!!json.access_token) {
+                setCookie('micro-token', json.access_token)
+                window.location.replace(urlDelParams('code'))
+            }
+        })
+    }
+}
 
 </script>
+
+<a href="javascript:void(0)" onclick="updateInfo()">http://127.0.0.1:8080/helloworld/updateInfo</a>

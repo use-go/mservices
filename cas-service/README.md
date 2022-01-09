@@ -12,6 +12,7 @@ Run the service
 make up
 ```
 
+## Test
 ```
-/cas/oauth2/redirect
+cd www && sh start.sh
 ```

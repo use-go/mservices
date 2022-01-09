@@ -22,6 +22,7 @@ micro new test && cd test-service && make proto && make up
 #### VerifyAccess
 
 ```shell
+micro auth delete rule default
 micro auth create rule --access=granted --scope='*' --resource="*:*:*" onlyloggedin
 micro auth create rule --access=granted --resource="service:auth:*" auth-public
 micro auth create rule --access=granted --resource="service:micro.:*" micro-public
