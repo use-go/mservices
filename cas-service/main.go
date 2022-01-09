@@ -57,10 +57,6 @@ func main() {
 	srv.HandleFunc("/oauth2/token", hdl.OAuth2Token)
 	srv.HandleFunc("/oauth2/login", hdl.OAuth2Login)
 	srv.HandleFunc("/oauth2/affirm", hdl.OAuth2Affirm)
-	srv.HandleFunc("/account/add", hdl.AccountAdd)
-	srv.HandleFunc("/account/del", hdl.AccountDel)
-	srv.HandleFunc("/account/update", hdl.AccountUpdate)
-	srv.HandleFunc("/account/list", hdl.AccountList)
 
 	// For frontend test
 	// Remove it in production
