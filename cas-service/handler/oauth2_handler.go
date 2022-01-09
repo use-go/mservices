@@ -69,15 +69,14 @@ func (h *Handler) OAuth2Login(rw http.ResponseWriter, r *http.Request) {
 		}
 		store.Set("LoggedInUserID", r.Form.Get("username"))
 		store.Save()
-
-		rw.Header().Set("Location", "/cas/oauth2/auth")
+		rw.Header().Set("Location", "/cas/oauth2/affirm")
 		rw.WriteHeader(http.StatusFound)
 		return
 	}
 	outputHTML(rw, r, "static/login.html")
 }
 
-func (h *Handler) OAuth2Auth(rw http.ResponseWriter, r *http.Request) {
+func (h *Handler) OAuth2Affirm(rw http.ResponseWriter, r *http.Request) {
 	store, err := session.Start(r.Context(), rw, r)
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
@@ -90,7 +89,7 @@ func (h *Handler) OAuth2Auth(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	outputHTML(rw, r, "static/auth.html")
+	outputHTML(rw, r, "static/affirm.html")
 }
 
 func (h *Handler) UserAuthorizeHandler(rw http.ResponseWriter, r *http.Request) (userID string, err error) {

@@ -56,7 +56,7 @@ func main() {
 	srv.HandleFunc("/oauth2/authorize", hdl.OAuth2Authorize)
 	srv.HandleFunc("/oauth2/token", hdl.OAuth2Token)
 	srv.HandleFunc("/oauth2/login", hdl.OAuth2Login)
-	srv.HandleFunc("/oauth2/auth", hdl.OAuth2Auth)
+	srv.HandleFunc("/oauth2/affirm", hdl.OAuth2Affirm)
 	srv.HandleFunc("/account/add", hdl.AccountAdd)
 	srv.HandleFunc("/account/del", hdl.AccountDel)
 	srv.HandleFunc("/account/update", hdl.AccountUpdate)
