@@ -78,22 +78,26 @@ function updateInfo() {
 
 window.onload = function() {
     var code = getQueryString("code")
-    if (!!code && !getCookie('micro-token')) {
-        var data = new URLSearchParams()
-        data.append('grant_type', grant_type)
-        data.append('client_id', client_id)
-        data.append('code_verifier', code_verifier)
-        data.append('client_secret', client_secret)
-        data.append('redirect_uri',redirect_uri)
-        data.append('code', code)
-        return fetch(token_url, { method: 'POST', body: data }).then(function(response) {
-            return response.json()
-        }).then(function(json) {
-            if (!!json.access_token) {
-                setCookie('micro-token', json.access_token)
-                window.location.replace(urlDelParams('code'))
-            }
-        })
+    if (!!code) {
+        // remove code for safty
+        history.pushState(null,document.title,urlDelParams('code'));
+        // fetch token
+        if (!getCookie('micro-token')) {
+            var data = new URLSearchParams()
+            data.append('grant_type', grant_type)
+            data.append('client_id', client_id)
+            data.append('code_verifier', code_verifier)
+            data.append('client_secret', client_secret)
+            data.append('redirect_uri',redirect_uri)
+            data.append('code', code)
+            return fetch(token_url, { method: 'POST', body: data }).then(function(response) {
+                return response.json()
+            }).then(function(json) {
+                if (!!json.access_token) {
+                    setCookie('micro-token', json.access_token)
+                }
+            })
+        }
     }
 }
 
