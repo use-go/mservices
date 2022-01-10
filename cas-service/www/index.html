@@ -12,11 +12,11 @@ var code_challenge = 'Qn3Kywp0OiU4NK_AFzGPlmrcYJDJ13Abj_jdL08Ahg8='
 var code_challenge_method = 'S256'
 var state = 'xyz'
 
-function setCookie(name,value) { 
+function setCookie(name, value) {
     var hour = 8; 
     var exp = new Date(); 
     exp.setTime(exp.getTime() + hour*60*60*1000); 
-    document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString()+";path=/"; 
+    document.cookie = name + "="+ escape(value) + ";expires=" + exp.toGMTString()+";path=/"; 
 }
 
 function getCookie(name) {
@@ -58,8 +58,8 @@ function urlDelParams(name) {
   }
 }
 
-function request(url, params = { credentials: 'include' }) {
-    return fetch(url, params).then(function(response) {
+function request(url, params = {}) {
+    return fetch(url, Object.assign({ headers:{ 'Authorization': getCookie('Authorization') } }, params)).then(function(response) {
         if (response.status === 401) {
             window.location.href= authorize_url +"?response_type=" + response_type + "&state="+ state + "&redirect_uri="+encodeURIComponent(redirect_uri)+"&code_challenge=" + encodeURIComponent(code_challenge) + "&code_challenge_method="+code_challenge_method+"&scope=all&client_id="+client_id
             throw new Error('unauthorized request') 
@@ -85,7 +85,7 @@ window.onload = function() {
         // remove code for safty
         history.pushState(null,document.title,urlDelParams('code'));
         // fetch token
-        if (!getCookie('micro-token')) {
+        if (!getCookie('Authorization')) {
             var data = new URLSearchParams()
             data.append('grant_type', grant_type)
             data.append('client_id', client_id)
@@ -97,7 +97,7 @@ window.onload = function() {
                 return response.json()
             }).then(function(json) {
                 if (!!json.access_token) {
-                    setCookie('micro-token', json.access_token)
+                    setCookie('Authorization', 'Bearer ' + json.access_token)
                 }
             })
         }
