@@ -63,15 +63,15 @@ func main() {
 	clientStore.Set("000000", &models.Client{
 		ID:     "000000",
 		Secret: "999999",
-		Domain: "http://127.0.0.1:8888",
+		Domain: "http://192.168.202.128:8888",
 	})
 	var (
-		authServerURL = "http://127.0.0.1:8080"
+		authServerURL = "http://192.168.202.128:8080"
 		config        = oauth2.Config{
 			ClientID:     "000000",
 			ClientSecret: "999999",
 			Scopes:       []string{"all"},
-			RedirectURL:  "http://127.0.0.1:8080/cas/oauth2/adduser",
+			RedirectURL:  "http://192.168.202.128:8080/cas/oauth2/adduser",
 			Endpoint: oauth2.Endpoint{
 				AuthURL:  authServerURL + "/cas/oauth2/authorize",
 				TokenURL: authServerURL + "/cas/oauth2/token",

@@ -6,8 +6,8 @@ var grant_type = 'authorization_code'
 var code_verifier = 's256example'
 var response_type = 'code'
 var redirect_uri = window.location.href.replaceAll(window.location.search, '')
-var authorize_url = 'http://127.0.0.1:8080/cas/oauth2/authorize'
-var token_url = 'http://127.0.0.1:8080/cas/oauth2/token'
+var authorize_url = 'http://192.168.202.128:8080/cas/oauth2/authorize'
+var token_url = 'http://192.168.202.128:8080/cas/oauth2/token'
 var code_challenge = 'Qn3Kywp0OiU4NK_AFzGPlmrcYJDJ13Abj_jdL08Ahg8='
 var code_challenge_method = 'S256'
 var state = 'xyz'
@@ -69,8 +69,11 @@ function request(url, params = { credentials: 'include' }) {
 }
 
 function updateInfo() {
-    request('http://127.0.0.1:8080/helloworld/updateInfo').then(function(json) {
-        document.body.innerHTML = JSON.stringify(json)
+    request('http://192.168.202.128:8080/helloworld/updateInfo').then(function(json) {
+        var body = document.body;
+        var div = document.createElement("div");
+        div.innerHTML = JSON.stringify(json);
+        document.body.appendChild(div);
     }).catch(function(ex) {
         console.error(ex)
     })
@@ -100,7 +103,6 @@ window.onload = function() {
         }
     }
 }
-
 </script>
 
-<a href="javascript:void(0)" onclick="updateInfo()">http://127.0.0.1:8080/helloworld/updateInfo</a>
+<a href="javascript:void(0)" onclick="updateInfo()">http://192.168.202.128:8080/helloworld/updateInfo</a>
