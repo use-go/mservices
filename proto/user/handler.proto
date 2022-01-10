@@ -6,13 +6,12 @@ option go_package = "./proto;user";
 
 import "proto/user/user.proto";
 
-service User {
+service Account {
 	rpc Create(CreateRequest) returns (CreateResponse) {}
 	rpc Read(ReadRequest) returns (ReadResponse) {}
 	rpc Update(UpdateRequest) returns (UpdateResponse) {}
 	rpc Delete(DeleteRequest) returns (DeleteResponse) {}
 	rpc UpdatePassword(UpdatePasswordRequest) returns (UpdatePasswordResponse) {}
-	rpc ReadSession(ReadSessionRequest) returns(ReadSessionResponse) {}
 	rpc VerifyEmail(VerifyEmailRequest) returns(VerifyEmailResponse) {}
 	rpc SendVerificationEmail(SendVerificationEmailRequest) returns (SendVerificationEmailResponse) {}
 	rpc SendPasswordResetEmail(SendPasswordResetEmailRequest) returns (SendPasswordResetEmailResponse) {}

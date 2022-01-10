@@ -25,11 +25,12 @@ import (
 )
 
 func main() {
+	// Create service
 	srv := web.New(web.Name("cas"))
 
-	// create oauth2 server
+	// Create oauth2 server
 	manager := manage.NewDefaultManager()
-	// adapter grpc apigateway jwt check
+	// Adapter grpc apigateway jwt check
 	manager.MapAccessGenerate(auth.NewJWTAccessGenerate(
 		token.WithPublicKey(sAuth.DefaultAuth.Options().PublicKey),
 		token.WithPrivateKey(sAuth.DefaultAuth.Options().PrivateKey),
@@ -39,7 +40,7 @@ func main() {
 	manager.MapClientStorage(clientStore)
 	auth := server.NewDefaultServer(manager)
 	hdl := handler.Handler{
-		OAuth: auth,
+		OAuthServer: auth,
 	}
 
 	auth.SetAllowGetAccessRequest(true)
@@ -58,8 +59,7 @@ func main() {
 	srv.HandleFunc("/oauth2/login", hdl.OAuth2Login)
 	srv.HandleFunc("/oauth2/affirm", hdl.OAuth2Affirm)
 
-	// For frontend test
-	// Remove it in production
+	// For frontend test, Remove it in production
 	clientStore.Set("000000", &models.Client{
 		ID:     "000000",
 		Secret: "999999",

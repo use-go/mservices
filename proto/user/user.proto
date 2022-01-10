@@ -4,27 +4,9 @@ package user;
 
 option go_package = "./proto;user";
 
-service User {
-	rpc Create(CreateRequest) returns (CreateResponse) {}
-	rpc Read(ReadRequest) returns (ReadResponse) {}
-	rpc Update(UpdateRequest) returns (UpdateResponse) {}
-	rpc Delete(DeleteRequest) returns (DeleteResponse) {}
-	rpc UpdatePassword(UpdatePasswordRequest) returns (UpdatePasswordResponse) {}
-	rpc Login(LoginRequest) returns (LoginResponse) {}
-	rpc Logout(LogoutRequest) returns (LogoutResponse) {}
-	rpc ReadSession(ReadSessionRequest) returns(ReadSessionResponse) {}
-	rpc VerifyEmail(VerifyEmailRequest) returns(VerifyEmailResponse) {}
-	rpc SendVerificationEmail(SendVerificationEmailRequest) returns (SendVerificationEmailResponse) {}
-	rpc SendPasswordResetEmail(SendPasswordResetEmailRequest) returns (SendPasswordResetEmailResponse) {}
-	rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse) {}
-	rpc List(ListRequest) returns(ListResponse) {}
-	rpc SendMagicLink(SendMagicLinkRequest) returns (SendMagicLinkResponse) {}
-	rpc VerifyToken(VerifyTokenRequest) returns (VerifyTokenResponse) {}
-}
-
-message Account {
+message User {
 	// unique account id
-	string id = 1;
+	uint32 id = 1;
 	// alphanumeric username
 	string username = 2;
 	// an email address
@@ -41,21 +23,11 @@ message Account {
 	map<string,string> profile = 8;
 }
 
-message Session {
-	// the session id
-	string id = 1;
-	// the associated user id
-	string userId = 2;
-	// unix timestamp
-	int64 created = 4;
-	// unix timestamp
-	int64 expires = 5;
-}
 
 // Create a new user account. The email address and username for the account must be unique.
 message CreateRequest {
-	// optional account id
-	string id = 1;
+	// the account id
+	uint32 id = 1;
 	// the username
 	string username = 2;
 	// the email address
@@ -64,17 +36,16 @@ message CreateRequest {
 	string password = 4;
 	// optional user profile as map<string,string>
 	map<string,string> profile = 5;
-	
 }
 
 message CreateResponse {
-	Account account = 1;
+	User account = 1;
 }
 
 // Delete an account by id
 message DeleteRequest {
 	// the account id
-	string id = 1;
+	uint32 id = 1;
 }
 
 message DeleteResponse {
@@ -83,7 +54,7 @@ message DeleteResponse {
 // Read an account by id, username or email. Only one need to be specified.
 message ReadRequest {
 	// the account id
-	string id = 1;
+	uint32 id = 1;
 	// the account username
 	string username = 2;
 	// the account email
@@ -91,13 +62,13 @@ message ReadRequest {
 }
 
 message ReadResponse {
-	Account account = 1;
+	User account = 1;
 }
 
 // Update the account username or email
 message UpdateRequest {
 	// the account id
-	string id = 1;
+	uint32 id = 1;
 	// the new username
 	string username = 2;
 	// the new email address
@@ -112,7 +83,7 @@ message UpdateResponse {
 // Update the account password
 message UpdatePasswordRequest {
 	// the account id
-	string userId = 1;
+	uint32 id = 1;
 	// the old password
 	string oldPassword = 2;
 	// the new password
@@ -122,17 +93,6 @@ message UpdatePasswordRequest {
 }
 
 message UpdatePasswordResponse {
-}
-
-// Read a session by the session id. In the event it has expired or is not found and error is returned.
-message ReadSessionRequest {
-	// The unique session id
-	string sessionId = 1;
-}
-
-message ReadSessionResponse {
-	// the session for the user
-	Session session = 1;
 }
 
 // Verify the email address of an account from a token sent in an email to the user.
@@ -211,5 +171,5 @@ message ListRequest {
 }
 
 message ListResponse {
-	repeated Account users = 1;
+	repeated User users = 1;
 }

@@ -31,7 +31,7 @@ func (h *Handler) OAuth2Authorize(rw http.ResponseWriter, r *http.Request) {
 	store.Delete("ReturnUri")
 	store.Save()
 
-	err = h.OAuth.HandleAuthorizeRequest(rw, r)
+	err = h.OAuthServer.HandleAuthorizeRequest(rw, r)
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusBadRequest)
 	}
@@ -42,7 +42,7 @@ func (h *Handler) OAuth2Token(rw http.ResponseWriter, r *http.Request) {
 	if ok {
 		logger.Infof(r.Context(), "%v Do OAuth2Token", acc.Name)
 	}
-	err := h.OAuth.HandleTokenRequest(rw, r)
+	err := h.OAuthServer.HandleTokenRequest(rw, r)
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 	}

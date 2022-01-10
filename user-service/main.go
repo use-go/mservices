@@ -1,12 +1,12 @@
 package main
 
 import (
+	"comm/define"
 	"comm/logger"
 	"comm/service"
-	"comm/define"
 
-	"user-service/handler"
 	user "proto/user"
+	"user-service/handler"
 )
 
 func main() {
@@ -17,7 +17,7 @@ func main() {
 	hdl := handler.Handler{}
 
 	// Register handler
-	user.RegisterUserHandler(srv.Server(), &hdl)
+	user.RegisterAccountHandler(srv.Server(), &hdl)
 
 	// Run service
 	if err := srv.Run(); err != nil {
