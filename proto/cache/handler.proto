@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package cache;
+
+option go_package = "./proto;cache";
+
+import "proto/cache/cache.proto";
+
+service Cache {
+	// Get retrieves an item from the cache. Returns the item or nil, and a bool indicating
+	// whether the key was found.
+	rpc Get(GetReq) returns (GetRes) {}
+
+    // Set sets an item to the cache, replacing any existing item.
+	rpc Set(SetReq) returns (SetRes) {}
+
+	// Add adds an item to the cache only if an item doesn't already exist for the given
+	// key, or if the existing item has expired. Returns an error otherwise.
+	rpc Add(AddReq) returns (AddRes) {}
+
+	// Replace sets a new value for the cache key only if it already exists. Returns an
+	// error if it does not.
+	rpc Replace(ReplaceReq) returns (ReplaceRes) {}
+
+	// Delete removes an item from the cache. Does nothing if the key is not in the cache.
+	rpc Delete(DeleteReq) returns (DeleteRes) {}
+
+	// Increment increments a real number, and returns error if the value is not real
+	rpc Increment(IncrementReq) returns (IncrementRes) {}
+
+	// Decrement decrements a real number, and returns error if the value is not real
+	rpc Decrement(DecrementReq) returns (DecrementRes) {}
+
+	// Flush seletes all items from the cache.
+	rpc Flush(FlushReq) returns (FlushRes) {}
+}

@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package cache;
+
+option go_package = "./proto;cache";
+
+message GetReq {
+	string key = 1 [json_name = "name"];
+}
+
+message GetRes {
+    bytes value = 1 [json_name = "value"];
+}
+
+message SetReq {
+	string key = 1 [json_name = "name"];
+    bytes value = 2 [json_name = "value"];
+    int64 expire = 3 [json_name = "expire"];
+}
+
+message SetRes {
+}
+
+message AddReq {
+	string key = 1 [json_name = "name"];
+    bytes value = 2 [json_name = "value"];
+    int64 expire = 3 [json_name = "expire"];
+}
+
+message AddRes {
+}
+
+message ReplaceReq {
+	string key = 1 [json_name = "name"];
+    bytes value = 2 [json_name = "value"];
+    int64 expire = 3 [json_name = "expire"];
+}
+
+message ReplaceRes {
+}
+
+message DeleteReq {
+	string key = 1 [json_name = "name"];
+}
+
+message DeleteRes {
+}
+
+
+message IncrementReq {
+	string key = 1 [json_name = "name"];
+    int64 value = 2 [json_name = "value"];
+}
+
+message IncrementRes {
+    int64 value = 1 [json_name = "value"];
+}
+
+message DecrementReq {
+	string key = 1 [json_name = "name"];
+    int64 value = 2 [json_name = "value"];
+}
+
+message DecrementRes {
+    int64 value = 1 [json_name = "value"];
+}
+
+message FlushReq {
+}
+
+message FlushRes {
+}

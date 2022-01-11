@@ -1,0 +1,622 @@
+{
+  "components": {
+    "requestBodies": {
+      "CacheAddRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AddReq"
+            }
+          }
+        },
+        "description": "CacheAddRequest"
+      },
+      "CacheDecrementRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DecrementReq"
+            }
+          }
+        },
+        "description": "CacheDecrementRequest"
+      },
+      "CacheDeleteRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DeleteReq"
+            }
+          }
+        },
+        "description": "CacheDeleteRequest"
+      },
+      "CacheFlushRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/FlushReq"
+            }
+          }
+        },
+        "description": "CacheFlushRequest"
+      },
+      "CacheGetRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GetReq"
+            }
+          }
+        },
+        "description": "CacheGetRequest"
+      },
+      "CacheIncrementRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/IncrementReq"
+            }
+          }
+        },
+        "description": "CacheIncrementRequest"
+      },
+      "CacheReplaceRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ReplaceReq"
+            }
+          }
+        },
+        "description": "CacheReplaceRequest"
+      },
+      "CacheSetRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/SetReq"
+            }
+          }
+        },
+        "description": "CacheSetRequest"
+      }
+    },
+    "responses": {
+      "CacheAddResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AddRes"
+            }
+          }
+        },
+        "description": "CacheAddResponse"
+      },
+      "CacheDecrementResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DecrementRes"
+            }
+          }
+        },
+        "description": "CacheDecrementResponse"
+      },
+      "CacheDeleteResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/DeleteRes"
+            }
+          }
+        },
+        "description": "CacheDeleteResponse"
+      },
+      "CacheFlushResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/FlushRes"
+            }
+          }
+        },
+        "description": "CacheFlushResponse"
+      },
+      "CacheGetResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GetRes"
+            }
+          }
+        },
+        "description": "CacheGetResponse"
+      },
+      "CacheIncrementResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/IncrementRes"
+            }
+          }
+        },
+        "description": "CacheIncrementResponse"
+      },
+      "CacheReplaceResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ReplaceRes"
+            }
+          }
+        },
+        "description": "CacheReplaceResponse"
+      },
+      "CacheSetResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/SetRes"
+            }
+          }
+        },
+        "description": "CacheSetResponse"
+      },
+      "MicroAPIError": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "Code": {
+                  "description": "Error code",
+                  "example": 500,
+                  "type": "number"
+                },
+                "Detail": {
+                  "description": "Error detail",
+                  "example": "service not found",
+                  "type": "string"
+                },
+                "Id": {
+                  "description": "Error ID",
+                  "type": "string"
+                },
+                "Status": {
+                  "description": "Error status message",
+                  "example": "Internal Server Error",
+                  "type": "string"
+                }
+              },
+              "title": "MicroAPIError",
+              "type": "object"
+            }
+          }
+        },
+        "description": "Error from the Micro API"
+      }
+    },
+    "schemas": {
+      "AddReq": {
+        "properties": {
+          "expire": {
+            "format": "int64",
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "format": "byte",
+            "type": "string"
+          }
+        },
+        "title": "AddReq",
+        "type": "object"
+      },
+      "AddRes": {
+        "title": "AddRes",
+        "type": "object"
+      },
+      "DecrementReq": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "format": "int64",
+            "type": "number"
+          }
+        },
+        "title": "DecrementReq",
+        "type": "object"
+      },
+      "DecrementRes": {
+        "title": "DecrementRes",
+        "type": "object"
+      },
+      "DeleteReq": {
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "title": "DeleteReq",
+        "type": "object"
+      },
+      "DeleteRes": {
+        "title": "DeleteRes",
+        "type": "object"
+      },
+      "FlushReq": {
+        "title": "FlushReq",
+        "type": "object"
+      },
+      "FlushRes": {
+        "title": "FlushRes",
+        "type": "object"
+      },
+      "GetReq": {
+        "properties": {
+          "name": {
+            "type": "string"
+          }
+        },
+        "title": "GetReq",
+        "type": "object"
+      },
+      "GetRes": {
+        "properties": {
+          "value": {
+            "format": "byte",
+            "type": "string"
+          }
+        },
+        "title": "GetRes",
+        "type": "object"
+      },
+      "IncrementReq": {
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "format": "int64",
+            "type": "number"
+          }
+        },
+        "title": "IncrementReq",
+        "type": "object"
+      },
+      "IncrementRes": {
+        "title": "IncrementRes",
+        "type": "object"
+      },
+      "ReplaceReq": {
+        "properties": {
+          "expire": {
+            "format": "int64",
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "format": "byte",
+            "type": "string"
+          }
+        },
+        "title": "ReplaceReq",
+        "type": "object"
+      },
+      "ReplaceRes": {
+        "title": "ReplaceRes",
+        "type": "object"
+      },
+      "SetReq": {
+        "properties": {
+          "expire": {
+            "format": "int64",
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "format": "byte",
+            "type": "string"
+          }
+        },
+        "title": "SetReq",
+        "type": "object"
+      },
+      "SetRes": {
+        "title": "SetRes",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "MicroAPIToken": {
+        "bearerFormat": "JWT",
+        "description": "Micro API token",
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "description": "Generated by protoc-gen-openapi",
+    "title": "Cache",
+    "version": "1",
+    "x-logo": {
+      "altText": "Micro logo",
+      "backgroundColor": "#FFFFFF",
+      "url": "https://micro.mu/images/brand.png"
+    }
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/cache/Cache/Add": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CacheAddRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CacheAddResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Cache.Add(AddReq)"
+      }
+    },
+    "/cache/Cache/Decrement": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CacheDecrementRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CacheDecrementResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Cache.Decrement(DecrementReq)"
+      }
+    },
+    "/cache/Cache/Delete": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CacheDeleteRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CacheDeleteResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Cache.Delete(DeleteReq)"
+      }
+    },
+    "/cache/Cache/Flush": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CacheFlushRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CacheFlushResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Cache.Flush(FlushReq)"
+      }
+    },
+    "/cache/Cache/Get": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CacheGetRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CacheGetResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Cache.Get(GetReq)"
+      }
+    },
+    "/cache/Cache/Increment": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CacheIncrementRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CacheIncrementResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Cache.Increment(IncrementReq)"
+      }
+    },
+    "/cache/Cache/Replace": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CacheReplaceRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CacheReplaceResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Cache.Replace(ReplaceReq)"
+      }
+    },
+    "/cache/Cache/Set": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/CacheSetRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/CacheSetResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Cache.Set(SetReq)"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Micro dev environment"
+    }
+  ]
+}
