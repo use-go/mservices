@@ -65,14 +65,14 @@ func (h *User) GenerateFromPassword(password string) (string, error) {
 	if err != nil {
 		return "", errors.InternalServerError(err.Error())
 	}
-	pp := base64.StdEncoding.EncodeToString(hb)
-	h.Password = pp
+	hashedPassword := base64.StdEncoding.EncodeToString(hb)
+	h.Password = hashedPassword
 	h.Salt = salt
-	return pp, nil
+	return hashedPassword, nil
 }
 
-func (h *User) CompareHashAndPassword(hashedPassword string, password string) error {
-	if err := bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(x+h.Salt+password)); err != nil {
+func (h *User) CompareHashAndPassword(password string) error {
+	if err := bcrypt.CompareHashAndPassword([]byte(h.Password), []byte(x+h.Salt+password)); err != nil {
 		return errors.Unauthorized(err.Error())
 	}
 	return nil

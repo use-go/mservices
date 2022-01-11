@@ -42,16 +42,16 @@ func NewAccountEndpoints() []*api.Endpoint {
 // Client API for Account service
 
 type AccountService interface {
-	Create(ctx context.Context, in *CreateRequest, opts ...client.CallOption) (*CreateResponse, error)
-	Read(ctx context.Context, in *ReadRequest, opts ...client.CallOption) (*ReadResponse, error)
-	Update(ctx context.Context, in *UpdateRequest, opts ...client.CallOption) (*UpdateResponse, error)
-	Delete(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*DeleteResponse, error)
-	UpdatePassword(ctx context.Context, in *UpdatePasswordRequest, opts ...client.CallOption) (*UpdatePasswordResponse, error)
-	VerifyEmail(ctx context.Context, in *VerifyEmailRequest, opts ...client.CallOption) (*VerifyEmailResponse, error)
-	SendVerificationEmail(ctx context.Context, in *SendVerificationEmailRequest, opts ...client.CallOption) (*SendVerificationEmailResponse, error)
-	SendPasswordResetEmail(ctx context.Context, in *SendPasswordResetEmailRequest, opts ...client.CallOption) (*SendPasswordResetEmailResponse, error)
-	ResetPassword(ctx context.Context, in *ResetPasswordRequest, opts ...client.CallOption) (*ResetPasswordResponse, error)
-	List(ctx context.Context, in *ListRequest, opts ...client.CallOption) (*ListResponse, error)
+	Create(ctx context.Context, in *CreateReq, opts ...client.CallOption) (*CreateRes, error)
+	Read(ctx context.Context, in *ReadReq, opts ...client.CallOption) (*ReadRes, error)
+	Update(ctx context.Context, in *UpdateReq, opts ...client.CallOption) (*UpdateRes, error)
+	Delete(ctx context.Context, in *DeleteReq, opts ...client.CallOption) (*DeleteRes, error)
+	List(ctx context.Context, in *ListReq, opts ...client.CallOption) (*ListRes, error)
+	UpdatePassword(ctx context.Context, in *UpdatePasswordReq, opts ...client.CallOption) (*UpdatePasswordRes, error)
+	VerifyEmail(ctx context.Context, in *VerifyEmailReq, opts ...client.CallOption) (*VerifyEmailRes, error)
+	SendVerificationEmail(ctx context.Context, in *SendVerificationEmailReq, opts ...client.CallOption) (*SendVerificationEmailRes, error)
+	SendPasswordResetEmail(ctx context.Context, in *SendPasswordResetEmailReq, opts ...client.CallOption) (*SendPasswordResetEmailRes, error)
+	ResetPassword(ctx context.Context, in *ResetPasswordReq, opts ...client.CallOption) (*ResetPasswordRes, error)
 }
 
 type accountService struct {
@@ -66,9 +66,9 @@ func NewAccountService(name string, c client.Client) AccountService {
 	}
 }
 
-func (c *accountService) Create(ctx context.Context, in *CreateRequest, opts ...client.CallOption) (*CreateResponse, error) {
+func (c *accountService) Create(ctx context.Context, in *CreateReq, opts ...client.CallOption) (*CreateRes, error) {
 	req := c.c.NewRequest(c.name, "Account.Create", in)
-	out := new(CreateResponse)
+	out := new(CreateRes)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -76,9 +76,9 @@ func (c *accountService) Create(ctx context.Context, in *CreateRequest, opts ...
 	return out, nil
 }
 
-func (c *accountService) Read(ctx context.Context, in *ReadRequest, opts ...client.CallOption) (*ReadResponse, error) {
+func (c *accountService) Read(ctx context.Context, in *ReadReq, opts ...client.CallOption) (*ReadRes, error) {
 	req := c.c.NewRequest(c.name, "Account.Read", in)
-	out := new(ReadResponse)
+	out := new(ReadRes)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -86,9 +86,9 @@ func (c *accountService) Read(ctx context.Context, in *ReadRequest, opts ...clie
 	return out, nil
 }
 
-func (c *accountService) Update(ctx context.Context, in *UpdateRequest, opts ...client.CallOption) (*UpdateResponse, error) {
+func (c *accountService) Update(ctx context.Context, in *UpdateReq, opts ...client.CallOption) (*UpdateRes, error) {
 	req := c.c.NewRequest(c.name, "Account.Update", in)
-	out := new(UpdateResponse)
+	out := new(UpdateRes)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -96,9 +96,9 @@ func (c *accountService) Update(ctx context.Context, in *UpdateRequest, opts ...
 	return out, nil
 }
 
-func (c *accountService) Delete(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*DeleteResponse, error) {
+func (c *accountService) Delete(ctx context.Context, in *DeleteReq, opts ...client.CallOption) (*DeleteRes, error) {
 	req := c.c.NewRequest(c.name, "Account.Delete", in)
-	out := new(DeleteResponse)
+	out := new(DeleteRes)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -106,59 +106,59 @@ func (c *accountService) Delete(ctx context.Context, in *DeleteRequest, opts ...
 	return out, nil
 }
 
-func (c *accountService) UpdatePassword(ctx context.Context, in *UpdatePasswordRequest, opts ...client.CallOption) (*UpdatePasswordResponse, error) {
-	req := c.c.NewRequest(c.name, "Account.UpdatePassword", in)
-	out := new(UpdatePasswordResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *accountService) VerifyEmail(ctx context.Context, in *VerifyEmailRequest, opts ...client.CallOption) (*VerifyEmailResponse, error) {
-	req := c.c.NewRequest(c.name, "Account.VerifyEmail", in)
-	out := new(VerifyEmailResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *accountService) SendVerificationEmail(ctx context.Context, in *SendVerificationEmailRequest, opts ...client.CallOption) (*SendVerificationEmailResponse, error) {
-	req := c.c.NewRequest(c.name, "Account.SendVerificationEmail", in)
-	out := new(SendVerificationEmailResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *accountService) SendPasswordResetEmail(ctx context.Context, in *SendPasswordResetEmailRequest, opts ...client.CallOption) (*SendPasswordResetEmailResponse, error) {
-	req := c.c.NewRequest(c.name, "Account.SendPasswordResetEmail", in)
-	out := new(SendPasswordResetEmailResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *accountService) ResetPassword(ctx context.Context, in *ResetPasswordRequest, opts ...client.CallOption) (*ResetPasswordResponse, error) {
-	req := c.c.NewRequest(c.name, "Account.ResetPassword", in)
-	out := new(ResetPasswordResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *accountService) List(ctx context.Context, in *ListRequest, opts ...client.CallOption) (*ListResponse, error) {
+func (c *accountService) List(ctx context.Context, in *ListReq, opts ...client.CallOption) (*ListRes, error) {
 	req := c.c.NewRequest(c.name, "Account.List", in)
-	out := new(ListResponse)
+	out := new(ListRes)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accountService) UpdatePassword(ctx context.Context, in *UpdatePasswordReq, opts ...client.CallOption) (*UpdatePasswordRes, error) {
+	req := c.c.NewRequest(c.name, "Account.UpdatePassword", in)
+	out := new(UpdatePasswordRes)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accountService) VerifyEmail(ctx context.Context, in *VerifyEmailReq, opts ...client.CallOption) (*VerifyEmailRes, error) {
+	req := c.c.NewRequest(c.name, "Account.VerifyEmail", in)
+	out := new(VerifyEmailRes)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accountService) SendVerificationEmail(ctx context.Context, in *SendVerificationEmailReq, opts ...client.CallOption) (*SendVerificationEmailRes, error) {
+	req := c.c.NewRequest(c.name, "Account.SendVerificationEmail", in)
+	out := new(SendVerificationEmailRes)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accountService) SendPasswordResetEmail(ctx context.Context, in *SendPasswordResetEmailReq, opts ...client.CallOption) (*SendPasswordResetEmailRes, error) {
+	req := c.c.NewRequest(c.name, "Account.SendPasswordResetEmail", in)
+	out := new(SendPasswordResetEmailRes)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *accountService) ResetPassword(ctx context.Context, in *ResetPasswordReq, opts ...client.CallOption) (*ResetPasswordRes, error) {
+	req := c.c.NewRequest(c.name, "Account.ResetPassword", in)
+	out := new(ResetPasswordRes)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -169,30 +169,30 @@ func (c *accountService) List(ctx context.Context, in *ListRequest, opts ...clie
 // Server API for Account service
 
 type AccountHandler interface {
-	Create(context.Context, *CreateRequest, *CreateResponse) error
-	Read(context.Context, *ReadRequest, *ReadResponse) error
-	Update(context.Context, *UpdateRequest, *UpdateResponse) error
-	Delete(context.Context, *DeleteRequest, *DeleteResponse) error
-	UpdatePassword(context.Context, *UpdatePasswordRequest, *UpdatePasswordResponse) error
-	VerifyEmail(context.Context, *VerifyEmailRequest, *VerifyEmailResponse) error
-	SendVerificationEmail(context.Context, *SendVerificationEmailRequest, *SendVerificationEmailResponse) error
-	SendPasswordResetEmail(context.Context, *SendPasswordResetEmailRequest, *SendPasswordResetEmailResponse) error
-	ResetPassword(context.Context, *ResetPasswordRequest, *ResetPasswordResponse) error
-	List(context.Context, *ListRequest, *ListResponse) error
+	Create(context.Context, *CreateReq, *CreateRes) error
+	Read(context.Context, *ReadReq, *ReadRes) error
+	Update(context.Context, *UpdateReq, *UpdateRes) error
+	Delete(context.Context, *DeleteReq, *DeleteRes) error
+	List(context.Context, *ListReq, *ListRes) error
+	UpdatePassword(context.Context, *UpdatePasswordReq, *UpdatePasswordRes) error
+	VerifyEmail(context.Context, *VerifyEmailReq, *VerifyEmailRes) error
+	SendVerificationEmail(context.Context, *SendVerificationEmailReq, *SendVerificationEmailRes) error
+	SendPasswordResetEmail(context.Context, *SendPasswordResetEmailReq, *SendPasswordResetEmailRes) error
+	ResetPassword(context.Context, *ResetPasswordReq, *ResetPasswordRes) error
 }
 
 func RegisterAccountHandler(s server.Server, hdlr AccountHandler, opts ...server.HandlerOption) error {
 	type account interface {
-		Create(ctx context.Context, in *CreateRequest, out *CreateResponse) error
-		Read(ctx context.Context, in *ReadRequest, out *ReadResponse) error
-		Update(ctx context.Context, in *UpdateRequest, out *UpdateResponse) error
-		Delete(ctx context.Context, in *DeleteRequest, out *DeleteResponse) error
-		UpdatePassword(ctx context.Context, in *UpdatePasswordRequest, out *UpdatePasswordResponse) error
-		VerifyEmail(ctx context.Context, in *VerifyEmailRequest, out *VerifyEmailResponse) error
-		SendVerificationEmail(ctx context.Context, in *SendVerificationEmailRequest, out *SendVerificationEmailResponse) error
-		SendPasswordResetEmail(ctx context.Context, in *SendPasswordResetEmailRequest, out *SendPasswordResetEmailResponse) error
-		ResetPassword(ctx context.Context, in *ResetPasswordRequest, out *ResetPasswordResponse) error
-		List(ctx context.Context, in *ListRequest, out *ListResponse) error
+		Create(ctx context.Context, in *CreateReq, out *CreateRes) error
+		Read(ctx context.Context, in *ReadReq, out *ReadRes) error
+		Update(ctx context.Context, in *UpdateReq, out *UpdateRes) error
+		Delete(ctx context.Context, in *DeleteReq, out *DeleteRes) error
+		List(ctx context.Context, in *ListReq, out *ListRes) error
+		UpdatePassword(ctx context.Context, in *UpdatePasswordReq, out *UpdatePasswordRes) error
+		VerifyEmail(ctx context.Context, in *VerifyEmailReq, out *VerifyEmailRes) error
+		SendVerificationEmail(ctx context.Context, in *SendVerificationEmailReq, out *SendVerificationEmailRes) error
+		SendPasswordResetEmail(ctx context.Context, in *SendPasswordResetEmailReq, out *SendPasswordResetEmailRes) error
+		ResetPassword(ctx context.Context, in *ResetPasswordReq, out *ResetPasswordRes) error
 	}
 	type Account struct {
 		account
@@ -205,42 +205,42 @@ type accountHandler struct {
 	AccountHandler
 }
 
-func (h *accountHandler) Create(ctx context.Context, in *CreateRequest, out *CreateResponse) error {
+func (h *accountHandler) Create(ctx context.Context, in *CreateReq, out *CreateRes) error {
 	return h.AccountHandler.Create(ctx, in, out)
 }
 
-func (h *accountHandler) Read(ctx context.Context, in *ReadRequest, out *ReadResponse) error {
+func (h *accountHandler) Read(ctx context.Context, in *ReadReq, out *ReadRes) error {
 	return h.AccountHandler.Read(ctx, in, out)
 }
 
-func (h *accountHandler) Update(ctx context.Context, in *UpdateRequest, out *UpdateResponse) error {
+func (h *accountHandler) Update(ctx context.Context, in *UpdateReq, out *UpdateRes) error {
 	return h.AccountHandler.Update(ctx, in, out)
 }
 
-func (h *accountHandler) Delete(ctx context.Context, in *DeleteRequest, out *DeleteResponse) error {
+func (h *accountHandler) Delete(ctx context.Context, in *DeleteReq, out *DeleteRes) error {
 	return h.AccountHandler.Delete(ctx, in, out)
 }
 
-func (h *accountHandler) UpdatePassword(ctx context.Context, in *UpdatePasswordRequest, out *UpdatePasswordResponse) error {
+func (h *accountHandler) List(ctx context.Context, in *ListReq, out *ListRes) error {
+	return h.AccountHandler.List(ctx, in, out)
+}
+
+func (h *accountHandler) UpdatePassword(ctx context.Context, in *UpdatePasswordReq, out *UpdatePasswordRes) error {
 	return h.AccountHandler.UpdatePassword(ctx, in, out)
 }
 
-func (h *accountHandler) VerifyEmail(ctx context.Context, in *VerifyEmailRequest, out *VerifyEmailResponse) error {
+func (h *accountHandler) VerifyEmail(ctx context.Context, in *VerifyEmailReq, out *VerifyEmailRes) error {
 	return h.AccountHandler.VerifyEmail(ctx, in, out)
 }
 
-func (h *accountHandler) SendVerificationEmail(ctx context.Context, in *SendVerificationEmailRequest, out *SendVerificationEmailResponse) error {
+func (h *accountHandler) SendVerificationEmail(ctx context.Context, in *SendVerificationEmailReq, out *SendVerificationEmailRes) error {
 	return h.AccountHandler.SendVerificationEmail(ctx, in, out)
 }
 
-func (h *accountHandler) SendPasswordResetEmail(ctx context.Context, in *SendPasswordResetEmailRequest, out *SendPasswordResetEmailResponse) error {
+func (h *accountHandler) SendPasswordResetEmail(ctx context.Context, in *SendPasswordResetEmailReq, out *SendPasswordResetEmailRes) error {
 	return h.AccountHandler.SendPasswordResetEmail(ctx, in, out)
 }
 
-func (h *accountHandler) ResetPassword(ctx context.Context, in *ResetPasswordRequest, out *ResetPasswordResponse) error {
+func (h *accountHandler) ResetPassword(ctx context.Context, in *ResetPasswordReq, out *ResetPasswordRes) error {
 	return h.AccountHandler.ResetPassword(ctx, in, out)
-}
-
-func (h *accountHandler) List(ctx context.Context, in *ListRequest, out *ListResponse) error {
-	return h.AccountHandler.List(ctx, in, out)
 }

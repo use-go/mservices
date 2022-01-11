@@ -6,6 +6,6 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-func InitDb(ctx context.Context, keys ...uint64) (*gorm.DB, error) {
+func InitDb(ctx context.Context, index ...uint64) (*gorm.DB, error) {
 	return nil, nil
 }

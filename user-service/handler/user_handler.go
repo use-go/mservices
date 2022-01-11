@@ -19,7 +19,7 @@ var (
 	emailFormat = regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`)
 )
 
-func (h *Handler) Create(ctx context.Context, req *user.CreateRequest, rsp *user.CreateResponse) error {
+func (h *Handler) Create(ctx context.Context, req *user.CreateReq, rsp *user.CreateRes) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Create", acc.Name)
@@ -28,9 +28,11 @@ func (h *Handler) Create(ctx context.Context, req *user.CreateRequest, rsp *user
 	if !emailFormat.MatchString(req.Email) {
 		return errors.BadRequest("email has wrong format")
 	}
+
 	if len(req.Password) < 8 {
 		return errors.InternalServerError("password is less than 8 characters")
 	}
+
 	req.Username = strings.ToLower(req.Username)
 	req.Email = strings.ToLower(req.Email)
 
@@ -39,21 +41,20 @@ func (h *Handler) Create(ctx context.Context, req *user.CreateRequest, rsp *user
 		return errors.InternalServerError("init db error %v", err)
 	}
 
-	where, user := model.User{Username: req.Username}, model.User{}
-	err = h.QueryUserDetailDB(ctx, session, &where, &user)
+	users := []model.User{}
+	err = h.QueryUserDB(ctx, session, &model.User{Username: req.Username}, &users)
 	if err != nil && !errors.Is(err, errors.RecordNotFound) {
 		return err
 	}
-	if user.Id > 0 {
+	if len(users) > 0 {
 		return errors.BadRequest("username already exists")
 	}
 
-	where = model.User{Email: req.Email}
-	err = h.QueryUserDetailDB(ctx, session, &where, &user)
+	err = h.QueryUserDB(ctx, session, &model.User{Email: req.Email}, &users)
 	if err != nil && !errors.Is(err, errors.RecordNotFound) {
 		return err
 	}
-	if user.Id > 0 {
+	if len(users) > 0 {
 		return errors.BadRequest("email already exists")
 	}
 
@@ -69,12 +70,11 @@ func (h *Handler) Create(ctx context.Context, req *user.CreateRequest, rsp *user
 	if err != nil {
 		return err
 	}
-
-	copier.Copy(&rsp.Account, &acc)
+	rsp.Id = mu.Id
 	return nil
 }
 
-func (h *Handler) Read(ctx context.Context, req *user.ReadRequest, rsp *user.ReadResponse) error {
+func (h *Handler) Read(ctx context.Context, req *user.ReadReq, rsp *user.ReadRes) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Read", acc.Name)
@@ -82,7 +82,7 @@ func (h *Handler) Read(ctx context.Context, req *user.ReadRequest, rsp *user.Rea
 
 	session, err := db.InitDb(ctx)
 	if err != nil {
-		return errors.InternalServerError("init db error %v", err)
+		return errors.InternalServerError("init db failed %v", err)
 	}
 	switch {
 	case req.Id > 0:
@@ -91,7 +91,7 @@ func (h *Handler) Read(ctx context.Context, req *user.ReadRequest, rsp *user.Rea
 		if err != nil {
 			return err
 		}
-		copier.Copy(&rsp.Account, &user)
+		copier.Copy(rsp, &user)
 		return nil
 	case req.Username != "" || req.Email != "":
 		where, user := model.User{Username: req.Username}, model.User{Email: req.Email}
@@ -99,13 +99,13 @@ func (h *Handler) Read(ctx context.Context, req *user.ReadRequest, rsp *user.Rea
 		if err != nil {
 			return err
 		}
-		copier.Copy(&rsp.Account, &user)
+		copier.Copy(&rsp, &user)
 		return nil
 	}
 	return nil
 }
 
-func (h *Handler) Update(ctx context.Context, req *user.UpdateRequest, rsp *user.UpdateResponse) error {
+func (h *Handler) Update(ctx context.Context, req *user.UpdateReq, rsp *user.UpdateRes) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Update", acc.Name)
@@ -113,20 +113,25 @@ func (h *Handler) Update(ctx context.Context, req *user.UpdateRequest, rsp *user
 
 	session, err := db.InitDb(ctx)
 	if err != nil {
-		return errors.InternalServerError("init db error %v", err)
+		return errors.InternalServerError("init db failed %v", err)
 	}
-	return h.UpdateUserDB(ctx, session, &model.User{
+
+	err = h.UpdateUserDB(ctx, session, &model.User{
 		Id:       req.Id,
 		Username: strings.ToLower(req.Username),
 		Email:    strings.ToLower(req.Email),
 		Profile:  req.Profile,
 	})
+	if err != nil {
+		return errors.InternalServerError("UpdateUserDB failed %v", err)
+	}
+	return nil
 }
 
-func (h *Handler) Delete(ctx context.Context, req *user.DeleteRequest, rsp *user.DeleteResponse) error {
+func (h *Handler) Delete(ctx context.Context, req *user.DeleteReq, rsp *user.DeleteRes) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
-		logger.Infof(ctx, "%v Do Update", acc.Name)
+		logger.Infof(ctx, "%v Do Delete", acc.Name)
 	}
 
 	session, err := db.InitDb(ctx)
@@ -134,41 +139,164 @@ func (h *Handler) Delete(ctx context.Context, req *user.DeleteRequest, rsp *user
 		return errors.InternalServerError("init db error %v", err)
 	}
 
-	return h.DeleteUserDB(ctx, session, &model.User{Id: req.Id})
+	err = h.DeleteUserDB(ctx, session, &model.User{Id: req.Id})
+	if err != nil {
+		return errors.InternalServerError("DeleteUserDB failed %v", err.Error())
+	}
+	return nil
 }
 
-// func (h *Handler) UpdatePassword(ctx context.Context, req *pb.UpdatePasswordRequest, rsp *pb.UpdatePasswordResponse) error {
-// 	usr, err := s.domain.Read(ctx, req.UserId)
-// 	if err != nil {
-// 		return errors.InternalServerError("user.updatepassword", err.Error())
-// 	}
-// 	if req.NewPassword != req.ConfirmPassword {
-// 		return errors.InternalServerError("user.updatepassword", "Passwords don't match")
-// 	}
+func (h *Handler) UpdatePassword(ctx context.Context, req *user.UpdatePasswordReq, rsp *user.UpdatePasswordRes) error {
+	acc, ok := auth.FromContext(ctx)
+	if ok {
+		logger.Infof(ctx, "%v Do UpdatePassword", acc.Name)
+	}
 
-// 	salt, hashed, err := s.domain.SaltAndPassword(ctx, usr.Id)
-// 	if err != nil {
-// 		return errors.InternalServerError("user.updatepassword", err.Error())
-// 	}
+	session, err := db.InitDb(ctx)
+	if err != nil {
+		return errors.InternalServerError("init db failed %v", err)
+	}
 
-// 	hh, err := base64.StdEncoding.DecodeString(hashed)
-// 	if err != nil {
-// 		return errors.InternalServerError("user.updatepassword", err.Error())
-// 	}
+	var usr model.User
+	err = h.QueryUserDetailDB(ctx, session, &model.User{Id: req.Id}, &usr)
+	if err != nil {
+		return errors.InternalServerError("QueryUserDetailDB %v", err.Error())
+	}
 
-// 	if err := bcrypt.CompareHashAndPassword(hh, []byte(x+salt+req.OldPassword)); err != nil {
-// 		return errors.Unauthorized("user.updatepassword", err.Error())
-// 	}
+	if req.NewPassword != req.ConfirmPassword {
+		return errors.InternalServerError("passwords don't match")
+	}
 
-// 	salt = random(16)
-// 	h, err := bcrypt.GenerateFromPassword([]byte(x+salt+req.NewPassword), 10)
-// 	if err != nil {
-// 		return errors.InternalServerError("user.updatepassword", err.Error())
-// 	}
-// 	pp := base64.StdEncoding.EncodeToString(h)
+	if err := usr.CompareHashAndPassword(req.OldPassword); err != nil {
+		return errors.InternalServerError("unauthorized")
+	}
 
-// 	if err := s.domain.UpdatePassword(ctx, req.UserId, salt, pp); err != nil {
-// 		return errors.InternalServerError("user.updatepassword", err.Error())
-// 	}
-// 	return nil
-// }
+	if _, err = usr.GenerateFromPassword(req.NewPassword); err != nil {
+		return errors.InternalServerError("generate password failed")
+	}
+
+	err = h.UpdateUserDB(ctx, session, &usr)
+	if err != nil {
+		return errors.InternalServerError("UpdateUserDB failed %v", err.Error())
+	}
+	return nil
+}
+
+func (h *Handler) List(ctx context.Context, req *user.ListReq, rsp *user.ListRes) error {
+	acc, ok := auth.FromContext(ctx)
+	if ok {
+		logger.Infof(ctx, "%v Do List", acc.Name)
+	}
+
+	session, err := db.InitDb(ctx)
+	if err != nil {
+		return errors.InternalServerError("init db failed %v", err)
+	}
+	session = db.SetLimit(ctx, session, req)
+
+	var list []model.User
+	err = h.QueryUserDB(ctx, session, &model.User{}, &list)
+	if err != nil {
+		return errors.InternalServerError("QueryUserDB failed %v", err.Error())
+	}
+	return nil
+}
+
+func (h *Handler) ResetPassword(ctx context.Context, req *user.ResetPasswordReq, rsp *user.ResetPasswordRes) error {
+	acc, ok := auth.FromContext(ctx)
+	if ok {
+		logger.Infof(ctx, "%v Do ResetPassword", acc.Name)
+	}
+
+	if len(req.Email) == 0 {
+		return errors.BadRequest("missing email")
+	}
+	if len(req.Code) == 0 {
+		return errors.BadRequest("missing code")
+	}
+	if len(req.ConfirmPassword) == 0 {
+		return errors.BadRequest("missing confirm password")
+	}
+	if len(req.NewPassword) == 0 {
+		return errors.BadRequest("missing new password")
+	}
+	if req.ConfirmPassword != req.NewPassword {
+		return errors.BadRequest("passwords do not match")
+	}
+
+	session, err := db.InitDb(ctx)
+	if err != nil {
+		return errors.InternalServerError("init db failed %v", err)
+	}
+
+	var usr model.User
+	err = h.QueryUserDetailDB(ctx, session, &model.User{Email: req.Email}, &usr)
+	if err != nil {
+		return errors.InternalServerError("QueryUserDetailDB %v", err.Error())
+	}
+
+	// check if a request was made to reset the password, we should have saved it
+	// code, err := s.domain.ReadPasswordResetCode(ctx, usr.Id, req.Code)
+	// if err != nil {
+	// 	return err
+	// }
+
+	// validate the code, e.g its an OTP token and hasn't expired
+	// resp, err := s.Otp.Validate(ctx, &otp.ValidateRequest{
+	// 	Id:   req.Email,
+	// 	Code: req.Code,
+	// })
+	// if err != nil {
+	// 	return err
+	// }
+
+	// check if the code is actually valid
+	// if !resp.Success {
+	// 	return errors.BadRequest("user.resetpassword", "invalid code")
+	// }
+
+	if _, err = usr.GenerateFromPassword(req.NewPassword); err != nil {
+		return errors.InternalServerError("generate password failed")
+	}
+
+	err = h.UpdateUserDB(ctx, session, &usr)
+	if err != nil {
+		return errors.InternalServerError("UpdateUserDB failed %v", err.Error())
+	}
+	return nil
+}
+
+func (h *Handler) SendPasswordResetEmail(ctx context.Context, req *user.SendPasswordResetEmailReq, rsp *user.SendPasswordResetEmailRes) error {
+	return nil
+}
+
+func (h *Handler) SendVerificationEmail(ctx context.Context, req *user.SendVerificationEmailReq, rsp *user.SendVerificationEmailRes) error {
+	return nil
+}
+
+func (h *Handler) VerifyEmail(ctx context.Context, req *user.VerifyEmailReq, rsp *user.VerifyEmailRes) error {
+	if len(req.Email) == 0 {
+		return errors.BadRequest("missing email")
+	}
+	if len(req.Token) == 0 {
+		return errors.BadRequest("missing token")
+	}
+
+	session, err := db.InitDb(ctx)
+	if err != nil {
+		return errors.InternalServerError("init db failed %v", err)
+	}
+
+	var usr model.User
+	// err = h.QueryUserDetailDB(ctx, session, &model.User{Id: req.Id}, &usr)
+	// if err != nil {
+	// 	return errors.InternalServerError("QueryUserDetailDB %v", err.Error())
+	// }
+
+	usr.Verified = true
+	err = h.UpdateUserDB(ctx, session, &usr)
+	if err != nil {
+		return errors.InternalServerError("UpdateUserDB failed %v", err.Error())
+	}
+	return nil
+}

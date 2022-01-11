@@ -5,7 +5,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/CreateRequest"
+              "$ref": "#/components/schemas/CreateReq"
             }
           }
         },
@@ -15,7 +15,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/DeleteRequest"
+              "$ref": "#/components/schemas/DeleteReq"
             }
           }
         },
@@ -25,7 +25,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ListRequest"
+              "$ref": "#/components/schemas/ListReq"
             }
           }
         },
@@ -35,7 +35,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ReadRequest"
+              "$ref": "#/components/schemas/ReadReq"
             }
           }
         },
@@ -45,7 +45,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ResetPasswordRequest"
+              "$ref": "#/components/schemas/ResetPasswordReq"
             }
           }
         },
@@ -55,7 +55,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/SendPasswordResetEmailRequest"
+              "$ref": "#/components/schemas/SendPasswordResetEmailReq"
             }
           }
         },
@@ -65,7 +65,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/SendVerificationEmailRequest"
+              "$ref": "#/components/schemas/SendVerificationEmailReq"
             }
           }
         },
@@ -75,7 +75,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/UpdatePasswordRequest"
+              "$ref": "#/components/schemas/UpdatePasswordReq"
             }
           }
         },
@@ -85,7 +85,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/UpdateRequest"
+              "$ref": "#/components/schemas/UpdateReq"
             }
           }
         },
@@ -95,7 +95,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/VerifyEmailRequest"
+              "$ref": "#/components/schemas/VerifyEmailReq"
             }
           }
         },
@@ -107,7 +107,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/CreateResponse"
+              "$ref": "#/components/schemas/CreateRes"
             }
           }
         },
@@ -117,7 +117,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/DeleteResponse"
+              "$ref": "#/components/schemas/DeleteRes"
             }
           }
         },
@@ -127,7 +127,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ListResponse"
+              "$ref": "#/components/schemas/ListRes"
             }
           }
         },
@@ -137,7 +137,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ReadResponse"
+              "$ref": "#/components/schemas/ReadRes"
             }
           }
         },
@@ -147,7 +147,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ResetPasswordResponse"
+              "$ref": "#/components/schemas/ResetPasswordRes"
             }
           }
         },
@@ -157,7 +157,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/SendPasswordResetEmailResponse"
+              "$ref": "#/components/schemas/SendPasswordResetEmailRes"
             }
           }
         },
@@ -167,7 +167,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/SendVerificationEmailResponse"
+              "$ref": "#/components/schemas/SendVerificationEmailRes"
             }
           }
         },
@@ -177,7 +177,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/UpdatePasswordResponse"
+              "$ref": "#/components/schemas/UpdatePasswordRes"
             }
           }
         },
@@ -187,7 +187,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/UpdateResponse"
+              "$ref": "#/components/schemas/UpdateRes"
             }
           }
         },
@@ -197,7 +197,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/VerifyEmailResponse"
+              "$ref": "#/components/schemas/VerifyEmailRes"
             }
           }
         },
@@ -237,108 +237,54 @@
       }
     },
     "schemas": {
-      "CreateRequest": {
-        "description": "Create a new user account. The email address and username for the account must be unique.",
+      "CreateReq": {
         "properties": {
           "email": {
-            "description": "the email address",
             "type": "string"
           },
-          "id": {
-            "description": "the account id",
-            "format": "int32",
-            "type": "number"
-          },
           "password": {
-            "description": "the user password",
             "type": "string"
           },
           "profile": {
             "additionalProperties": {
               "type": "string"
             },
-            "description": "optional user profile as map\u003cstring,string\u003e",
             "type": "object"
           },
           "username": {
-            "description": "the username",
             "type": "string"
           }
         },
-        "title": "CreateRequest",
+        "title": "CreateReq",
         "type": "object"
       },
-      "CreateResponse": {
-        "properties": {
-          "account": {
-            "properties": {
-              "created": {
-                "description": "unix timestamp",
-                "format": "int64",
-                "type": "number"
-              },
-              "email": {
-                "description": "an email address",
-                "type": "string"
-              },
-              "id": {
-                "description": "unique account id",
-                "format": "int32",
-                "type": "number"
-              },
-              "profile": {
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "description": "Store any custom data you want about your users in this fields.",
-                "type": "object"
-              },
-              "updated": {
-                "description": "unix timestamp",
-                "format": "int64",
-                "type": "number"
-              },
-              "username": {
-                "description": "alphanumeric username",
-                "type": "string"
-              },
-              "verificationDate": {
-                "description": "date of verification",
-                "format": "int64",
-                "type": "number"
-              },
-              "verified": {
-                "description": "if the account is verified",
-                "type": "boolean"
-              }
-            },
-            "type": "object"
-          }
-        },
-        "title": "CreateResponse",
-        "type": "object"
-      },
-      "DeleteRequest": {
-        "description": "Delete an account by id",
+      "CreateRes": {
         "properties": {
           "id": {
-            "description": "the account id",
             "format": "int32",
             "type": "number"
           }
         },
-        "title": "DeleteRequest",
+        "title": "CreateRes",
         "type": "object"
       },
-      "DeleteResponse": {
-        "title": "DeleteResponse",
+      "DeleteReq": {
+        "properties": {
+          "id": {
+            "format": "int32",
+            "type": "number"
+          }
+        },
+        "title": "DeleteReq",
         "type": "object"
       },
-      "ListRequest": {
-        "description": "List all users. Returns a paged list of results",
+      "DeleteRes": {
+        "title": "DeleteRes",
+        "type": "object"
+      },
+      "ListReq": {
         "properties": {
           "limit": {
-            "description": "Maximum number of records to return. Default limit is 25.\n Maximum limit is 1000. Anything higher will return an error.",
             "format": "int32",
             "type": "number"
           },
@@ -347,25 +293,22 @@
             "type": "number"
           }
         },
-        "title": "ListRequest",
+        "title": "ListReq",
         "type": "object"
       },
-      "ListResponse": {
+      "ListRes": {
         "properties": {
           "users": {
             "items": {
               "properties": {
                 "created": {
-                  "description": "unix timestamp",
                   "format": "int64",
                   "type": "number"
                 },
                 "email": {
-                  "description": "an email address",
                   "type": "string"
                 },
                 "id": {
-                  "description": "unique account id",
                   "format": "int32",
                   "type": "number"
                 },
@@ -373,25 +316,20 @@
                   "additionalProperties": {
                     "type": "string"
                   },
-                  "description": "Store any custom data you want about your users in this fields.",
                   "type": "object"
                 },
                 "updated": {
-                  "description": "unix timestamp",
                   "format": "int64",
                   "type": "number"
                 },
                 "username": {
-                  "description": "alphanumeric username",
                   "type": "string"
                 },
                 "verificationDate": {
-                  "description": "date of verification",
                   "format": "int64",
                   "type": "number"
                 },
                 "verified": {
-                  "description": "if the account is verified",
                   "type": "boolean"
                 }
               },
@@ -400,203 +338,151 @@
             "type": "array"
           }
         },
-        "title": "ListResponse",
+        "title": "ListRes",
         "type": "object"
       },
-      "ReadRequest": {
-        "description": "Read an account by id, username or email. Only one need to be specified.",
+      "ReadReq": {
         "properties": {
           "email": {
-            "description": "the account email",
             "type": "string"
           },
           "id": {
-            "description": "the account id",
             "format": "int32",
             "type": "number"
           },
           "username": {
-            "description": "the account username",
             "type": "string"
           }
         },
-        "title": "ReadRequest",
+        "title": "ReadReq",
         "type": "object"
       },
-      "ReadResponse": {
+      "ReadRes": {
         "properties": {
-          "account": {
-            "properties": {
-              "created": {
-                "description": "unix timestamp",
-                "format": "int64",
-                "type": "number"
-              },
-              "email": {
-                "description": "an email address",
-                "type": "string"
-              },
-              "id": {
-                "description": "unique account id",
-                "format": "int32",
-                "type": "number"
-              },
-              "profile": {
-                "additionalProperties": {
-                  "type": "string"
-                },
-                "description": "Store any custom data you want about your users in this fields.",
-                "type": "object"
-              },
-              "updated": {
-                "description": "unix timestamp",
-                "format": "int64",
-                "type": "number"
-              },
-              "username": {
-                "description": "alphanumeric username",
-                "type": "string"
-              },
-              "verificationDate": {
-                "description": "date of verification",
-                "format": "int64",
-                "type": "number"
-              },
-              "verified": {
-                "description": "if the account is verified",
-                "type": "boolean"
-              }
+          "email": {
+            "type": "string"
+          },
+          "id": {
+            "format": "int32",
+            "type": "number"
+          },
+          "password": {
+            "type": "string"
+          },
+          "profile": {
+            "additionalProperties": {
+              "type": "string"
             },
             "type": "object"
+          },
+          "username": {
+            "type": "string"
           }
         },
-        "title": "ReadResponse",
+        "title": "ReadRes",
         "type": "object"
       },
-      "ResetPasswordRequest": {
-        "description": "Reset password with the code sent by the \"SendPasswordResetEmail\" endoint.",
+      "ResetPasswordReq": {
         "properties": {
           "code": {
-            "description": "The code from the verification email",
             "type": "string"
           },
           "confirmPassword": {
-            "description": "confirm new password",
             "type": "string"
           },
           "email": {
-            "description": "the email to reset the password for",
             "type": "string"
           },
           "newPassword": {
-            "description": "the new password",
             "type": "string"
           }
         },
-        "title": "ResetPasswordRequest",
+        "title": "ResetPasswordReq",
         "type": "object"
       },
-      "ResetPasswordResponse": {
-        "title": "ResetPasswordResponse",
+      "ResetPasswordRes": {
+        "title": "ResetPasswordRes",
         "type": "object"
       },
-      "SendPasswordResetEmailRequest": {
-        "description": "Send an email with a verification code to reset password.\n Call \"ResetPassword\" endpoint once user provides the code.",
+      "SendPasswordResetEmailReq": {
         "properties": {
           "email": {
-            "description": "email address to send reset for",
             "type": "string"
           },
           "fromName": {
-            "description": "Display name of the sender for the email. Note: the email address will still be 'noreply@email.m3ocontent.com'",
             "type": "string"
           },
           "subject": {
-            "description": "subject of the email",
             "type": "string"
           },
           "textContent": {
-            "description": "Text content of the email. Don't forget to include the string '$code' which will be replaced by the real verification link\n HTML emails are not available currently.",
             "type": "string"
           }
         },
-        "title": "SendPasswordResetEmailRequest",
+        "title": "SendPasswordResetEmailReq",
         "type": "object"
       },
-      "SendPasswordResetEmailResponse": {
-        "title": "SendPasswordResetEmailResponse",
+      "SendPasswordResetEmailRes": {
+        "title": "SendPasswordResetEmailRes",
         "type": "object"
       },
-      "SendVerificationEmailRequest": {
-        "description": "Send a verification email\n to the user being signed up. Email from will be from 'noreply@email.m3ocontent.com',\n but you can provide the title and contents.\n The verification link will be injected in to the email as a template variable, $micro_verification_link.\n Example: 'Hi there, welcome onboard! Use the link below to verify your email: $micro_verification_link'\n The variable will be replaced with an actual url that will look similar to this:\n 'https://user.m3o.com/user/verify?token=a-verification-token\u0026redirectUrl=your-redir-url'",
+      "SendVerificationEmailReq": {
         "properties": {
           "email": {
-            "description": "email address to send the verification code",
             "type": "string"
           },
           "failureRedirectUrl": {
             "type": "string"
           },
           "fromName": {
-            "description": "Display name of the sender for the email. Note: the email address will still be 'noreply@email.m3ocontent.com'",
             "type": "string"
           },
           "redirectUrl": {
             "type": "string"
           },
           "subject": {
-            "description": "subject of the email",
             "type": "string"
           },
           "textContent": {
-            "description": "Text content of the email. Don't forget to include the string '$micro_verification_link' which will be replaced by the real verification link\n HTML emails are not available currently.",
             "type": "string"
           }
         },
-        "title": "SendVerificationEmailRequest",
+        "title": "SendVerificationEmailReq",
         "type": "object"
       },
-      "SendVerificationEmailResponse": {
-        "title": "SendVerificationEmailResponse",
+      "SendVerificationEmailRes": {
+        "title": "SendVerificationEmailRes",
         "type": "object"
       },
-      "UpdatePasswordRequest": {
-        "description": "Update the account password",
+      "UpdatePasswordReq": {
         "properties": {
           "confirmPassword": {
-            "description": "confirm new password",
             "type": "string"
           },
           "id": {
-            "description": "the account id",
             "format": "int32",
             "type": "number"
           },
           "newPassword": {
-            "description": "the new password",
             "type": "string"
           },
           "oldPassword": {
-            "description": "the old password",
             "type": "string"
           }
         },
-        "title": "UpdatePasswordRequest",
+        "title": "UpdatePasswordReq",
         "type": "object"
       },
-      "UpdatePasswordResponse": {
-        "title": "UpdatePasswordResponse",
+      "UpdatePasswordRes": {
+        "title": "UpdatePasswordRes",
         "type": "object"
       },
-      "UpdateRequest": {
-        "description": "Update the account username or email",
+      "UpdateReq": {
         "properties": {
           "email": {
-            "description": "the new email address",
             "type": "string"
           },
           "id": {
-            "description": "the account id",
             "format": "int32",
             "type": "number"
           },
@@ -604,34 +490,29 @@
             "additionalProperties": {
               "type": "string"
             },
-            "description": "the user profile as map\u003cstring,string\u003e",
             "type": "object"
           },
           "username": {
-            "description": "the new username",
             "type": "string"
           }
         },
-        "title": "UpdateRequest",
+        "title": "UpdateReq",
         "type": "object"
       },
-      "UpdateResponse": {
-        "title": "UpdateResponse",
+      "UpdateRes": {
+        "title": "UpdateRes",
         "type": "object"
       },
       "User": {
         "properties": {
           "created": {
-            "description": "unix timestamp",
             "format": "int64",
             "type": "number"
           },
           "email": {
-            "description": "an email address",
             "type": "string"
           },
           "id": {
-            "description": "unique account id",
             "format": "int32",
             "type": "number"
           },
@@ -639,48 +520,40 @@
             "additionalProperties": {
               "type": "string"
             },
-            "description": "Store any custom data you want about your users in this fields.",
             "type": "object"
           },
           "updated": {
-            "description": "unix timestamp",
             "format": "int64",
             "type": "number"
           },
           "username": {
-            "description": "alphanumeric username",
             "type": "string"
           },
           "verificationDate": {
-            "description": "date of verification",
             "format": "int64",
             "type": "number"
           },
           "verified": {
-            "description": "if the account is verified",
             "type": "boolean"
           }
         },
         "title": "User",
         "type": "object"
       },
-      "VerifyEmailRequest": {
-        "description": "Verify the email address of an account from a token sent in an email to the user.",
+      "VerifyEmailReq": {
         "properties": {
           "email": {
-            "description": "the email address to verify",
             "type": "string"
           },
           "token": {
-            "description": "The token from the verification email",
             "type": "string"
           }
         },
-        "title": "VerifyEmailRequest",
+        "title": "VerifyEmailReq",
         "type": "object"
       },
-      "VerifyEmailResponse": {
-        "title": "VerifyEmailResponse",
+      "VerifyEmailRes": {
+        "title": "VerifyEmailRes",
         "type": "object"
       }
     },
@@ -734,7 +607,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Account.Create(CreateRequest)"
+        "summary": "Account.Create(CreateReq)"
       }
     },
     "/user/Account/Delete": {
@@ -766,7 +639,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Account.Delete(DeleteRequest)"
+        "summary": "Account.Delete(DeleteReq)"
       }
     },
     "/user/Account/List": {
@@ -798,7 +671,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Account.List(ListRequest)"
+        "summary": "Account.List(ListReq)"
       }
     },
     "/user/Account/Read": {
@@ -830,7 +703,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Account.Read(ReadRequest)"
+        "summary": "Account.Read(ReadReq)"
       }
     },
     "/user/Account/ResetPassword": {
@@ -862,7 +735,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Account.ResetPassword(ResetPasswordRequest)"
+        "summary": "Account.ResetPassword(ResetPasswordReq)"
       }
     },
     "/user/Account/SendPasswordResetEmail": {
@@ -894,7 +767,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Account.SendPasswordResetEmail(SendPasswordResetEmailRequest)"
+        "summary": "Account.SendPasswordResetEmail(SendPasswordResetEmailReq)"
       }
     },
     "/user/Account/SendVerificationEmail": {
@@ -926,7 +799,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Account.SendVerificationEmail(SendVerificationEmailRequest)"
+        "summary": "Account.SendVerificationEmail(SendVerificationEmailReq)"
       }
     },
     "/user/Account/Update": {
@@ -958,7 +831,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Account.Update(UpdateRequest)"
+        "summary": "Account.Update(UpdateReq)"
       }
     },
     "/user/Account/UpdatePassword": {
@@ -990,7 +863,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Account.UpdatePassword(UpdatePasswordRequest)"
+        "summary": "Account.UpdatePassword(UpdatePasswordReq)"
       }
     },
     "/user/Account/VerifyEmail": {
@@ -1022,7 +895,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Account.VerifyEmail(VerifyEmailRequest)"
+        "summary": "Account.VerifyEmail(VerifyEmailReq)"
       }
     }
   },

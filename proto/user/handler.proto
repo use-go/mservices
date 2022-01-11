@@ -7,14 +7,14 @@ option go_package = "./proto;user";
 import "proto/user/user.proto";
 
 service Account {
-	rpc Create(CreateRequest) returns (CreateResponse) {}
-	rpc Read(ReadRequest) returns (ReadResponse) {}
-	rpc Update(UpdateRequest) returns (UpdateResponse) {}
-	rpc Delete(DeleteRequest) returns (DeleteResponse) {}
-	rpc UpdatePassword(UpdatePasswordRequest) returns (UpdatePasswordResponse) {}
-	rpc VerifyEmail(VerifyEmailRequest) returns(VerifyEmailResponse) {}
-	rpc SendVerificationEmail(SendVerificationEmailRequest) returns (SendVerificationEmailResponse) {}
-	rpc SendPasswordResetEmail(SendPasswordResetEmailRequest) returns (SendPasswordResetEmailResponse) {}
-	rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse) {}
-	rpc List(ListRequest) returns(ListResponse) {}
+	rpc Create(CreateReq) returns (CreateRes) {}
+	rpc Read(ReadReq) returns (ReadRes) {}
+	rpc Update(UpdateReq) returns (UpdateRes) {}
+	rpc Delete(DeleteReq) returns (DeleteRes) {}
+	rpc List(ListReq) returns(ListRes) {}
+	rpc UpdatePassword(UpdatePasswordReq) returns (UpdatePasswordRes) {}
+	rpc VerifyEmail(VerifyEmailReq) returns(VerifyEmailRes) {}
+	rpc SendVerificationEmail(SendVerificationEmailReq) returns (SendVerificationEmailRes) {}
+	rpc SendPasswordResetEmail(SendPasswordResetEmailReq) returns (SendPasswordResetEmailRes) {}
+	rpc ResetPassword(ResetPasswordReq) returns (ResetPasswordRes) {}
 }
