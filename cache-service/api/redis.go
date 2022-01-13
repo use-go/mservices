@@ -1,12 +1,11 @@
 package api
 
 import (
+	"comm/util/encode"
 	"context"
 	"strconv"
 	"time"
 
-	"github.com/gin-contrib/cache/persistence"
-	"github.com/gin-contrib/cache/utils"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -47,7 +46,7 @@ func (c *RedisStore) Get(key string, ptrValue interface{}) error {
 	if err != nil {
 		return err
 	}
-	return utils.Deserialize(buf, ptrValue)
+	return encode.Deserialize(buf, ptrValue)
 }
 
 func exists(client redis.Cmdable, key string) bool {
@@ -105,7 +104,7 @@ func (c *RedisStore) Decrement(key string, delta uint64) (newValue uint64, err e
 	// 0 out the value
 	val, _ := c.redisClient.Get(context.Background(), key).Result()
 	if val == "" {
-		return 0, persistence.ErrCacheMiss
+		return 0, ErrCacheMiss
 	}
 	currentVal, err := strconv.ParseInt(val, 10, 64)
 	if err == nil && delta > uint64(currentVal) {
@@ -124,13 +123,13 @@ func (c *RedisStore) Flush() error {
 
 func (c *RedisStore) invoke(key string, value interface{}, expires time.Duration) error {
 	switch expires {
-	case persistence.DEFAULT:
+	case DEFAULT:
 		expires = c.defaultExpiration
-	case persistence.FOREVER:
+	case FOREVER:
 		expires = time.Duration(0)
 	}
 
-	b, err := Serialize(value)
+	b, err := encode.Serialize(value)
 	if err != nil {
 		return err
 	}

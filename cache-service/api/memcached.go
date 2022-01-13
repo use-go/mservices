@@ -1,6 +1,7 @@
 package api
 
 import (
+	"comm/util/encode"
 	"time"
 
 	"github.com/bradfitz/gomemcache/memcache"
@@ -38,7 +39,7 @@ func (c *MemcachedStore) Get(key string, value interface{}) error {
 	if err != nil {
 		return convertMemcacheError(err)
 	}
-	return Deserialize(item.Value, value)
+	return encode.Deserialize(item.Value, value)
 }
 
 // Delete (see CacheStore interface)
@@ -73,7 +74,7 @@ func (c *MemcachedStore) invoke(storeFn func(*memcache.Client, *memcache.Item) e
 		expire = time.Duration(0)
 	}
 
-	b, err := Serialize(value)
+	b, err := encode.Serialize(value)
 	if err != nil {
 		return err
 	}

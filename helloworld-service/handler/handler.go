@@ -1,3 +1,7 @@
 package handler
 
-type Handler struct{}
+import "comm/store"
+
+type Handler struct {
+	CacheStore store.Cache
+}

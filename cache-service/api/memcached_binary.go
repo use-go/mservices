@@ -1,6 +1,7 @@
 package api
 
 import (
+	"comm/util/encode"
 	"time"
 
 	"github.com/memcachier/mc/v3"
@@ -26,7 +27,7 @@ func NewMemcachedBinaryStoreWithConfig(hostList, username, password string, defa
 // Set (see CacheStore interface)
 func (s *MemcachedBinaryStore) Set(key string, value interface{}, expires time.Duration) error {
 	exp := s.getExpiration(expires)
-	b, err := Serialize(value)
+	b, err := encode.Serialize(value)
 	if err != nil {
 		return err
 	}
@@ -37,7 +38,7 @@ func (s *MemcachedBinaryStore) Set(key string, value interface{}, expires time.D
 // Add (see CacheStore interface)
 func (s *MemcachedBinaryStore) Add(key string, value interface{}, expires time.Duration) error {
 	exp := s.getExpiration(expires)
-	b, err := Serialize(value)
+	b, err := encode.Serialize(value)
 	if err != nil {
 		return err
 	}
@@ -48,7 +49,7 @@ func (s *MemcachedBinaryStore) Add(key string, value interface{}, expires time.D
 // Replace (see CacheStore interface)
 func (s *MemcachedBinaryStore) Replace(key string, value interface{}, expires time.Duration) error {
 	exp := s.getExpiration(expires)
-	b, err := Serialize(value)
+	b, err := encode.Serialize(value)
 	if err != nil {
 		return err
 	}
@@ -62,7 +63,7 @@ func (s *MemcachedBinaryStore) Get(key string, value interface{}) error {
 	if err != nil {
 		return convertMcError(err)
 	}
-	return Deserialize([]byte(val), value)
+	return encode.Deserialize([]byte(val), value)
 }
 
 // Delete (see CacheStore interface)

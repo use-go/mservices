@@ -1,14 +1,13 @@
-package api
+package encode
 
 import (
-	"bytes"
-	"encoding/gob"
+	"encoding/json"
 	"reflect"
 	"strconv"
 )
 
-// Serialize returns a []byte representing the passed value
-func Serialize(value interface{}) ([]byte, error) {
+// Marshal returns a []byte representing the passed value
+func Marshal(value interface{}) ([]byte, error) {
 	if bytes, ok := value.([]byte); ok {
 		return bytes, nil
 	}
@@ -20,16 +19,11 @@ func Serialize(value interface{}) ([]byte, error) {
 		return []byte(strconv.FormatUint(v.Uint(), 10)), nil
 	}
 
-	var b bytes.Buffer
-	encoder := gob.NewEncoder(&b)
-	if err := encoder.Encode(value); err != nil {
-		return nil, err
-	}
-	return b.Bytes(), nil
+	return json.Marshal(value)
 }
 
-// Deserialize deserialices the passed []byte into a the passed ptr interface{}
-func Deserialize(byt []byte, ptr interface{}) (err error) {
+// Unmarshal deserialices the passed []byte into a the passed ptr interface{}
+func Unmarshal(byt []byte, ptr interface{}) (err error) {
 	if bytes, ok := ptr.(*[]byte); ok {
 		*bytes = byt
 		return nil
@@ -59,10 +53,5 @@ func Deserialize(byt []byte, ptr interface{}) (err error) {
 		}
 	}
 
-	b := bytes.NewBuffer(byt)
-	decoder := gob.NewDecoder(b)
-	if err = decoder.Decode(ptr); err != nil {
-		return err
-	}
-	return nil
+	return json.Unmarshal(byt, ptr)
 }

@@ -3,7 +3,7 @@ package trace
 import (
 	"bytes"
 	"comm/logger"
-	"comm/util/json"
+	"comm/util/encode"
 	"context"
 	"strings"
 	"time"
@@ -12,7 +12,7 @@ import (
 // Debug defined TODO
 func Debug(ctx context.Context, action string, req, rsp interface{}) func() {
 	startTime := time.Now()
-	reqByte := json.MustMarshal(req)
+	reqByte := encode.MustMarshal(req)
 	reqStr := strings.Replace(strings.Replace(string(reqByte), " ", "", -1), "\n", "", -1)
 	logger.Init(logger.WithCallerSkipCount(2))
 	defer logger.Init(logger.WithCallerSkipCount(logger.DefaultCallerSkipCount))
@@ -21,7 +21,7 @@ func Debug(ctx context.Context, action string, req, rsp interface{}) func() {
 		if rspBuffer, ok := rsp.(*bytes.Buffer); ok {
 			rsp = rspBuffer.Bytes()
 		}
-		rspByte := json.MustMarshal(rsp)
+		rspByte := encode.MustMarshal(rsp)
 		rspStr := strings.Replace(strings.Replace(string(rspByte), " ", "", -1), "\n", "", -1)
 		cost := int(time.Since(startTime) / time.Microsecond)
 		logger.Init(logger.WithCallerSkipCount(2))

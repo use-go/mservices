@@ -1,7 +1,8 @@
 package api
 
 import (
-	"reflect"
+	"comm/util/encode"
+	"strconv"
 	"time"
 
 	"github.com/robfig/go-cache"
@@ -18,30 +19,35 @@ func NewInMemoryStore(defaultExpiration time.Duration) *InMemoryStore {
 }
 
 // Get (see CacheStore interface)
-func (c *InMemoryStore) Get(key string, value interface{}) error {
+func (c *InMemoryStore) Get(key string, ptrValue interface{}) error {
 	val, found := c.Cache.Get(key)
 	if !found {
 		return ErrCacheMiss
 	}
-
-	v := reflect.ValueOf(value)
-	if v.Type().Kind() == reflect.Ptr && v.Elem().CanSet() {
-		v.Elem().Set(reflect.ValueOf(val))
-		return nil
+	valBytes, err := encode.Serialize(val)
+	if err != nil {
+		return err
 	}
-	return ErrNotStored
+	return encode.Deserialize(valBytes, ptrValue)
 }
 
 // Set (see CacheStore interface)
 func (c *InMemoryStore) Set(key string, value interface{}, expires time.Duration) error {
-	// NOTE: go-cache understands the values of DEFAULT and FOREVER
-	c.Cache.Set(key, value, expires)
+	b, err := encode.Serialize(value)
+	if err != nil {
+		return err
+	}
+	c.Cache.Set(key, b, expires)
 	return nil
 }
 
 // Add (see CacheStore interface)
 func (c *InMemoryStore) Add(key string, value interface{}, expires time.Duration) error {
-	err := c.Cache.Add(key, value, expires)
+	b, err := encode.Serialize(value)
+	if err != nil {
+		return err
+	}
+	err = c.Cache.Add(key, b, expires)
 	if err == cache.ErrKeyExists {
 		return ErrNotStored
 	}
@@ -50,7 +56,11 @@ func (c *InMemoryStore) Add(key string, value interface{}, expires time.Duration
 
 // Replace (see CacheStore interface)
 func (c *InMemoryStore) Replace(key string, value interface{}, expires time.Duration) error {
-	if err := c.Cache.Replace(key, value, expires); err != nil {
+	b, err := encode.Serialize(value)
+	if err != nil {
+		return err
+	}
+	if err := c.Cache.Replace(key, b, expires); err != nil {
 		return ErrNotStored
 	}
 	return nil
@@ -65,8 +75,26 @@ func (c *InMemoryStore) Delete(key string) error {
 }
 
 // Increment (see CacheStore interface)
-func (c *InMemoryStore) Increment(key string, n uint64) (uint64, error) {
-	newValue, err := c.Cache.Increment(key, n)
+func (c *InMemoryStore) Increment(key string, delta uint64) (uint64, error) {
+	val, found := c.Cache.Get(key)
+	if !found {
+		return 0, ErrCacheMiss
+	}
+	valBytes, err := encode.Serialize(val)
+	if err != nil {
+		return 0, err
+	}
+	currentVal, err := strconv.ParseUint(string(valBytes), 10, 64)
+	if err == nil {
+		sum := currentVal + delta
+		b, err := encode.Serialize(sum)
+		if err != nil {
+			return 0, err
+		}
+		c.Cache.Set(key, b, 0)
+		return sum, nil
+	}
+	newValue, err := c.Cache.Increment(key, delta)
 	if err == cache.ErrCacheMiss {
 		return 0, ErrCacheMiss
 	}
@@ -74,8 +102,30 @@ func (c *InMemoryStore) Increment(key string, n uint64) (uint64, error) {
 }
 
 // Decrement (see CacheStore interface)
-func (c *InMemoryStore) Decrement(key string, n uint64) (uint64, error) {
-	newValue, err := c.Cache.Decrement(key, n)
+func (c *InMemoryStore) Decrement(key string, delta uint64) (uint64, error) {
+	val, found := c.Cache.Get(key)
+	if !found {
+		return 0, ErrCacheMiss
+	}
+	valBytes, err := encode.Serialize(val)
+	if err != nil {
+		return 0, err
+	}
+
+	currentVal, err := strconv.ParseUint(string(valBytes), 10, 64)
+	if err == nil {
+		sum := currentVal - delta
+		if delta > currentVal {
+			sum = 0
+		}
+		b, err := encode.Serialize(sum)
+		if err != nil {
+			return 0, err
+		}
+		c.Cache.Set(key, b, 0)
+		return sum, nil
+	}
+	newValue, err := c.Cache.Decrement(key, delta)
 	if err == cache.ErrCacheMiss {
 		return 0, ErrCacheMiss
 	}
