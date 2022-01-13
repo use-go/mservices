@@ -60,7 +60,7 @@ function urlDelParams(name) {
 }
 
 function request(url, params = {}) {
-    return fetch(url, Object.assign({ headers:{ 'Authorization': getCookie('Authorization') } }, params)).then(function(response) {
+    return fetch(url, Object.assign({ headers:{ 'Authorization': 'Bearer ' + getCookie('token') } }, params)).then(function(response) {
         if (response.status === 401) {
             window.location.href= authorize_url +"?response_type=" + response_type + "&state="+ state + "&redirect_uri="+encodeURIComponent(redirect_uri)+"&code_challenge=" + encodeURIComponent(code_challenge) + "&code_challenge_method="+code_challenge_method+"&scope="+scope+"&client_id="+client_id
             throw new Error('unauthorized request') 
@@ -86,7 +86,7 @@ window.onload = function() {
         // remove code for safty
         history.pushState(null,document.title,urlDelParams('code'));
         // fetch token
-        if (!getCookie('Authorization')) {
+        if (!getCookie('token')) {
             var data = new URLSearchParams()
             data.append('grant_type', grant_type)
             data.append('client_id', client_id)
@@ -98,7 +98,7 @@ window.onload = function() {
                 return response.json()
             }).then(function(json) {
                 if (!!json.access_token) {
-                    setCookie('Authorization', 'Bearer ' + json.access_token)
+                    setCookie('token', json.access_token)
                     return
                 }
             })
