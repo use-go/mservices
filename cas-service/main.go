@@ -38,6 +38,22 @@ func main() {
 	manager.MustTokenStorage(store.NewMemoryTokenStore())
 	clientStore := store.NewClientStore()
 	manager.MapClientStorage(clientStore)
+
+	// Modify it for local test
+	manager.SetValidateURIHandler(func(baseURI string, redirectURI string) error {
+		base, err := url.Parse(baseURI)
+		if err != nil {
+			return err
+		}
+		redirect, err := url.Parse(redirectURI)
+		if err != nil {
+			return err
+		}
+		if !strings.HasSuffix(redirect.Host, base.Host) {
+			return errors.ErrInvalidRedirectURI
+		}
+		return nil
+	})
 	auth := server.NewDefaultServer(manager)
 	hdl := handler.Handler{
 		OAuthServer: auth,

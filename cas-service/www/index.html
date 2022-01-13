@@ -109,7 +109,6 @@ window.onload = function() {
         // remove code for safty
         history.pushState(null,document.title,urlDelParams('code'))
         // fetch token
-        console.log('-------', getCookie('token'))
         if (!getCookie('token')) {
             var data = new URLSearchParams()
             data.append('grant_type', grant_type)
