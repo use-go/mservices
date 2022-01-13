@@ -2,12 +2,14 @@ package handler
 
 import (
 	"comm/auth"
+	"comm/db"
 	"comm/errors"
 	"comm/logger"
 	"context"
-	"fmt"
+	"helloworld-service/model"
 	"proto/helloworld"
-	"time"
+
+	"github.com/jinzhu/copier"
 )
 
 // DeleteInfo defined TODO
@@ -16,19 +18,25 @@ func (h *Handler) DeleteInfo(ctx context.Context, req *helloworld.InfoFilter, rs
 	if ok {
 		logger.Infof(ctx, "%v Do DeleteInfo", acc.Name)
 	}
-	err := h.CacheStore.Set(ctx, "DeleteInfo", 1, 10*time.Second)
-	if err != nil {
-		return errors.InternalServerError("set failed %v", err)
+
+	if len(req.Name) == 0 {
+		return errors.BadRequest("Name required")
 	}
-	_, err = h.CacheStore.Increment(ctx, "DeleteInfo", 2)
+
+	session, err := db.InitDb(ctx)
 	if err != nil {
-		return errors.InternalServerError("increment failed %v", err)
+		return errors.InternalServerError("init db error %v", err)
 	}
-	ret, err := h.CacheStore.Decrement(ctx, "DeleteInfo", 1)
+
+	where := model.Info{
+		Name: req.GetName(),
+	}
+	err = h.DeleteInfoDB(ctx, session, &where)
 	if err != nil {
-		return errors.InternalServerError("decrement failed %v", err)
+		logger.Errorf(ctx, "DeleteInfoDB failed. [%v]", err)
+		return errors.InternalServerError("deleteInfoDB failed %v", err.Error())
 	}
-	rsp.Name = "Hello " + req.Name + fmt.Sprintf("%v", ret)
+	rsp.Name = where.Name
 	return nil
 }
 
@@ -38,7 +46,33 @@ func (h *Handler) UpdateInfo(ctx context.Context, req *helloworld.Info, rsp *hel
 	if ok {
 		logger.Infof(ctx, "%v Do UpdateInfo", acc.Name)
 	}
-	rsp.Name = "Hello " + req.Name
+
+	if len(req.Name) == 0 {
+		return errors.BadRequest("Name required")
+	}
+
+	session, err := db.InitDb(ctx)
+	if err != nil {
+		return errors.InternalServerError("init db error %v", err)
+	}
+
+	info := model.Info{}
+	err = copier.Copy(&info, req)
+	if err != nil {
+		logger.Errorf(ctx, "Copy.req failed %v", err)
+		return errors.InternalServerError("Copy.req failed %v", err)
+	}
+	err = h.UpdateInfoDB(ctx, session, &info)
+	if err != nil {
+		logger.Errorf(ctx, "UpdateInfoDB failed %v", err)
+		return errors.InternalServerError("UpdateInfoDB failed %v", err)
+	}
+
+	err = copier.Copy(rsp, &info)
+	if err != nil {
+		logger.Errorf(ctx, "Copy.info failed %v", err)
+		return errors.InternalServerError("Copy.info failed %v", err)
+	}
 	return nil
 }
 
@@ -46,9 +80,30 @@ func (h *Handler) UpdateInfo(ctx context.Context, req *helloworld.Info, rsp *hel
 func (h *Handler) InsertInfo(ctx context.Context, req *helloworld.Info, rsp *helloworld.Info) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
-		logger.Infof(ctx, "%v Do InsertInfo", acc.Name)
+		logger.Infof(ctx, "%v Do UpdateInfo", acc.Name)
 	}
-	rsp.Name = "Hello " + req.Name
+
+	if len(req.Name) == 0 {
+		return errors.BadRequest("Name required")
+	}
+
+	session, err := db.InitDb(ctx)
+	if err != nil {
+		return errors.InternalServerError("InitDb failed %v", err)
+	}
+
+	info := model.Info{}
+	err = copier.Copy(&info, req)
+	if err != nil {
+		logger.Errorf(ctx, "Copy.req failed %v", err)
+		return errors.InternalServerError("Copy.req failed %v", err.Error())
+	}
+
+	err = h.InsertInfoDB(ctx, session, &info)
+	if err != nil {
+		logger.Errorf(ctx, "InsertSchedulePositionDB failed %v", err)
+		return errors.InternalServerError("InsertSchedulePositionDB failed %v", err.Error())
+	}
 	return nil
 }
 
