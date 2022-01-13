@@ -84,11 +84,12 @@ window.onload = function() {
             data.append('code', code)
             return fetch(token_url, { method: 'POST', body: data }).then(function(response) {
                 return response.json()
-            }).then(function(json) {
-                if (!!json.access_token) {
-                    setCookie('token', json.access_token)
+            }).then(function(res) {
+                if (!!res.access_token) {
+                    setCookie('token', res.access_token)
                     return
                 }
+                console.log(res)
             })
         }
     }
