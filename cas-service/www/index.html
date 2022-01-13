@@ -1,17 +1,9 @@
 <script src="https://cdn.bootcdn.net/ajax/libs/fetch/3.6.2/fetch.min.js"></script>
 <script>
-var client_id = '000000'
-var client_secret = '999999'
-var authorize_url = 'http://192.168.202.128:8080/cas/oauth2/authorize'
-var token_url = 'http://192.168.202.128:8080/cas/oauth2/token'
-var grant_type = 'authorization_code'
-var code_verifier = 's256example'
-var response_type = 'code'
+var authorize_url = 'http://192.168.202.128:8080/cas/client/authorize'
+var token_url = 'http://192.168.202.128:8080/cas/client/token'
 var redirect_uri = window.location.href.replaceAll(window.location.search, '')
-var code_challenge = 'Qn3Kywp0OiU4NK_AFzGPlmrcYJDJ13Abj_jdL08Ahg8='
-var code_challenge_method = 'S256'
-var state = 'xyz'
-var scope = 'all'
+var state = window.location.search
 
 function setCookie(name, value) {
     var hour = 8; 
@@ -78,13 +70,8 @@ function request(url, params = {}) {
     return fetch(url, Object.assign({ headers:{ 'Authorization': 'Bearer ' + getCookie('token') } }, params)).then(function(response) {
         if (response.status === 401) {
             window.location.href= authorize_url +"?" + urlEncode({
-                "response_type": response_type,
                 "state": state,
                 "redirect_uri": redirect_uri,
-                "code_challenge": code_challenge,
-                "code_challenge_method": code_challenge_method,
-                "scope": scope,
-                "client_id": client_id,
             })
             throw new Error('unauthorized request') 
         }
@@ -111,10 +98,6 @@ window.onload = function() {
         // fetch token
         if (!getCookie('token')) {
             var data = new URLSearchParams()
-            data.append('grant_type', grant_type)
-            data.append('client_id', client_id)
-            data.append('code_verifier', code_verifier)
-            data.append('client_secret', client_secret)
             data.append('redirect_uri', redirect_uri)
             data.append('code', code)
             return fetch(token_url, { method: 'POST', body: data }).then(function(response) {
