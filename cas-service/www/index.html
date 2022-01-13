@@ -21,20 +21,20 @@ function setCookie(name, value) {
 }
 
 function getCookie(name) {
-    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)")
     if(arr=document.cookie.match(reg))
-        return unescape(arr[2]);
+        return unescape(arr[2])
     else
-        return null;
+        return null
 }
 
 function getQueryString(name) {
-  var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
-  var r = window.location.search.substr(1).match(reg);
+  var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
+  var r = window.location.search.substr(1).match(reg)
   if (r != null) {
-    return unescape(r[2]);
+    return unescape(r[2])
   }
-  return null;
+  return null
 }
 
 function urlDelParams(name) {
@@ -59,10 +59,33 @@ function urlDelParams(name) {
   }
 }
 
+function urlEncode(param, key, encode) {  
+  if(param==null) return ''
+  var paramStr = ''  
+  var t = typeof (param)
+  if (t == 'string' || t == 'number' || t == 'boolean') {  
+    paramStr += '&' + key + '=' + ((encode==null||encode) ? encodeURIComponent(param) : param)
+  } else {  
+    for (var i in param) {  
+      var k = key == null ? i : key + (param instanceof Array ? '[' + i + ']' : '.' + i)
+      paramStr += urlEncode(param[i], k, encode)
+    }  
+  }  
+  return paramStr
+}  
+
 function request(url, params = {}) {
     return fetch(url, Object.assign({ headers:{ 'Authorization': 'Bearer ' + getCookie('token') } }, params)).then(function(response) {
         if (response.status === 401) {
-            window.location.href= authorize_url +"?response_type=" + response_type + "&state="+ state + "&redirect_uri="+encodeURIComponent(redirect_uri)+"&code_challenge=" + encodeURIComponent(code_challenge) + "&code_challenge_method="+code_challenge_method+"&scope="+scope+"&client_id="+client_id
+            window.location.href= authorize_url +"?" + urlEncode({
+                "response_type": response_type,
+                "state": state,
+                "redirect_uri": redirect_uri,
+                "code_challenge": code_challenge,
+                "code_challenge_method": code_challenge_method,
+                "scope": scope,
+                "client_id": client_id,
+            })
             throw new Error('unauthorized request') 
         }
         return response.json()
@@ -71,10 +94,10 @@ function request(url, params = {}) {
 
 function updateInfo() {
     request('http://192.168.202.128:8080/helloworld/updateInfo').then(function(json) {
-        var body = document.body;
-        var div = document.createElement("div");
-        div.innerHTML = JSON.stringify(json);
-        document.body.appendChild(div);
+        var body = document.body
+        var div = document.createElement("div")
+        div.innerHTML = JSON.stringify(json)
+        document.body.appendChild(div)
     }).catch(function(ex) {
         console.error(ex)
     })
@@ -84,8 +107,9 @@ window.onload = function() {
     var code = getQueryString("code")
     if (!!code) {
         // remove code for safty
-        history.pushState(null,document.title,urlDelParams('code'));
+        history.pushState(null,document.title,urlDelParams('code'))
         // fetch token
+        console.log('-------', getCookie('token'))
         if (!getCookie('token')) {
             var data = new URLSearchParams()
             data.append('grant_type', grant_type)
