@@ -34,6 +34,9 @@
 			"path": "cache-service"
 		},
 		{
+			"path": "screenshot-service"
+		},
+		{
 			"name": "go-service",
 			"path": "."
 		}

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package screenshot;
+
+option go_package = "./proto;screenshot";
+
+message ScreenshotRequest {
+	string url = 1;
+	int32 width = 2;
+	int32 height = 3;
+}
+
+message ScreenshotResponse {
+	bytes data = 1;
+}

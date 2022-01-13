@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package screenshot;
+
+option go_package = "./proto;screenshot";
+
+import "proto/screenshot/screenshot.proto";
+
+service Screenshot {
+	rpc Screenshot(ScreenshotRequest) returns (ScreenshotResponse) {}
+}
