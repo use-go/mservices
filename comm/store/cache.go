@@ -1,7 +1,7 @@
 package store
 
 import (
-	"comm/util/json"
+	"comm/util/encode"
 	"context"
 	"reflect"
 	"time"
@@ -60,7 +60,7 @@ func (c *cache) Get(ctx context.Context, key string, value interface{}, opts ...
 		return e
 	}
 	v, _ := out[0].Elem().FieldByName("Value").Interface().([]byte)
-	json.MustDeserialize(v, value)
+	encode.MustDeserialize(v, value)
 	return nil
 }
 
@@ -68,7 +68,7 @@ func (c *cache) Set(ctx context.Context, key string, value interface{}, expire t
 	funk := reflect.ValueOf(c.srv).MethodByName("Set")
 	setReq := reflect.New(funk.Type().In(1).Elem())
 	setReq.Elem().FieldByName("Key").SetString(key)
-	setReq.Elem().FieldByName("Value").SetBytes(json.MustSerialize(value))
+	setReq.Elem().FieldByName("Value").SetBytes(encode.MustSerialize(value))
 	setReq.Elem().FieldByName("Expire").SetInt(int64(expire))
 	optsv := []reflect.Value{
 		reflect.ValueOf(ctx),
@@ -88,7 +88,7 @@ func (c *cache) Add(ctx context.Context, key string, value interface{}, expire t
 	funk := reflect.ValueOf(c.srv).MethodByName("Add")
 	addReq := reflect.New(funk.Type().In(1).Elem())
 	addReq.Elem().FieldByName("Key").SetString(key)
-	addReq.Elem().FieldByName("Value").SetBytes(json.MustSerialize(value))
+	addReq.Elem().FieldByName("Value").SetBytes(encode.MustSerialize(value))
 	addReq.Elem().FieldByName("Expire").SetInt(int64(expire))
 
 	optsv := []reflect.Value{
@@ -109,7 +109,7 @@ func (c *cache) Replace(ctx context.Context, key string, data interface{}, expir
 	funk := reflect.ValueOf(c.srv).MethodByName("Replace")
 	replaceReq := reflect.New(funk.Type().In(1).Elem())
 	replaceReq.Elem().FieldByName("Key").SetString(key)
-	replaceReq.Elem().FieldByName("Value").SetBytes(json.MustSerialize(data))
+	replaceReq.Elem().FieldByName("Value").SetBytes(encode.MustSerialize(data))
 	replaceReq.Elem().FieldByName("Expire").SetInt(int64(expire))
 
 	optsv := []reflect.Value{
