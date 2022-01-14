@@ -23,7 +23,7 @@ type responseBodyWriter struct {
 
 func (r responseBodyWriter) Write(b []byte) (int, error) {
 	// reduce mem
-	if r.ResponseWriter.Header().Get("Content-Type") == "application/json" {
+	if strings.HasPrefix(r.ResponseWriter.Header().Get("Content-Type"), "application/json") {
 		r.body.Write(b)
 	}
 	return r.ResponseWriter.Write(b)
