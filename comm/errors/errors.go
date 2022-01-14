@@ -21,7 +21,6 @@ func FromError(err error) *errors.Error {
 }
 
 // Parse tries to parse a JSON string into an error. If that
-// fails, it will set the given string as the error detail.
 func Parse(err string, trace ...string) *errors.Error {
 	return errors.Parse(err, trace...)
 }

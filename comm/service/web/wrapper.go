@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/2637309949/micro/v3/service/api"
 	sAuth "github.com/2637309949/micro/v3/service/auth"
 	"github.com/2637309949/micro/v3/util/auth"
 	cx "github.com/2637309949/micro/v3/util/ctx"
@@ -32,11 +33,10 @@ var (
 	debugWrapper = func(call func(http.ResponseWriter, *http.Request)) func(http.ResponseWriter, *http.Request) {
 		return func(res http.ResponseWriter, req *http.Request) {
 			req = req.WithContext(cx.FromRequest(req))
-			bodyBytes := []byte("{}")
-			if req.Header.Get("Content-Type") == "application/json" {
-				bodyBytes, _ := ioutil.ReadAll(req.Body)
-				req.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
-			}
+			raws, _ := ioutil.ReadAll(req.Body)
+			req.Body = ioutil.NopCloser(bytes.NewBuffer(raws))
+			bodyBytes, _ := api.RequestPayload(req)
+			req.Body = ioutil.NopCloser(bytes.NewBuffer(raws))
 			w := &responseBodyWriter{body: &bytes.Buffer{}, ResponseWriter: res}
 			defer trace.Debug(cx.FromRequest(req), req.URL.Path, bodyBytes, w.body)()
 			call(w, req)

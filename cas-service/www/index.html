@@ -73,7 +73,7 @@ function request(url, params = {}) {
 }
 
 function updateInfo() {
-    return request('http://192.168.202.128:8080/helloworld/updateInfo').then(function(json) {
+    return request('http://192.168.202.128:8080/helloworld/queryInfoDetail').then(function(json) {
         var body = document.body
         var div = document.createElement("div")
         div.innerText = JSON.stringify(json, null, 4)
