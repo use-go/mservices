@@ -65,7 +65,9 @@ function request(url, params = {}) {
             status = data.code || status
         }
         if (status === 401) {
-            window.location.href= authorize_url +"?state=" + state + "&redirect_uri=" + redirect_uri
+            if (window.confirm('Authentication failure')) {
+                window.location.href= authorize_url +"?state=" + state + "&redirect_uri=" + redirect_uri
+            }
             throw new Error('unauthorized request') 
         }
         return data
