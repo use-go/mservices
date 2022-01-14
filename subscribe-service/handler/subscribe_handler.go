@@ -29,6 +29,7 @@ func (h *Handler) Publish(ctx context.Context, req *subscribe.PublishRequest, rs
 	return nil
 }
 
+// Subscribe defined TODO, setting timeout should be careful
 func (h *Handler) Subscribe(ctx context.Context, req *subscribe.SubscribeRequest, stream subscribe.Subscribe_SubscribeStream) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
