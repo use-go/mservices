@@ -2,8 +2,8 @@
 <script>
 var authorize_url = 'http://192.168.202.128:8080/cas/client/authorize'
 var token_url = 'http://192.168.202.128:8080/cas/client/token'
-var redirect_uri = window.location.href.replaceAll(window.location.search, '')
-var state = window.location.search
+var redirect_uri = encodeURIComponent(window.location.href.match('([a-z][a-z0-9+\-.]*://[^?#&=]+)/?')[1]) 
+var state = 'xyz'
 
 function setCookie(name, value) {
     var hour = 8; 
@@ -29,43 +29,54 @@ function getQueryString(name) {
   return null
 }
 
-function urlDelParams(name) {
+function urlDelParams(keys) {
   var loca = window.location
-  var baseUrl = loca.origin + loca.pathname + '?'
+  var baseUrl = loca.origin + loca.pathname
   var query = loca.search.substr(1)
-  if (query.indexOf(name) > -1) {
-    var obj = {}
-    var arr = query.split('&')
-    for (var i = 0; i < arr.length; i++) {
-      arr[i] = arr[i].split('=')
-      obj[arr[i][0]] = arr[i][1]
-    }
-    delete obj[name]
-    var url =
-      baseUrl +
-      JSON.stringify(obj)
-        .replace(/[\"\{\}]/g, '')
-        .replace(/\:/g, '=')
-        .replace(/\,/g, '&')
-    return url
+
+  var obj = {}
+  var arr = query.split('&')
+  for (var i = 0; i < arr.length; i++) {
+    arr[i] = arr[i].split('=')
+    obj[arr[i][0]] = arr[i][1]
   }
+  for(var key of keys) {
+    delete obj[key]
+  }
+  if (Object.keys(obj).length > 0) {
+    baseUrl += '?'
+  }
+
+  var url =
+    baseUrl +
+    JSON.stringify(obj)
+      .replace(/[\"\{\}]/g, '')
+      .replace(/\:/g, '=')
+      .replace(/\,/g, '&')
+  return url
 }
 
 function request(url, params = {}) {
     return fetch(url, Object.assign({ headers:{ 'Authorization': 'Bearer ' + getCookie('token') } }, params)).then(function(response) {
-        if (response.status === 401) {
+        var data = response
+        var status = data.status
+        if (data.headers.get('Content-Type') === 'application/json') {
+            data = data.json()
+            status = data.code || status
+        }
+        if (status === 401) {
             window.location.href= authorize_url +"?state=" + state + "&redirect_uri=" + redirect_uri
             throw new Error('unauthorized request') 
         }
-        return response.json()
+        return data
     })
 }
 
 function updateInfo() {
-    request('http://192.168.202.128:8080/helloworld/updateInfo').then(function(json) {
+    return request('http://192.168.202.128:8080/helloworld/updateInfo').then(function(json) {
         var body = document.body
         var div = document.createElement("div")
-        div.innerHTML = JSON.stringify(json)
+        div.innerText = JSON.stringify(json, null, 4)
         document.body.appendChild(div)
     }).catch(function(ex) {
         console.error(ex)
@@ -76,7 +87,7 @@ window.onload = function() {
     var code = getQueryString("code")
     if (!!code) {
         // remove code for safty
-        history.pushState(null,document.title,urlDelParams('code'))
+        history.pushState(null, document.title, urlDelParams(['code', 'state']))
         // fetch token
         if (!getCookie('token')) {
             var data = new URLSearchParams()
