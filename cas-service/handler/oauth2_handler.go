@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/go-session/session"
+	"github.com/go-session/session/v3"
 )
 
 func (h *Handler) OAuth2Authorize(rw http.ResponseWriter, r *http.Request) {
@@ -17,6 +17,11 @@ func (h *Handler) OAuth2Authorize(rw http.ResponseWriter, r *http.Request) {
 	}
 
 	store, err := session.Start(r.Context(), rw, r)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = r.ParseForm()
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
@@ -48,34 +53,6 @@ func (h *Handler) OAuth2Token(rw http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *Handler) OAuth2Login(rw http.ResponseWriter, r *http.Request) {
-	acc, ok := auth.FromContext(r.Context())
-	if ok {
-		logger.Infof(r.Context(), "%v Do OAuth2Login", acc.Name)
-	}
-
-	store, err := session.Start(r.Context(), rw, r)
-	if err != nil {
-		http.Error(rw, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	if r.Method == "POST" {
-		if r.Form == nil {
-			if err := r.ParseForm(); err != nil {
-				http.Error(rw, err.Error(), http.StatusInternalServerError)
-				return
-			}
-		}
-		store.Set("LoggedInUserID", r.Form.Get("username"))
-		store.Save()
-		rw.Header().Set("Location", "/cas/oauth2/affirm")
-		rw.WriteHeader(http.StatusFound)
-		return
-	}
-	outputHTML(rw, r, "static/login.html")
-}
-
 func (h *Handler) OAuth2Affirm(rw http.ResponseWriter, r *http.Request) {
 	store, err := session.Start(r.Context(), rw, r)
 	if err != nil {
@@ -98,12 +75,13 @@ func (h *Handler) UserAuthorizeHandler(rw http.ResponseWriter, r *http.Request) 
 		return
 	}
 
+	err = r.ParseForm()
+	if err != nil {
+		return
+	}
+
 	uid, ok := store.Get("LoggedInUserID")
 	if !ok {
-		if r.Form == nil {
-			r.ParseForm()
-		}
-
 		store.Set("ReturnUri", r.Form)
 		store.Save()
 
@@ -111,9 +89,7 @@ func (h *Handler) UserAuthorizeHandler(rw http.ResponseWriter, r *http.Request) 
 		rw.WriteHeader(http.StatusFound)
 		return
 	}
-	// check
 	userID = uid.(string)
-	store.Delete("LoggedInUserID")
 	store.Save()
 	return
 }
