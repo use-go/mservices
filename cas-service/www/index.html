@@ -1,112 +1,133 @@
-<script src="https://cdn.bootcdn.net/ajax/libs/fetch/3.6.2/fetch.min.js"></script>
-<script>
-var authorize_url = 'http://192.168.202.128:8080/cas/client/authorize'
-var token_url = 'http://192.168.202.128:8080/cas/client/token'
-var redirect_uri = encodeURIComponent(window.location.href.match('([a-z][a-z0-9+\-.]*://[^?#&=]+)/?')[1]) 
-var state = 'xyz'
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>The Third party</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Language" content="zh-CN" />
+    <meta name="Author" content="网页作者" />
+    <meta name="Copyright" content="网站版权" />
+    <meta name="keywords" content="网站关键字" />
+    <meta name="description" content="网站描述" />
+    <script>
+        var authorize_url = 'http://192.168.202.128:8080/cas/client/authorize'
+        var token_url = 'http://192.168.202.128:8080/cas/client/token'
+        var redirect_uri = encodeURIComponent(window.location.href.match('([a-z][a-z0-9+\-.]*://[^?#&=]+)/?')[1]) 
+        var state = 'xyz'
 
-function setCookie(name, value) {
-    var hour = 8; 
-    var exp = new Date(); 
-    exp.setTime(exp.getTime() + hour*60*60*1000); 
-    document.cookie = name + "="+ escape(value) + ";expires=" + exp.toGMTString()+";path=/"; 
-}
-
-function getCookie(name) {
-    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)")
-    if(arr=document.cookie.match(reg))
-        return unescape(arr[2])
-    else
-        return null
-}
-
-function getQueryString(name) {
-  var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
-  var r = window.location.search.substr(1).match(reg)
-  if (r != null) {
-    return unescape(r[2])
-  }
-  return null
-}
-
-function urlDelParams(keys) {
-  var loca = window.location
-  var baseUrl = loca.origin + loca.pathname
-  var query = loca.search.substr(1)
-
-  var obj = {}
-  var arr = query.split('&')
-  for (var i = 0; i < arr.length; i++) {
-    arr[i] = arr[i].split('=')
-    obj[arr[i][0]] = arr[i][1]
-  }
-  for(var key of keys) {
-    delete obj[key]
-  }
-  if (Object.keys(obj).length > 0) {
-    baseUrl += '?'
-  }
-
-  var url =
-    baseUrl +
-    JSON.stringify(obj)
-      .replace(/[\"\{\}]/g, '')
-      .replace(/\:/g, '=')
-      .replace(/\,/g, '&')
-  return url
-}
-
-function request(url, params = {}) {
-    return fetch(url, Object.assign({ headers:{ 'Authorization': 'Bearer ' + getCookie('token') } }, params)).then(function(response) {
-        var data = response
-        var status = data.status
-        if (data.headers.get('Content-Type') === 'application/json') {
-            data = data.json()
-            status = data.code || status
+        function setCookie(name, value) {
+            var hour = 8; 
+            var exp = new Date(); 
+            exp.setTime(exp.getTime() + hour*60*60*1000); 
+            document.cookie = name + "="+ escape(value) + ";expires=" + exp.toGMTString()+";path=/"; 
         }
-        if (status === 401) {
-            if (window.confirm('Authentication failure')) {
-                window.location.href= authorize_url +"?state=" + state + "&redirect_uri=" + redirect_uri
+
+        function getCookie(name) {
+            var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)")
+            if(arr=document.cookie.match(reg))
+                return unescape(arr[2])
+            else
+                return null
+        }
+
+        function delCookie(name) {
+            var exp = new Date();
+            exp.setTime(exp.getTime() - 1);
+            var cval=getCookie(name);
+            if(cval!=null)
+            document.cookie= name + "="+cval+";expires="+exp.toGMTString();
+        }
+
+        function getQueryString(name) {
+            var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
+            var r = window.location.search.substr(1).match(reg)
+            if (r != null) {
+                return unescape(r[2])
             }
-            throw new Error('unauthorized request') 
+            return null
         }
-        return data
-    })
-}
 
-function updateInfo() {
-    return request('http://192.168.202.128:8080/helloworld/queryInfoDetail').then(function(json) {
-        var body = document.body
-        var div = document.createElement("div")
-        div.innerText = JSON.stringify(json, null, 4)
-        document.body.appendChild(div)
-    }).catch(function(ex) {
-        console.error(ex)
-    })
-}
+        function urlDelParams(keys) {
+            var loca = window.location
+            var baseUrl = loca.origin + loca.pathname
+            var query = loca.search.substr(1)
 
-window.onload = function() {
-    var code = getQueryString("code")
-    if (!!code) {
-        // remove code for safty
-        history.pushState(null, document.title, urlDelParams(['code', 'state']))
-        // fetch token
-        if (!getCookie('token')) {
-            var data = new URLSearchParams()
-            data.append('redirect_uri', redirect_uri)
-            data.append('code', code)
-            return fetch(token_url, { method: 'POST', body: data }).then(function(response) {
-                return response.json()
-            }).then(function(res) {
-                if (!!res.access_token) {
-                    setCookie('token', res.access_token)
-                    return
+            var obj = {}
+            var arr = query.split('&')
+            for (var i = 0; i < arr.length; i++) {
+                arr[i] = arr[i].split('=')
+                obj[arr[i][0]] = arr[i][1]
+            }
+            for(var key of keys) {
+                delete obj[key]
+            }
+            if (Object.keys(obj).length > 0) {
+                baseUrl += '?'
+            }
+
+            var url =
+                baseUrl +
+                JSON.stringify(obj)
+                .replace(/[\"\{\}]/g, '')
+                .replace(/\:/g, '=')
+                .replace(/\,/g, '&')
+            return url
+        }
+
+        function request(url, params = {}) {
+            return fetch(url, Object.assign({ headers:{ 'Authorization': 'Bearer ' + getCookie('token') } }, params)).then(function(response) {
+                var data = response
+                var status = data.status
+                if (data.headers.get('Content-Type') === 'application/json') {
+                    data = data.json()
+                    status = data.code || status
                 }
-                console.log(res)
+                if (status === 401) {
+                    delCookie('token')
+                    if (window.confirm('Authentication failure')) {
+                        window.location.href= authorize_url +"?state=" + state + "&redirect_uri=" + redirect_uri
+                    }
+                    throw new Error('unauthorized request') 
+                }
+                return data
             })
         }
-    }
-}
-</script>
 
-<a href="javascript:void(0)" onclick="updateInfo()">http://192.168.202.128:8080/helloworld/updateInfo</a>
+        function queryInfoDetail() {
+            return request('http://192.168.202.128:8080/helloworld/queryInfoDetail').then(function(json) {
+                var body = document.body
+                var div = document.createElement("div")
+                div.innerText = JSON.stringify(json, null, 4)
+                document.body.appendChild(div)
+            }).catch(function(ex) {
+                console.error(ex)
+            })
+        }
+
+        window.onload = function() {
+            var code = getQueryString("code")
+            if (!!code) {
+                // remove code for safty
+                history.pushState(null, document.title, urlDelParams(['code', 'state']))
+                // fetch token
+                if (!getCookie('token')) {
+                    var data = new URLSearchParams()
+                    data.append('redirect_uri', redirect_uri)
+                    data.append('code', code)
+                    return fetch(token_url, { method: 'POST', body: data }).then(function(response) {
+                        return response.json()
+                    }).then(function(res) {
+                        if (!!res.access_token) {
+                            setCookie('token', res.access_token)
+                            return
+                        }
+                        console.log(res)
+                    })
+                }
+            }
+        }
+    </script>
+  </head>
+  <body>
+    <a href="javascript:void(0)" onclick="queryInfoDetail()">http://192.168.202.128:8080/helloworld/updateInfo</a>
+  </body>
+</html>
