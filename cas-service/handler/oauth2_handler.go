@@ -85,7 +85,7 @@ func (h *Handler) UserAuthorizeHandler(rw http.ResponseWriter, r *http.Request) 
 		store.Set("ReturnUri", r.Form)
 		store.Save()
 
-		rw.Header().Set("Location", "/cas/oauth2/login")
+		rw.Header().Set("Location", "/cas/user/login")
 		rw.WriteHeader(http.StatusFound)
 		return
 	}
