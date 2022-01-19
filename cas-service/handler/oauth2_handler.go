@@ -3,9 +3,9 @@ package handler
 import (
 	"comm/auth"
 	"comm/logger"
+	whttp "comm/service/web/http"
 	"net/http"
 	"net/url"
-	"os"
 
 	"github.com/go-session/session/v3"
 )
@@ -66,7 +66,7 @@ func (h *Handler) OAuth2Affirm(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	outputHTML(rw, r, "static/affirm.html")
+	whttp.OutputHTML(rw, r, "static/affirm.html")
 }
 
 func (h *Handler) UserAuthorizeHandler(rw http.ResponseWriter, r *http.Request) (userID string, err error) {
@@ -92,15 +92,4 @@ func (h *Handler) UserAuthorizeHandler(rw http.ResponseWriter, r *http.Request) 
 	userID = uid.(string)
 	store.Save()
 	return
-}
-
-func outputHTML(w http.ResponseWriter, req *http.Request, filename string) {
-	file, err := os.Open(filename)
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-	defer file.Close()
-	fi, _ := file.Stat()
-	http.ServeContent(w, req, file.Name(), fi.ModTime(), file)
 }

@@ -3,6 +3,7 @@ package handler
 import (
 	"comm/auth"
 	"comm/logger"
+	whttp "comm/service/web/http"
 	"net/http"
 
 	"github.com/go-session/session/v3"
@@ -16,7 +17,7 @@ func (h *Handler) UserLogin(rw http.ResponseWriter, r *http.Request) {
 
 	// outputHTML
 	if r.Method == "GET" {
-		outputHTML(rw, r, "static/login.html")
+		whttp.OutputHTML(rw, r, "static/login.html")
 		return
 	}
 
