@@ -13,6 +13,7 @@ func (r *Info) Marshal() ([]byte, error) {
 }
 
 type Info struct {
+	Id   uint32 `gorm:"column:id" json:"id"`
 	Name string `gorm:"column:name" json:"name"`
 }
 

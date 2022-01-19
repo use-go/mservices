@@ -7,9 +7,9 @@ option go_package = "./proto;helloworld";
 import "proto/helloworld/info.proto";
 
 service Helloworld {
-    rpc InsertInfo (Info) returns (Info) {}
-	rpc DeleteInfo (InfoFilter) returns (Info) {}
-    rpc UpdateInfo (Info) returns (Info) {}
-    rpc QueryInfo (InfoFilter) returns (InfoList) {}
-    rpc QueryInfoDetail (InfoFilter) returns (Info) {}
+    rpc InsertInfo (InsertInfoRequest) returns (InsertInfoResponse) {}
+	rpc DeleteInfo (DeleteInfoRequest) returns (DeleteInfoResponse) {}
+    rpc UpdateInfo (UpdateInfoRequest) returns (UpdateInfoResponse) {}
+    rpc QueryInfo (QueryInfoRequest) returns (QueryInfoResponse) {}
+    rpc QueryInfoDetail (QueryInfoDetailRequest) returns (QueryInfoDetailResponse) {}
 }

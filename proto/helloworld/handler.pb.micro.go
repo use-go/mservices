@@ -42,11 +42,11 @@ func NewHelloworldEndpoints() []*api.Endpoint {
 // Client API for Helloworld service
 
 type HelloworldService interface {
-	InsertInfo(ctx context.Context, in *Info, opts ...client.CallOption) (*Info, error)
-	DeleteInfo(ctx context.Context, in *InfoFilter, opts ...client.CallOption) (*Info, error)
-	UpdateInfo(ctx context.Context, in *Info, opts ...client.CallOption) (*Info, error)
-	QueryInfo(ctx context.Context, in *InfoFilter, opts ...client.CallOption) (*InfoList, error)
-	QueryInfoDetail(ctx context.Context, in *InfoFilter, opts ...client.CallOption) (*Info, error)
+	InsertInfo(ctx context.Context, in *InsertInfoRequest, opts ...client.CallOption) (*InsertInfoResponse, error)
+	DeleteInfo(ctx context.Context, in *DeleteInfoRequest, opts ...client.CallOption) (*DeleteInfoResponse, error)
+	UpdateInfo(ctx context.Context, in *UpdateInfoRequest, opts ...client.CallOption) (*UpdateInfoResponse, error)
+	QueryInfo(ctx context.Context, in *QueryInfoRequest, opts ...client.CallOption) (*QueryInfoResponse, error)
+	QueryInfoDetail(ctx context.Context, in *QueryInfoDetailRequest, opts ...client.CallOption) (*QueryInfoDetailResponse, error)
 }
 
 type helloworldService struct {
@@ -61,9 +61,9 @@ func NewHelloworldService(name string, c client.Client) HelloworldService {
 	}
 }
 
-func (c *helloworldService) InsertInfo(ctx context.Context, in *Info, opts ...client.CallOption) (*Info, error) {
+func (c *helloworldService) InsertInfo(ctx context.Context, in *InsertInfoRequest, opts ...client.CallOption) (*InsertInfoResponse, error) {
 	req := c.c.NewRequest(c.name, "Helloworld.InsertInfo", in)
-	out := new(Info)
+	out := new(InsertInfoResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -71,9 +71,9 @@ func (c *helloworldService) InsertInfo(ctx context.Context, in *Info, opts ...cl
 	return out, nil
 }
 
-func (c *helloworldService) DeleteInfo(ctx context.Context, in *InfoFilter, opts ...client.CallOption) (*Info, error) {
+func (c *helloworldService) DeleteInfo(ctx context.Context, in *DeleteInfoRequest, opts ...client.CallOption) (*DeleteInfoResponse, error) {
 	req := c.c.NewRequest(c.name, "Helloworld.DeleteInfo", in)
-	out := new(Info)
+	out := new(DeleteInfoResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -81,9 +81,9 @@ func (c *helloworldService) DeleteInfo(ctx context.Context, in *InfoFilter, opts
 	return out, nil
 }
 
-func (c *helloworldService) UpdateInfo(ctx context.Context, in *Info, opts ...client.CallOption) (*Info, error) {
+func (c *helloworldService) UpdateInfo(ctx context.Context, in *UpdateInfoRequest, opts ...client.CallOption) (*UpdateInfoResponse, error) {
 	req := c.c.NewRequest(c.name, "Helloworld.UpdateInfo", in)
-	out := new(Info)
+	out := new(UpdateInfoResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -91,9 +91,9 @@ func (c *helloworldService) UpdateInfo(ctx context.Context, in *Info, opts ...cl
 	return out, nil
 }
 
-func (c *helloworldService) QueryInfo(ctx context.Context, in *InfoFilter, opts ...client.CallOption) (*InfoList, error) {
+func (c *helloworldService) QueryInfo(ctx context.Context, in *QueryInfoRequest, opts ...client.CallOption) (*QueryInfoResponse, error) {
 	req := c.c.NewRequest(c.name, "Helloworld.QueryInfo", in)
-	out := new(InfoList)
+	out := new(QueryInfoResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -101,9 +101,9 @@ func (c *helloworldService) QueryInfo(ctx context.Context, in *InfoFilter, opts 
 	return out, nil
 }
 
-func (c *helloworldService) QueryInfoDetail(ctx context.Context, in *InfoFilter, opts ...client.CallOption) (*Info, error) {
+func (c *helloworldService) QueryInfoDetail(ctx context.Context, in *QueryInfoDetailRequest, opts ...client.CallOption) (*QueryInfoDetailResponse, error) {
 	req := c.c.NewRequest(c.name, "Helloworld.QueryInfoDetail", in)
-	out := new(Info)
+	out := new(QueryInfoDetailResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -114,20 +114,20 @@ func (c *helloworldService) QueryInfoDetail(ctx context.Context, in *InfoFilter,
 // Server API for Helloworld service
 
 type HelloworldHandler interface {
-	InsertInfo(context.Context, *Info, *Info) error
-	DeleteInfo(context.Context, *InfoFilter, *Info) error
-	UpdateInfo(context.Context, *Info, *Info) error
-	QueryInfo(context.Context, *InfoFilter, *InfoList) error
-	QueryInfoDetail(context.Context, *InfoFilter, *Info) error
+	InsertInfo(context.Context, *InsertInfoRequest, *InsertInfoResponse) error
+	DeleteInfo(context.Context, *DeleteInfoRequest, *DeleteInfoResponse) error
+	UpdateInfo(context.Context, *UpdateInfoRequest, *UpdateInfoResponse) error
+	QueryInfo(context.Context, *QueryInfoRequest, *QueryInfoResponse) error
+	QueryInfoDetail(context.Context, *QueryInfoDetailRequest, *QueryInfoDetailResponse) error
 }
 
 func RegisterHelloworldHandler(s server.Server, hdlr HelloworldHandler, opts ...server.HandlerOption) error {
 	type helloworld interface {
-		InsertInfo(ctx context.Context, in *Info, out *Info) error
-		DeleteInfo(ctx context.Context, in *InfoFilter, out *Info) error
-		UpdateInfo(ctx context.Context, in *Info, out *Info) error
-		QueryInfo(ctx context.Context, in *InfoFilter, out *InfoList) error
-		QueryInfoDetail(ctx context.Context, in *InfoFilter, out *Info) error
+		InsertInfo(ctx context.Context, in *InsertInfoRequest, out *InsertInfoResponse) error
+		DeleteInfo(ctx context.Context, in *DeleteInfoRequest, out *DeleteInfoResponse) error
+		UpdateInfo(ctx context.Context, in *UpdateInfoRequest, out *UpdateInfoResponse) error
+		QueryInfo(ctx context.Context, in *QueryInfoRequest, out *QueryInfoResponse) error
+		QueryInfoDetail(ctx context.Context, in *QueryInfoDetailRequest, out *QueryInfoDetailResponse) error
 	}
 	type Helloworld struct {
 		helloworld
@@ -140,22 +140,22 @@ type helloworldHandler struct {
 	HelloworldHandler
 }
 
-func (h *helloworldHandler) InsertInfo(ctx context.Context, in *Info, out *Info) error {
+func (h *helloworldHandler) InsertInfo(ctx context.Context, in *InsertInfoRequest, out *InsertInfoResponse) error {
 	return h.HelloworldHandler.InsertInfo(ctx, in, out)
 }
 
-func (h *helloworldHandler) DeleteInfo(ctx context.Context, in *InfoFilter, out *Info) error {
+func (h *helloworldHandler) DeleteInfo(ctx context.Context, in *DeleteInfoRequest, out *DeleteInfoResponse) error {
 	return h.HelloworldHandler.DeleteInfo(ctx, in, out)
 }
 
-func (h *helloworldHandler) UpdateInfo(ctx context.Context, in *Info, out *Info) error {
+func (h *helloworldHandler) UpdateInfo(ctx context.Context, in *UpdateInfoRequest, out *UpdateInfoResponse) error {
 	return h.HelloworldHandler.UpdateInfo(ctx, in, out)
 }
 
-func (h *helloworldHandler) QueryInfo(ctx context.Context, in *InfoFilter, out *InfoList) error {
+func (h *helloworldHandler) QueryInfo(ctx context.Context, in *QueryInfoRequest, out *QueryInfoResponse) error {
 	return h.HelloworldHandler.QueryInfo(ctx, in, out)
 }
 
-func (h *helloworldHandler) QueryInfoDetail(ctx context.Context, in *InfoFilter, out *Info) error {
+func (h *helloworldHandler) QueryInfoDetail(ctx context.Context, in *QueryInfoDetailRequest, out *QueryInfoDetailResponse) error {
 	return h.HelloworldHandler.QueryInfoDetail(ctx, in, out)
 }
