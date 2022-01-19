@@ -10,7 +10,6 @@ message InsertInfoRequest {
 
 message InsertInfoResponse {
 	uint32 id = 1 [json_name = "id"];
-	string name = 2 [json_name = "name"];
 }
 
 message DeleteInfoRequest {
@@ -28,7 +27,6 @@ message UpdateInfoRequest {
 
 message UpdateInfoResponse {
 	uint32 id = 1 [json_name = "id"];
-	string name = 2 [json_name = "name"];
 }
 
 message QueryInfoRequest {

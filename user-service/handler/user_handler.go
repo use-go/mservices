@@ -19,7 +19,7 @@ var (
 	emailFormat = regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`)
 )
 
-func (h *Handler) Create(ctx context.Context, req *user.CreateReq, rsp *user.CreateRes) error {
+func (h *Handler) Create(ctx context.Context, req *user.CreateRequest, rsp *user.CreateResponse) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Create", acc.Name)
@@ -74,7 +74,7 @@ func (h *Handler) Create(ctx context.Context, req *user.CreateReq, rsp *user.Cre
 	return nil
 }
 
-func (h *Handler) Read(ctx context.Context, req *user.ReadReq, rsp *user.ReadRes) error {
+func (h *Handler) Read(ctx context.Context, req *user.ReadRequest, rsp *user.ReadResponse) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Read", acc.Name)
@@ -105,7 +105,7 @@ func (h *Handler) Read(ctx context.Context, req *user.ReadReq, rsp *user.ReadRes
 	return nil
 }
 
-func (h *Handler) Update(ctx context.Context, req *user.UpdateReq, rsp *user.UpdateRes) error {
+func (h *Handler) Update(ctx context.Context, req *user.UpdateRequest, rsp *user.UpdateResponse) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Update", acc.Name)
@@ -128,7 +128,7 @@ func (h *Handler) Update(ctx context.Context, req *user.UpdateReq, rsp *user.Upd
 	return nil
 }
 
-func (h *Handler) Delete(ctx context.Context, req *user.DeleteReq, rsp *user.DeleteRes) error {
+func (h *Handler) Delete(ctx context.Context, req *user.DeleteRequest, rsp *user.DeleteResponse) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Delete", acc.Name)
@@ -146,7 +146,7 @@ func (h *Handler) Delete(ctx context.Context, req *user.DeleteReq, rsp *user.Del
 	return nil
 }
 
-func (h *Handler) UpdatePassword(ctx context.Context, req *user.UpdatePasswordReq, rsp *user.UpdatePasswordRes) error {
+func (h *Handler) UpdatePassword(ctx context.Context, req *user.UpdatePasswordRequest, rsp *user.UpdatePasswordResponse) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do UpdatePassword", acc.Name)
@@ -182,7 +182,7 @@ func (h *Handler) UpdatePassword(ctx context.Context, req *user.UpdatePasswordRe
 	return nil
 }
 
-func (h *Handler) List(ctx context.Context, req *user.ListReq, rsp *user.ListRes) error {
+func (h *Handler) List(ctx context.Context, req *user.ListRequest, rsp *user.ListResponse) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do List", acc.Name)
@@ -202,7 +202,7 @@ func (h *Handler) List(ctx context.Context, req *user.ListReq, rsp *user.ListRes
 	return nil
 }
 
-func (h *Handler) ResetPassword(ctx context.Context, req *user.ResetPasswordReq, rsp *user.ResetPasswordRes) error {
+func (h *Handler) ResetPassword(ctx context.Context, req *user.ResetPasswordRequest, rsp *user.ResetPasswordResponse) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do ResetPassword", acc.Name)
@@ -266,15 +266,15 @@ func (h *Handler) ResetPassword(ctx context.Context, req *user.ResetPasswordReq,
 	return nil
 }
 
-func (h *Handler) SendPasswordResetEmail(ctx context.Context, req *user.SendPasswordResetEmailReq, rsp *user.SendPasswordResetEmailRes) error {
+func (h *Handler) SendPasswordResetEmail(ctx context.Context, req *user.SendPasswordResetEmailRequest, rsp *user.SendPasswordResetEmailResponse) error {
 	return nil
 }
 
-func (h *Handler) SendVerificationEmail(ctx context.Context, req *user.SendVerificationEmailReq, rsp *user.SendVerificationEmailRes) error {
+func (h *Handler) SendVerificationEmail(ctx context.Context, req *user.SendVerificationEmailRequest, rsp *user.SendVerificationEmailResponse) error {
 	return nil
 }
 
-func (h *Handler) VerifyEmail(ctx context.Context, req *user.VerifyEmailReq, rsp *user.VerifyEmailRes) error {
+func (h *Handler) VerifyEmail(ctx context.Context, req *user.VerifyEmailRequest, rsp *user.VerifyEmailResponse) error {
 	if len(req.Email) == 0 {
 		return errors.BadRequest("missing email")
 	}

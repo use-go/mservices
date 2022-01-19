@@ -4,7 +4,105 @@ package user;
 
 option go_package = "./proto;user";
 
-message User {
+message CreateRequest {
+	string username = 2;
+	string email = 3;
+	string password = 4;
+	map<string,string> profile = 5;
+}
+
+message CreateResponse {
+	uint32 id = 1;
+}
+
+message DeleteRequest {
+	uint32 id = 1;
+}
+
+message DeleteResponse {
+	uint32 id = 1;
+}
+
+message ReadRequest {
+	uint32 id = 1;
+	string username = 2;
+	string email = 3;
+}
+
+message ReadResponse {
+	uint32 id = 1;
+	string username = 2;
+	string email = 3;
+	string password = 4;
+	map<string,string> profile = 5;
+}
+
+message UpdateRequest {
+	uint32 id = 1;
+	string username = 2;
+	string email = 3;
+	map<string,string> profile = 4;
+}
+
+message UpdateResponse {
+	uint32 id = 1;
+}
+
+message UpdatePasswordRequest {
+	uint32 id = 1;
+	string oldPassword = 2;
+	string newPassword = 3;
+	string confirm_password = 4;
+}
+
+message UpdatePasswordResponse {
+	uint32 id = 1;
+}
+
+message VerifyEmailRequest {
+	string email = 1;
+	string token = 2;
+}
+
+message VerifyEmailResponse {
+}
+
+message SendVerificationEmailRequest {
+	string email = 1;
+	string subject = 2;
+	string textContent = 3;
+	string redirectUrl = 4;
+	string failureRedirectUrl = 5;
+	string fromName = 6;
+}
+
+message SendVerificationEmailResponse {}
+
+message SendPasswordResetEmailRequest {
+	string email = 1;
+	string subject = 2;
+	string textContent = 3;
+	string fromName = 4;
+}
+
+message SendPasswordResetEmailResponse {
+}
+
+message ResetPasswordRequest {
+	string email = 1;
+	string code = 2;
+	string newPassword = 3;
+	string confirmPassword = 4;
+}
+
+message ResetPasswordResponse {}
+
+message ListRequest {
+	int32 offset = 1;
+	int32 limit = 2;
+}
+
+message ListResponseItem {
 	uint32 id = 1;
 	string username = 2;
 	string email = 3;
@@ -15,101 +113,6 @@ message User {
 	map<string,string> profile = 8;
 }
 
-message CreateReq {
-	string username = 2;
-	string email = 3;
-	string password = 4;
-	map<string,string> profile = 5;
-}
-
-message CreateRes {
-	uint32 id = 1;
-}
-
-message DeleteReq {
-	uint32 id = 1;
-}
-
-message DeleteRes {
-}
-
-message ReadReq {
-	uint32 id = 1;
-	string username = 2;
-	string email = 3;
-}
-
-message ReadRes {
-	uint32 id = 1;
-	string username = 2;
-	string email = 3;
-	string password = 4;
-	map<string,string> profile = 5;
-}
-
-message UpdateReq {
-	uint32 id = 1;
-	string username = 2;
-	string email = 3;
-	map<string,string> profile = 4;
-}
-
-message UpdateRes {
-}
-
-message UpdatePasswordReq {
-	uint32 id = 1;
-	string oldPassword = 2;
-	string newPassword = 3;
-	string confirm_password = 4;
-}
-
-message UpdatePasswordRes {
-}
-
-message VerifyEmailReq {
-	string email = 1;
-	string token = 2;
-}
-
-message VerifyEmailRes{
-}
-
-message SendVerificationEmailReq{
-	string email = 1;
-	string subject = 2;
-	string textContent = 3;
-	string redirectUrl = 4;
-	string failureRedirectUrl = 5;
-	string fromName = 6;
-}
-
-message SendVerificationEmailRes{}
-
-message SendPasswordResetEmailReq {
-	string email = 1;
-	string subject = 2;
-	string textContent = 3;
-	string fromName = 4;
-}
-
-message SendPasswordResetEmailRes {
-}
-
-message ResetPasswordReq {
-	string email = 1;
-	string code = 2;
-	string newPassword = 3;
-	string confirmPassword = 4;
-}
-
-message ResetPasswordRes {}
-
-message ListReq {
-	int32 offset = 1;
-	int32 limit = 2;
-}
-
-message ListRes {
-	repeated User users = 1;
+message ListResponse {
+	repeated ListResponseItem users = 1;
 }
