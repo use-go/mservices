@@ -4,69 +4,69 @@ package cache;
 
 option go_package = "./proto;cache";
 
-message GetReq {
+message GetRequest {
 	string key = 1 [json_name = "name"];
 }
 
-message GetRes {
+message GetResponse {
     bytes value = 1 [json_name = "value"];
 }
 
-message SetReq {
+message SetRequest {
 	string key = 1 [json_name = "name"];
     bytes value = 2 [json_name = "value"];
     int64 expire = 3 [json_name = "expire"];
 }
 
-message SetRes {
+message SetResponse {
 }
 
-message AddReq {
+message AddRequest {
 	string key = 1 [json_name = "name"];
     bytes value = 2 [json_name = "value"];
     int64 expire = 3 [json_name = "expire"];
 }
 
-message AddRes {
+message AddResponse {
 }
 
-message ReplaceReq {
+message ReplaceRequest {
 	string key = 1 [json_name = "name"];
     bytes value = 2 [json_name = "value"];
     int64 expire = 3 [json_name = "expire"];
 }
 
-message ReplaceRes {
+message ReplaceResponse {
 }
 
-message DeleteReq {
+message DeleteRequest {
 	string key = 1 [json_name = "name"];
 }
 
-message DeleteRes {
+message DeleteResponse {
 }
 
 
-message IncrementReq {
+message IncrementRequest {
 	string key = 1 [json_name = "name"];
     int64 value = 2 [json_name = "value"];
 }
 
-message IncrementRes {
+message IncrementResponse {
     int64 value = 1 [json_name = "value"];
 }
 
-message DecrementReq {
+message DecrementRequest {
 	string key = 1 [json_name = "name"];
     int64 value = 2 [json_name = "value"];
 }
 
-message DecrementRes {
+message DecrementResponse {
     int64 value = 1 [json_name = "value"];
 }
 
-message FlushReq {
+message FlushRequest {
 }
 
-message FlushRes {
+message FlushResponse {
 }

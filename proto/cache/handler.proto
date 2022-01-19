@@ -9,28 +9,28 @@ import "proto/cache/cache.proto";
 service Cache {
 	// Get retrieves an item from the cache. Returns the item or nil, and a bool indicating
 	// whether the key was found.
-	rpc Get(GetReq) returns (GetRes) {}
+	rpc Get(GetRequest) returns (GetResponse) {}
 
     // Set sets an item to the cache, replacing any existing item.
-	rpc Set(SetReq) returns (SetRes) {}
+	rpc Set(SetRequest) returns (SetResponse) {}
 
 	// Add adds an item to the cache only if an item doesn't already exist for the given
 	// key, or if the existing item has expired. Returns an error otherwise.
-	rpc Add(AddReq) returns (AddRes) {}
+	rpc Add(AddRequest) returns (AddResponse) {}
 
 	// Replace sets a new value for the cache key only if it already exists. Returns an
 	// error if it does not.
-	rpc Replace(ReplaceReq) returns (ReplaceRes) {}
+	rpc Replace(ReplaceRequest) returns (ReplaceResponse) {}
 
 	// Delete removes an item from the cache. Does nothing if the key is not in the cache.
-	rpc Delete(DeleteReq) returns (DeleteRes) {}
+	rpc Delete(DeleteRequest) returns (DeleteResponse) {}
 
 	// Increment increments a real number, and returns error if the value is not real
-	rpc Increment(IncrementReq) returns (IncrementRes) {}
+	rpc Increment(IncrementRequest) returns (IncrementResponse) {}
 
 	// Decrement decrements a real number, and returns error if the value is not real
-	rpc Decrement(DecrementReq) returns (DecrementRes) {}
+	rpc Decrement(DecrementRequest) returns (DecrementResponse) {}
 
 	// Flush seletes all items from the cache.
-	rpc Flush(FlushReq) returns (FlushRes) {}
+	rpc Flush(FlushRequest) returns (FlushResponse) {}
 }

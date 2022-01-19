@@ -44,23 +44,23 @@ func NewCacheEndpoints() []*api.Endpoint {
 type CacheService interface {
 	// Get retrieves an item from the cache. Returns the item or nil, and a bool indicating
 	// whether the key was found.
-	Get(ctx context.Context, in *GetReq, opts ...client.CallOption) (*GetRes, error)
+	Get(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*GetResponse, error)
 	// Set sets an item to the cache, replacing any existing item.
-	Set(ctx context.Context, in *SetReq, opts ...client.CallOption) (*SetRes, error)
+	Set(ctx context.Context, in *SetRequest, opts ...client.CallOption) (*SetResponse, error)
 	// Add adds an item to the cache only if an item doesn't already exist for the given
 	// key, or if the existing item has expired. Returns an error otherwise.
-	Add(ctx context.Context, in *AddReq, opts ...client.CallOption) (*AddRes, error)
+	Add(ctx context.Context, in *AddRequest, opts ...client.CallOption) (*AddResponse, error)
 	// Replace sets a new value for the cache key only if it already exists. Returns an
 	// error if it does not.
-	Replace(ctx context.Context, in *ReplaceReq, opts ...client.CallOption) (*ReplaceRes, error)
+	Replace(ctx context.Context, in *ReplaceRequest, opts ...client.CallOption) (*ReplaceResponse, error)
 	// Delete removes an item from the cache. Does nothing if the key is not in the cache.
-	Delete(ctx context.Context, in *DeleteReq, opts ...client.CallOption) (*DeleteRes, error)
+	Delete(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*DeleteResponse, error)
 	// Increment increments a real number, and returns error if the value is not real
-	Increment(ctx context.Context, in *IncrementReq, opts ...client.CallOption) (*IncrementRes, error)
+	Increment(ctx context.Context, in *IncrementRequest, opts ...client.CallOption) (*IncrementResponse, error)
 	// Decrement decrements a real number, and returns error if the value is not real
-	Decrement(ctx context.Context, in *DecrementReq, opts ...client.CallOption) (*DecrementRes, error)
+	Decrement(ctx context.Context, in *DecrementRequest, opts ...client.CallOption) (*DecrementResponse, error)
 	// Flush seletes all items from the cache.
-	Flush(ctx context.Context, in *FlushReq, opts ...client.CallOption) (*FlushRes, error)
+	Flush(ctx context.Context, in *FlushRequest, opts ...client.CallOption) (*FlushResponse, error)
 }
 
 type cacheService struct {
@@ -75,9 +75,9 @@ func NewCacheService(name string, c client.Client) CacheService {
 	}
 }
 
-func (c *cacheService) Get(ctx context.Context, in *GetReq, opts ...client.CallOption) (*GetRes, error) {
+func (c *cacheService) Get(ctx context.Context, in *GetRequest, opts ...client.CallOption) (*GetResponse, error) {
 	req := c.c.NewRequest(c.name, "Cache.Get", in)
-	out := new(GetRes)
+	out := new(GetResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -85,9 +85,9 @@ func (c *cacheService) Get(ctx context.Context, in *GetReq, opts ...client.CallO
 	return out, nil
 }
 
-func (c *cacheService) Set(ctx context.Context, in *SetReq, opts ...client.CallOption) (*SetRes, error) {
+func (c *cacheService) Set(ctx context.Context, in *SetRequest, opts ...client.CallOption) (*SetResponse, error) {
 	req := c.c.NewRequest(c.name, "Cache.Set", in)
-	out := new(SetRes)
+	out := new(SetResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -95,9 +95,9 @@ func (c *cacheService) Set(ctx context.Context, in *SetReq, opts ...client.CallO
 	return out, nil
 }
 
-func (c *cacheService) Add(ctx context.Context, in *AddReq, opts ...client.CallOption) (*AddRes, error) {
+func (c *cacheService) Add(ctx context.Context, in *AddRequest, opts ...client.CallOption) (*AddResponse, error) {
 	req := c.c.NewRequest(c.name, "Cache.Add", in)
-	out := new(AddRes)
+	out := new(AddResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -105,9 +105,9 @@ func (c *cacheService) Add(ctx context.Context, in *AddReq, opts ...client.CallO
 	return out, nil
 }
 
-func (c *cacheService) Replace(ctx context.Context, in *ReplaceReq, opts ...client.CallOption) (*ReplaceRes, error) {
+func (c *cacheService) Replace(ctx context.Context, in *ReplaceRequest, opts ...client.CallOption) (*ReplaceResponse, error) {
 	req := c.c.NewRequest(c.name, "Cache.Replace", in)
-	out := new(ReplaceRes)
+	out := new(ReplaceResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -115,9 +115,9 @@ func (c *cacheService) Replace(ctx context.Context, in *ReplaceReq, opts ...clie
 	return out, nil
 }
 
-func (c *cacheService) Delete(ctx context.Context, in *DeleteReq, opts ...client.CallOption) (*DeleteRes, error) {
+func (c *cacheService) Delete(ctx context.Context, in *DeleteRequest, opts ...client.CallOption) (*DeleteResponse, error) {
 	req := c.c.NewRequest(c.name, "Cache.Delete", in)
-	out := new(DeleteRes)
+	out := new(DeleteResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -125,9 +125,9 @@ func (c *cacheService) Delete(ctx context.Context, in *DeleteReq, opts ...client
 	return out, nil
 }
 
-func (c *cacheService) Increment(ctx context.Context, in *IncrementReq, opts ...client.CallOption) (*IncrementRes, error) {
+func (c *cacheService) Increment(ctx context.Context, in *IncrementRequest, opts ...client.CallOption) (*IncrementResponse, error) {
 	req := c.c.NewRequest(c.name, "Cache.Increment", in)
-	out := new(IncrementRes)
+	out := new(IncrementResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -135,9 +135,9 @@ func (c *cacheService) Increment(ctx context.Context, in *IncrementReq, opts ...
 	return out, nil
 }
 
-func (c *cacheService) Decrement(ctx context.Context, in *DecrementReq, opts ...client.CallOption) (*DecrementRes, error) {
+func (c *cacheService) Decrement(ctx context.Context, in *DecrementRequest, opts ...client.CallOption) (*DecrementResponse, error) {
 	req := c.c.NewRequest(c.name, "Cache.Decrement", in)
-	out := new(DecrementRes)
+	out := new(DecrementResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -145,9 +145,9 @@ func (c *cacheService) Decrement(ctx context.Context, in *DecrementReq, opts ...
 	return out, nil
 }
 
-func (c *cacheService) Flush(ctx context.Context, in *FlushReq, opts ...client.CallOption) (*FlushRes, error) {
+func (c *cacheService) Flush(ctx context.Context, in *FlushRequest, opts ...client.CallOption) (*FlushResponse, error) {
 	req := c.c.NewRequest(c.name, "Cache.Flush", in)
-	out := new(FlushRes)
+	out := new(FlushResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -160,35 +160,35 @@ func (c *cacheService) Flush(ctx context.Context, in *FlushReq, opts ...client.C
 type CacheHandler interface {
 	// Get retrieves an item from the cache. Returns the item or nil, and a bool indicating
 	// whether the key was found.
-	Get(context.Context, *GetReq, *GetRes) error
+	Get(context.Context, *GetRequest, *GetResponse) error
 	// Set sets an item to the cache, replacing any existing item.
-	Set(context.Context, *SetReq, *SetRes) error
+	Set(context.Context, *SetRequest, *SetResponse) error
 	// Add adds an item to the cache only if an item doesn't already exist for the given
 	// key, or if the existing item has expired. Returns an error otherwise.
-	Add(context.Context, *AddReq, *AddRes) error
+	Add(context.Context, *AddRequest, *AddResponse) error
 	// Replace sets a new value for the cache key only if it already exists. Returns an
 	// error if it does not.
-	Replace(context.Context, *ReplaceReq, *ReplaceRes) error
+	Replace(context.Context, *ReplaceRequest, *ReplaceResponse) error
 	// Delete removes an item from the cache. Does nothing if the key is not in the cache.
-	Delete(context.Context, *DeleteReq, *DeleteRes) error
+	Delete(context.Context, *DeleteRequest, *DeleteResponse) error
 	// Increment increments a real number, and returns error if the value is not real
-	Increment(context.Context, *IncrementReq, *IncrementRes) error
+	Increment(context.Context, *IncrementRequest, *IncrementResponse) error
 	// Decrement decrements a real number, and returns error if the value is not real
-	Decrement(context.Context, *DecrementReq, *DecrementRes) error
+	Decrement(context.Context, *DecrementRequest, *DecrementResponse) error
 	// Flush seletes all items from the cache.
-	Flush(context.Context, *FlushReq, *FlushRes) error
+	Flush(context.Context, *FlushRequest, *FlushResponse) error
 }
 
 func RegisterCacheHandler(s server.Server, hdlr CacheHandler, opts ...server.HandlerOption) error {
 	type cache interface {
-		Get(ctx context.Context, in *GetReq, out *GetRes) error
-		Set(ctx context.Context, in *SetReq, out *SetRes) error
-		Add(ctx context.Context, in *AddReq, out *AddRes) error
-		Replace(ctx context.Context, in *ReplaceReq, out *ReplaceRes) error
-		Delete(ctx context.Context, in *DeleteReq, out *DeleteRes) error
-		Increment(ctx context.Context, in *IncrementReq, out *IncrementRes) error
-		Decrement(ctx context.Context, in *DecrementReq, out *DecrementRes) error
-		Flush(ctx context.Context, in *FlushReq, out *FlushRes) error
+		Get(ctx context.Context, in *GetRequest, out *GetResponse) error
+		Set(ctx context.Context, in *SetRequest, out *SetResponse) error
+		Add(ctx context.Context, in *AddRequest, out *AddResponse) error
+		Replace(ctx context.Context, in *ReplaceRequest, out *ReplaceResponse) error
+		Delete(ctx context.Context, in *DeleteRequest, out *DeleteResponse) error
+		Increment(ctx context.Context, in *IncrementRequest, out *IncrementResponse) error
+		Decrement(ctx context.Context, in *DecrementRequest, out *DecrementResponse) error
+		Flush(ctx context.Context, in *FlushRequest, out *FlushResponse) error
 	}
 	type Cache struct {
 		cache
@@ -201,34 +201,34 @@ type cacheHandler struct {
 	CacheHandler
 }
 
-func (h *cacheHandler) Get(ctx context.Context, in *GetReq, out *GetRes) error {
+func (h *cacheHandler) Get(ctx context.Context, in *GetRequest, out *GetResponse) error {
 	return h.CacheHandler.Get(ctx, in, out)
 }
 
-func (h *cacheHandler) Set(ctx context.Context, in *SetReq, out *SetRes) error {
+func (h *cacheHandler) Set(ctx context.Context, in *SetRequest, out *SetResponse) error {
 	return h.CacheHandler.Set(ctx, in, out)
 }
 
-func (h *cacheHandler) Add(ctx context.Context, in *AddReq, out *AddRes) error {
+func (h *cacheHandler) Add(ctx context.Context, in *AddRequest, out *AddResponse) error {
 	return h.CacheHandler.Add(ctx, in, out)
 }
 
-func (h *cacheHandler) Replace(ctx context.Context, in *ReplaceReq, out *ReplaceRes) error {
+func (h *cacheHandler) Replace(ctx context.Context, in *ReplaceRequest, out *ReplaceResponse) error {
 	return h.CacheHandler.Replace(ctx, in, out)
 }
 
-func (h *cacheHandler) Delete(ctx context.Context, in *DeleteReq, out *DeleteRes) error {
+func (h *cacheHandler) Delete(ctx context.Context, in *DeleteRequest, out *DeleteResponse) error {
 	return h.CacheHandler.Delete(ctx, in, out)
 }
 
-func (h *cacheHandler) Increment(ctx context.Context, in *IncrementReq, out *IncrementRes) error {
+func (h *cacheHandler) Increment(ctx context.Context, in *IncrementRequest, out *IncrementResponse) error {
 	return h.CacheHandler.Increment(ctx, in, out)
 }
 
-func (h *cacheHandler) Decrement(ctx context.Context, in *DecrementReq, out *DecrementRes) error {
+func (h *cacheHandler) Decrement(ctx context.Context, in *DecrementRequest, out *DecrementResponse) error {
 	return h.CacheHandler.Decrement(ctx, in, out)
 }
 
-func (h *cacheHandler) Flush(ctx context.Context, in *FlushReq, out *FlushRes) error {
+func (h *cacheHandler) Flush(ctx context.Context, in *FlushRequest, out *FlushResponse) error {
 	return h.CacheHandler.Flush(ctx, in, out)
 }

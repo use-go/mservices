@@ -11,7 +11,7 @@ import (
 	"proto/cache"
 )
 
-func (h *Handler) Get(ctx context.Context, req *cache.GetReq, rsp *cache.GetRes) error {
+func (h *Handler) Get(ctx context.Context, req *cache.GetRequest, rsp *cache.GetResponse) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Get", acc.Name)
@@ -23,7 +23,7 @@ func (h *Handler) Get(ctx context.Context, req *cache.GetReq, rsp *cache.GetRes)
 	return nil
 }
 
-func (h *Handler) Set(ctx context.Context, req *cache.SetReq, rsp *cache.SetRes) error {
+func (h *Handler) Set(ctx context.Context, req *cache.SetRequest, rsp *cache.SetResponse) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Set", acc.Name)
@@ -35,7 +35,7 @@ func (h *Handler) Set(ctx context.Context, req *cache.SetReq, rsp *cache.SetRes)
 	return nil
 }
 
-func (h *Handler) Add(ctx context.Context, req *cache.AddReq, rsp *cache.AddRes) error {
+func (h *Handler) Add(ctx context.Context, req *cache.AddRequest, rsp *cache.AddResponse) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Add", acc.Name)
@@ -47,7 +47,7 @@ func (h *Handler) Add(ctx context.Context, req *cache.AddReq, rsp *cache.AddRes)
 	return nil
 }
 
-func (h *Handler) Replace(ctx context.Context, req *cache.ReplaceReq, rsp *cache.ReplaceRes) error {
+func (h *Handler) Replace(ctx context.Context, req *cache.ReplaceRequest, rsp *cache.ReplaceResponse) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Replace", acc.Name)
@@ -59,7 +59,7 @@ func (h *Handler) Replace(ctx context.Context, req *cache.ReplaceReq, rsp *cache
 	return nil
 }
 
-func (h *Handler) Delete(ctx context.Context, req *cache.DeleteReq, rsp *cache.DeleteRes) error {
+func (h *Handler) Delete(ctx context.Context, req *cache.DeleteRequest, rsp *cache.DeleteResponse) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Delete", acc.Name)
@@ -71,7 +71,7 @@ func (h *Handler) Delete(ctx context.Context, req *cache.DeleteReq, rsp *cache.D
 	return nil
 }
 
-func (h *Handler) Increment(ctx context.Context, req *cache.IncrementReq, rsp *cache.IncrementRes) error {
+func (h *Handler) Increment(ctx context.Context, req *cache.IncrementRequest, rsp *cache.IncrementResponse) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Increment", acc.Name)
@@ -84,7 +84,7 @@ func (h *Handler) Increment(ctx context.Context, req *cache.IncrementReq, rsp *c
 	return nil
 }
 
-func (h *Handler) Decrement(ctx context.Context, req *cache.DecrementReq, rsp *cache.DecrementRes) error {
+func (h *Handler) Decrement(ctx context.Context, req *cache.DecrementRequest, rsp *cache.DecrementResponse) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Decrement", acc.Name)
@@ -97,7 +97,7 @@ func (h *Handler) Decrement(ctx context.Context, req *cache.DecrementReq, rsp *c
 	return nil
 }
 
-func (h *Handler) Flush(ctx context.Context, req *cache.FlushReq, rsp *cache.FlushRes) error {
+func (h *Handler) Flush(ctx context.Context, req *cache.FlushRequest, rsp *cache.FlushResponse) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Flush", acc.Name)
