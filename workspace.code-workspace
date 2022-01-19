@@ -16,6 +16,9 @@
 			"path": "assert-service"
 		},
 		{
+			"path": "quicktype-service"
+		},
+		{
 			"path": "email-service"
 		},
 		{
