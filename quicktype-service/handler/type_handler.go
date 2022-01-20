@@ -4,11 +4,8 @@ import (
 	"comm/auth"
 	"comm/logger"
 	whttp "comm/service/web/http"
-	"fmt"
 	"net/http"
-	"quicktype-service/api"
 
-	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -31,23 +28,11 @@ func (h *Handler) Tables(rw http.ResponseWriter, r *http.Request) {
 		logger.Infof(r.Context(), "%v Do Tables", acc.Name)
 	}
 
-	dsn := r.URL.Query().Get("dsn")
-	if len(dsn) > 0 {
-		db, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
-		if err != nil {
-			http.Error(rw, err.Error(), http.StatusInternalServerError)
-			return
-		}
-	} else {
-		uri := (new(api.Uri)).Unmarshal(r)
-		dsn = fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8mb4&parseTime=True&loc=Local", uri.User, uri.PassWd, uri.Host, uri.Port, uri.DB)
-		db, err = gorm.Open((mysql.Open(dsn)), &gorm.Config{})
-		if err != nil {
-			http.Error(rw, err.Error(), http.StatusInternalServerError)
-			return
-		}
+	db, err = h.DB(r)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusInternalServerError)
+		return
 	}
-	db = db.Debug()
 	rows, err := db.Table("information_schema.tables").Select("table_name").Where("table_schema = ?", "public").Rows()
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
