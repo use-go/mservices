@@ -142,6 +142,7 @@ func (h *Handler) QueryInfo(ctx context.Context, req *helloworld.QueryInfoReques
 	}
 
 	session, err := db.InitDb(ctx)
+	session = db.SetLimit(ctx, session, req)
 	if err != nil {
 		return errors.InternalServerError("InitDb failed %v", err)
 	}
@@ -159,6 +160,7 @@ func (h *Handler) QueryInfo(ctx context.Context, req *helloworld.QueryInfoReques
 	if err != nil {
 		return errors.InternalServerError("copier.Copy failed %v", err)
 	}
+
 	rsp.TotalCount = totalCount
 	rsp.Page = totalCount / req.Size
 	if totalCount%req.Size != 0 {
