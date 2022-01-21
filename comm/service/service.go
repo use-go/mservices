@@ -73,5 +73,5 @@ func New(opts ...service.Option) *Service {
 }
 
 func Name(n string) service.Option {
-	return service.Name(n)
+	return service.Name(SetName(n))
 }

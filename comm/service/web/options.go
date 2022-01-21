@@ -1,6 +1,7 @@
 package web
 
 import (
+	cservice "comm/service"
 	"context"
 	"crypto/tls"
 	"net/http"
@@ -70,7 +71,7 @@ func newOptions(opts ...Option) Options {
 // Server name
 func Name(n string) Option {
 	return func(o *Options) {
-		o.Name = n
+		o.Name = cservice.SetName(n)
 	}
 }
 
