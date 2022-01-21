@@ -5,6 +5,8 @@ import (
 	"comm/logger"
 	"comm/service/web"
 	"quicktype-service/handler"
+
+	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {

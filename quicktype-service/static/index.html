@@ -2,17 +2,57 @@
 <html>
 
 <head>
-    <script src="https://cdn.jsdelivr.net/npm/quicktype-core@6.0.70/dist/index.min.js"></script>
+    <title>quicktype</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Language" content="zh-CN" />
+    <meta name="Author" content="网页作者" />
+    <meta name="Copyright" content="网站版权" />
+    <meta name="keywords" content="网站关键字" />
+    <meta name="description" content="网站描述" />
+    <script>
+    </script>
+    <style>
+    .row {
+        display:flex;
+        background-color:tomato;
+        width: 100%;
+        height: 320px;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: center;
+        align-content: stretch;
+        align-items: stretch;
+    }
+    .item {
+        background-color:royalblue;
+    }
+    .left {
+        width: 20%;
+        height: 320px;
+        order: 1;
+        align-self: auto;
+        flex-basis: auto;
+        flex-grow: 0;
+        flex-shrink: 1;
+    }
+    .right {
+        width: 80%;
+        height: 320px;
+        order: 1;
+        align-self: auto;
+        flex-basis: auto;
+        flex-grow: 0;
+        flex-shrink: 1;
+    }
+    </style>
 </head>
 
 <body>
-    <div class="container" id="content">
-        <div class="quicktype" data-type-name="Person" contenteditable="true">
-        {
-            "name": "Bob",
-            "age": 99,
-            "friends": ["Sue", "Vlad"]
-        }
+    <div class="container">
+        <div class="row">
+            <div class="item left"></div>
+            <div class="item right">
+            </div>
         </div>
     </div>
 </body>

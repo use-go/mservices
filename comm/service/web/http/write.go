@@ -1,10 +1,16 @@
 package http
 
 import (
+	"bytes"
 	"comm/errors"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
+	"strconv"
+	"strings"
+
+	"github.com/2637309949/micro/v3/service/debug/trace"
 )
 
 func OutputHTML(w http.ResponseWriter, req *http.Request, filename string) {
@@ -18,16 +24,34 @@ func OutputHTML(w http.ResponseWriter, req *http.Request, filename string) {
 	http.ServeContent(w, req, file.Name(), fi.ModTime(), file)
 }
 
-// WriteJSON defined TODO
-func WriteJSON(w http.ResponseWriter, r *http.Request, obj interface{}) error {
+// Success defined TODO
+func Success(w http.ResponseWriter, r *http.Request, obj interface{}) error {
 	w.Header().Set("Content-Type", "application/json")
-
-	rsp, err := json.Marshal(obj)
-	if err != nil {
-		return err
+	traceID, _, _ := trace.FromContext(r.Context())
+	var err error
+	var rsp []byte
+	switch o := obj.(type) {
+	case string:
+		rsp = []byte(o)
+	case []byte:
+		rsp = o
+	default:
+		rsp, err = json.Marshal(obj)
+		if err != nil {
+			return err
+		}
 	}
-
 	w.WriteHeader(http.StatusOK)
+	rsp = bytes.TrimRight(rsp, "\n")
+	if !strings.HasPrefix(string(rsp), "{") {
+		rsp = []byte(fmt.Sprintf("{\"data\": %v}", strconv.Quote(string(rsp))))
+	}
+	if !strings.Contains(string(rsp), "code") {
+		rsp = []byte(strings.Replace(string(rsp), "{", "{\"code\": 200,", 1))
+	}
+	if !strings.Contains(string(rsp), "request_id") {
+		rsp = []byte(strings.Replace(string(rsp), "{", "{\"request_id\": \""+traceID+"\",", 1))
+	}
 	_, err = w.Write(rsp)
 	if err != nil {
 		return err
@@ -35,8 +59,8 @@ func WriteJSON(w http.ResponseWriter, r *http.Request, obj interface{}) error {
 	return nil
 }
 
-// WriteError defined TODO
-func WriteError(w http.ResponseWriter, r *http.Request, err error) {
+// Fail defined TODO
+func Fail(w http.ResponseWriter, r *http.Request, err error) {
 	w.Header().Set("Content-Type", "application/json")
 
 	// parse out the error code
