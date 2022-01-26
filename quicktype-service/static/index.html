@@ -9,26 +9,20 @@
     <meta name="Copyright" content="网站版权" />
     <meta name="keywords" content="网站关键字" />
     <meta name="description" content="网站描述" />
-    <script>
-    </script>
+    <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <style>
     .row {
         display:flex;
-        background-color:tomato;
         width: 100%;
-        height: 320px;
         flex-direction: row;
         flex-wrap: nowrap;
         justify-content: center;
         align-content: stretch;
         align-items: stretch;
     }
-    .item {
-        background-color:royalblue;
-    }
     .left {
-        width: 20%;
-        height: 320px;
+        width: 18%;
         order: 1;
         align-self: auto;
         flex-basis: auto;
@@ -36,25 +30,116 @@
         flex-shrink: 1;
     }
     .right {
-        width: 80%;
-        height: 320px;
+        width: 78%;
         order: 1;
         align-self: auto;
         flex-basis: auto;
         flex-grow: 0;
         flex-shrink: 1;
     }
+    .container{
+        background: #f6f6f6
+    }
+    ul>li {
+        padding: 2px;
+    }
+    ul>li:hover{
+        background-color:#ccc !important;
+    }
+    .act-bar{
+        display:flex;
+        background-color:tomato;
+        width: 100%;
+        height: 32px;
+        line-height:32px;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-content: stretch;
+        align-items: stretch;
+    }
+    .act-1 {
+        height: 32px;
+        order: 1;
+        align-self: auto;
+        flex-basis: auto;
+        flex-grow: 0;
+        flex-shrink: 1;
+    }
+    .act-2 {
+        order: 1;
+        align-self: auto;
+        flex-basis: auto;
+        flex-grow: 0;
+        flex-shrink: 1;
+        margin-left: 4px;
+    }
+    .act-3 {
+        order: 1;
+        align-self: auto;
+        flex-basis: auto;
+        flex-grow: 0;
+        flex-shrink: 1;
+        margin-left: 4px;
+    }
+    .act-4 {
+        order: 1;
+        align-self: auto;
+        flex-basis: auto;
+        flex-grow: 0;
+        flex-shrink: 1;
+        margin-left: 4px;
+    }
     </style>
 </head>
 
 <body>
-    <div class="container">
+    <div class="container" id="app">
         <div class="row">
-            <div class="item left"></div>
+            <div class="item left">
+                <ul>
+                    <li v-for="tb in tables" v-on:click="say('auth_group')">
+                        {{ tb }}
+                    </li>
+                </ul>
+            </div>
             <div class="item right">
+                <div class="act-bar">
+                    <div class="act act-1">Proto</div>
+                    <div class="act act-2">Struct</div>
+                    <div class="act act-3">Handler</div>
+                    <div class="act act-4">Read/Write</div>
+                </div>
+                <div class="code">{{ json.strin }}</div>
             </div>
         </div>
     </div>
 </body>
-
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            tables: [],
+            code: ''
+        },
+        mounted () {
+            axios
+            .get('/quicktype/type/tables?dsn=root%3Agmt%40tcp(192.168.202.128%3A3306)%2Fyearning%3Fcharset%3Dutf8mb4%26parseTime%3DTrue%26loc%3DLocal')
+            .then(response => response.data)
+            .then(res => {
+                this.tables = res.data
+            })
+        },
+        methods: {
+            say: function (message) {
+                axios
+                .get('/quicktype/type/table2proto?table=auth_group&dsn=root%3Agmt%40tcp(192.168.202.128%3A3306)%2Fyearning%3Fcharset%3Dutf8mb4%26parseTime%3DTrue%26loc%3DLocal')
+                .then(response => response.data)
+                .then(res => {
+                    this.code = res.data
+                })
+            }
+        }
+    })
+</script>
 </html>

@@ -44,7 +44,12 @@ func Success(w http.ResponseWriter, r *http.Request, obj interface{}) error {
 	w.WriteHeader(http.StatusOK)
 	rsp = bytes.TrimRight(rsp, "\n")
 	if !strings.HasPrefix(string(rsp), "{") {
-		rsp = []byte(fmt.Sprintf("{\"data\": %v}", strconv.Quote(string(rsp))))
+		switch obj.(type) {
+		case string, []byte:
+			rsp = []byte(fmt.Sprintf("{\"data\": %v}", strconv.Quote(string(rsp))))
+		default:
+			rsp = []byte(fmt.Sprintf(`{"data": %v}`, string(rsp)))
+		}
 	}
 	if !strings.Contains(string(rsp), "code") {
 		rsp = []byte(strings.Replace(string(rsp), "{", "{\"code\": 200,", 1))
