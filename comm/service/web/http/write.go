@@ -52,6 +52,7 @@ func Success(w http.ResponseWriter, r *http.Request, obj interface{}) error {
 	if !strings.Contains(string(rsp), "request_id") {
 		rsp = []byte(strings.Replace(string(rsp), "{", "{\"request_id\": \""+traceID+"\",", 1))
 	}
+	rsp = []byte(strings.ReplaceAll(string(rsp), ",}", "}"))
 	_, err = w.Write(rsp)
 	if err != nil {
 		return err
