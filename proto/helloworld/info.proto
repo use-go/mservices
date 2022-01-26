@@ -33,9 +33,9 @@ message QueryInfoRequest {
 	uint32 id = 1 [json_name = "id"];
 	string name = 2 [json_name = "name"];
 
-	int32 page = 3 [json_name = "page"];
-	int32 size = 4 [json_name = "size"];
-	int32 order = 5 [json_name = "order"];
+	int64 page = 3 [json_name = "page"];
+	int64 size = 4 [json_name = "size"];
+	string order = 5 [json_name = "order"];
 }
 
 message QueryInfoResponseItem {
@@ -46,9 +46,9 @@ message QueryInfoResponseItem {
 message QueryInfoResponse {
     repeated QueryInfoResponseItem data = 1 [json_name = "data"];
 
-	int32 page = 2 [json_name = "page"];
-	int32 size = 3 [json_name = "size"];
-	int32 total_count = 4 [json_name = "total_count"];
+	int64 page = 2 [json_name = "page"];
+	int64 size = 3 [json_name = "size"];
+	int64 total_count = 4 [json_name = "total_count"];
 }
 
 message QueryInfoDetailRequest {

@@ -17,7 +17,7 @@ func (h *Handler) FileUpload(rw http.ResponseWriter, r *http.Request) {
 	if ok {
 		logger.Infof(r.Context(), "%v Do FileUpload", acc.Name)
 	}
-	whttp.WriteJSON(rw, r, map[string]interface{}{"name": "hello 2012"})
+	whttp.Success(rw, r, map[string]interface{}{"name": "hello 2012"})
 }
 
 // FileDownload defined TODO
@@ -32,7 +32,7 @@ func (h *Handler) FileDownload(rw http.ResponseWriter, r *http.Request) {
 	rw.Header().Set("Content-Disposition", disposition)
 	err := excel.Write(rw)
 	if err != nil {
-		whttp.WriteError(rw, r, err)
+		whttp.Fail(rw, r, err)
 		return
 	}
 }

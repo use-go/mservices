@@ -13,13 +13,13 @@ require (
 	github.com/clbanning/mxj v1.8.4 // indirect
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/mattn/go-sqlite3 v1.14.10 // indirect
 	github.com/syndtr/goleveldb v1.0.0 // indirect
 	github.com/tealeg/xlsx v1.0.5 // indirect
 	github.com/xormplus/builder v0.0.0-20200331055651-240ff40009be // indirect
 	github.com/xormplus/xorm v0.0.0-20210822100304-4e1d4fcc1e67
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/flosch/pongo2.v3 v3.0.0-20141028000813-5e81b817a0c4 // indirect
-	gorm.io/gorm v1.22.5
 )
 
 replace (

@@ -4,17 +4,17 @@ import (
 	"context"
 	"reflect"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type Offset interface {
-	GetOffset() int32
-	GetLimit() int32
+	GetOffset() int
+	GetLimit() int
 }
 
 type Pager interface {
-	GetPageSize() int32
-	GetPageNo() int32
+	GetPageSize() int
+	GetPageNo() int
 }
 
 func SetZero(t interface{}, key string, v interface{}) {

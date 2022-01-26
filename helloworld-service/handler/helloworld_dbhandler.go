@@ -6,18 +6,18 @@ import (
 	"context"
 	"helloworld-service/model"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // QueryInfoDB defined TODO
-func (h *Handler) QueryInfoDB(ctx context.Context, session *gorm.DB, where *model.Info, list *[]*model.Info, count ...*int32) error {
+func (h *Handler) QueryInfoDB(ctx context.Context, session *gorm.DB, where *model.Info, list *[]*model.Info, count ...*int64) error {
 	session = session.Table(where.TableName()).Where(where).Find(list)
 	if len(count) > 0 {
 		session = session.Offset(0).Count(count[0])
 	}
-	if errs := session.GetErrors(); len(errs) != 0 {
-		logger.Errorf(ctx, "QueryInfoDB failed. [%v]", errs)
-		return errors.InternalServerError("QueryInfoDB fail. [%v]", errs)
+	if err := session.Error; err != nil {
+		logger.Errorf(ctx, "QueryInfoDB failed. [%v]", err)
+		return errors.InternalServerError("QueryInfoDB fail. [%v]", err)
 	}
 	return nil
 }

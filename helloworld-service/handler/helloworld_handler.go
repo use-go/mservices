@@ -147,7 +147,7 @@ func (h *Handler) QueryInfo(ctx context.Context, req *helloworld.QueryInfoReques
 		return errors.InternalServerError("InitDb failed %v", err)
 	}
 
-	var totalCount int32
+	var totalCount int64
 	var lst []*model.Info
 	where := model.Info{
 		Name: req.GetName(),

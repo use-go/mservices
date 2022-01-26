@@ -6,18 +6,18 @@ import (
 	"context"
 	"user-service/model"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // QueryUserDB defined TODO
-func (h *Handler) QueryUserDB(ctx context.Context, session *gorm.DB, where *model.User, list *[]model.User, count ...*int32) error {
+func (h *Handler) QueryUserDB(ctx context.Context, session *gorm.DB, where *model.User, list *[]model.User, count ...*int64) error {
 	session = session.Table(where.TableName()).Where(where).Find(list)
 	if len(count) > 0 {
 		session = session.Offset(0).Count(count[0])
 	}
-	if errs := session.GetErrors(); len(errs) != 0 {
-		logger.Errorf(ctx, "QueryUserDB failed. [%v]", errs)
-		return errors.InternalServerError("QueryUserDB fail. [%v]", errs)
+	if err := session.Error; err != nil {
+		logger.Errorf(ctx, "QueryUserDB failed. [%v]", err)
+		return errors.InternalServerError("QueryUserDB fail. [%v]", err)
 	}
 	return nil
 }
