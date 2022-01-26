@@ -5,7 +5,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/InfoFilter"
+              "$ref": "#/components/schemas/DeleteInfoRequest"
             }
           }
         },
@@ -15,7 +15,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/Info"
+              "$ref": "#/components/schemas/InsertInfoRequest"
             }
           }
         },
@@ -25,7 +25,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/InfoFilter"
+              "$ref": "#/components/schemas/QueryInfoDetailRequest"
             }
           }
         },
@@ -35,7 +35,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/InfoFilter"
+              "$ref": "#/components/schemas/QueryInfoRequest"
             }
           }
         },
@@ -45,7 +45,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/Info"
+              "$ref": "#/components/schemas/UpdateInfoRequest"
             }
           }
         },
@@ -57,7 +57,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/Info"
+              "$ref": "#/components/schemas/DeleteInfoResponse"
             }
           }
         },
@@ -67,7 +67,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/Info"
+              "$ref": "#/components/schemas/InsertInfoResponse"
             }
           }
         },
@@ -77,7 +77,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/Info"
+              "$ref": "#/components/schemas/QueryInfoDetailResponse"
             }
           }
         },
@@ -87,7 +87,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/InfoList"
+              "$ref": "#/components/schemas/QueryInfoResponse"
             }
           }
         },
@@ -97,7 +97,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/Info"
+              "$ref": "#/components/schemas/UpdateInfoResponse"
             }
           }
         },
@@ -137,16 +137,69 @@
       }
     },
     "schemas": {
-      "Info": {
+      "DeleteInfoRequest": {
+        "properties": {
+          "id": {
+            "format": "int32",
+            "type": "number"
+          }
+        },
+        "title": "DeleteInfoRequest",
+        "type": "object"
+      },
+      "DeleteInfoResponse": {
+        "properties": {
+          "id": {
+            "format": "int32",
+            "type": "number"
+          }
+        },
+        "title": "DeleteInfoResponse",
+        "type": "object"
+      },
+      "InsertInfoRequest": {
         "properties": {
           "name": {
             "type": "string"
           }
         },
-        "title": "Info",
+        "title": "InsertInfoRequest",
         "type": "object"
       },
-      "InfoFilter": {
+      "InsertInfoResponse": {
+        "properties": {
+          "id": {
+            "format": "int32",
+            "type": "number"
+          }
+        },
+        "title": "InsertInfoResponse",
+        "type": "object"
+      },
+      "QueryInfoDetailRequest": {
+        "properties": {
+          "id": {
+            "format": "int32",
+            "type": "number"
+          }
+        },
+        "title": "QueryInfoDetailRequest",
+        "type": "object"
+      },
+      "QueryInfoDetailResponse": {
+        "properties": {
+          "id": {
+            "format": "int32",
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "title": "QueryInfoDetailResponse",
+        "type": "object"
+      },
+      "QueryInfoRequest": {
         "properties": {
           "id": {
             "format": "int32",
@@ -156,26 +209,29 @@
             "type": "string"
           },
           "order": {
-            "format": "int32",
-            "type": "number"
+            "type": "string"
           },
           "page": {
-            "format": "int32",
+            "format": "int64",
             "type": "number"
           },
           "size": {
-            "format": "int32",
+            "format": "int64",
             "type": "number"
           }
         },
-        "title": "InfoFilter",
+        "title": "QueryInfoRequest",
         "type": "object"
       },
-      "InfoList": {
+      "QueryInfoResponse": {
         "properties": {
           "data": {
             "items": {
               "properties": {
+                "id": {
+                  "format": "int32",
+                  "type": "number"
+                },
                 "name": {
                   "type": "string"
                 }
@@ -185,19 +241,55 @@
             "type": "array"
           },
           "page": {
-            "format": "int32",
+            "format": "int64",
             "type": "number"
           },
           "size": {
-            "format": "int32",
+            "format": "int64",
             "type": "number"
           },
           "total_count": {
+            "format": "int64",
+            "type": "number"
+          }
+        },
+        "title": "QueryInfoResponse",
+        "type": "object"
+      },
+      "QueryInfoResponseItem": {
+        "properties": {
+          "id": {
+            "format": "int32",
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "title": "QueryInfoResponseItem",
+        "type": "object"
+      },
+      "UpdateInfoRequest": {
+        "properties": {
+          "id": {
+            "format": "int32",
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "title": "UpdateInfoRequest",
+        "type": "object"
+      },
+      "UpdateInfoResponse": {
+        "properties": {
+          "id": {
             "format": "int32",
             "type": "number"
           }
         },
-        "title": "InfoList",
+        "title": "UpdateInfoResponse",
         "type": "object"
       }
     },
@@ -251,7 +343,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Helloworld.DeleteInfo(InfoFilter)"
+        "summary": "Helloworld.DeleteInfo(DeleteInfoRequest)"
       }
     },
     "/helloworld/Helloworld/InsertInfo": {
@@ -283,7 +375,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Helloworld.InsertInfo(Info)"
+        "summary": "Helloworld.InsertInfo(InsertInfoRequest)"
       }
     },
     "/helloworld/Helloworld/QueryInfo": {
@@ -315,7 +407,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Helloworld.QueryInfo(InfoFilter)"
+        "summary": "Helloworld.QueryInfo(QueryInfoRequest)"
       }
     },
     "/helloworld/Helloworld/QueryInfoDetail": {
@@ -347,7 +439,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Helloworld.QueryInfoDetail(InfoFilter)"
+        "summary": "Helloworld.QueryInfoDetail(QueryInfoDetailRequest)"
       }
     },
     "/helloworld/Helloworld/UpdateInfo": {
@@ -379,7 +471,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Helloworld.UpdateInfo(Info)"
+        "summary": "Helloworld.UpdateInfo(UpdateInfoRequest)"
       }
     }
   },
