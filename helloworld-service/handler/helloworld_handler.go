@@ -9,8 +9,6 @@ import (
 	"context"
 	"helloworld-service/model"
 	"proto/helloworld"
-
-	"github.com/jinzhu/copier"
 )
 
 // DeleteInfo defined TODO
@@ -60,10 +58,10 @@ func (h *Handler) UpdateInfo(ctx context.Context, req *helloworld.UpdateInfoRequ
 	}
 
 	info := model.Info{}
-	err = copier.Copy(&info, req)
+	err = info.Unmarshal(req)
 	if err != nil {
-		logger.Errorf(ctx, "Copy.req failed %v", err)
-		return errors.InternalServerError("Copy.req failed %v", err)
+		logger.Errorf(ctx, "Unmarshal failed %v", err)
+		return errors.InternalServerError("Unmarshal failed %v", err)
 	}
 	err = h.UpdateInfoDB(ctx, session, &info)
 	if err != nil {
@@ -71,10 +69,10 @@ func (h *Handler) UpdateInfo(ctx context.Context, req *helloworld.UpdateInfoRequ
 		return errors.InternalServerError("UpdateInfoDB failed %v", err)
 	}
 
-	err = copier.Copy(rsp, &info)
+	err = info.Marshal(rsp)
 	if err != nil {
-		logger.Errorf(ctx, "Copy.info failed %v", err)
-		return errors.InternalServerError("Copy.info failed %v", err)
+		logger.Errorf(ctx, "Marshal failed %v", err)
+		return errors.InternalServerError("Marshal failed %v", err)
 	}
 	return nil
 }
@@ -92,10 +90,10 @@ func (h *Handler) InsertInfo(ctx context.Context, req *helloworld.InsertInfoRequ
 	}
 
 	info := model.Info{}
-	err = copier.Copy(&info, req)
+	err = info.Unmarshal(req)
 	if err != nil {
-		logger.Errorf(ctx, "Copy.req failed %v", err)
-		return errors.InternalServerError("Copy.req failed %v", err.Error())
+		logger.Errorf(ctx, "Unmarshal failed %v", err)
+		return errors.InternalServerError("Unmarshal failed %v", err.Error())
 	}
 
 	err = h.InsertInfoDB(ctx, session, &info)
@@ -131,9 +129,10 @@ func (h *Handler) QueryInfoDetail(ctx context.Context, req *helloworld.QueryInfo
 	if err != nil {
 		return errors.InternalServerError("QueryInfoDetailDB failed %v", err)
 	}
-	err = copier.Copy(rsp, &info)
+	err = info.Marshal(rsp)
 	if err != nil {
-		return errors.InternalServerError("copier.Copy failed %v", err)
+		logger.Errorf(ctx, "Marshal failed %v", err)
+		return errors.InternalServerError("Marshal failed %v", err)
 	}
 	return nil
 }
@@ -160,9 +159,10 @@ func (h *Handler) QueryInfo(ctx context.Context, req *helloworld.QueryInfoReques
 	if err != nil {
 		return errors.InternalServerError("QueryInfoDB failed %v", err)
 	}
-	err = copier.Copy(&rsp.Data, &lst)
+
+	err = model.InfoUnmarshalLst(&lst, &rsp.Data)
 	if err != nil {
-		return errors.InternalServerError("copier.Copy failed %v", err)
+		return errors.InternalServerError("InfoUnmarshalLst failed %v", err)
 	}
 
 	rsp.TotalCount = totalCount

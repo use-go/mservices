@@ -1,19 +1,10 @@
 package model
 
 import (
-	"encoding/json"
 	"time"
+
+	"github.com/jinzhu/copier"
 )
-
-func UnmarshalInfo(data []byte) (Info, error) {
-	var r Info
-	err := json.Unmarshal(data, &r)
-	return r, err
-}
-
-func (r *Info) Marshal() ([]byte, error) {
-	return json.Marshal(r)
-}
 
 type Info struct {
 	Id        uint32     `gorm:"column:id" json:"id"`
@@ -26,4 +17,36 @@ type Info struct {
 // TableName sets the insert table name for this struct type
 func (h *Info) TableName() string {
 	return "info"
+}
+
+func (h *Info) Marshal(o interface{}) error {
+	err := copier.Copy(o, h)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (h *Info) Unmarshal(o interface{}) error {
+	err := copier.Copy(h, o)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func InfoMarshalLst(toValue interface{}, o interface{}) error {
+	err := copier.Copy(toValue, o)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func InfoUnmarshalLst(o interface{}, toValue interface{}) error {
+	err := copier.Copy(toValue, o)
+	if err != nil {
+		return err
+	}
+	return nil
 }
