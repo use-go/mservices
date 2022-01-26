@@ -5,6 +5,7 @@ import (
 	"comm/db"
 	"comm/errors"
 	"comm/logger"
+	"comm/util"
 	"context"
 	"helloworld-service/model"
 	"proto/helloworld"
@@ -19,8 +20,9 @@ func (h *Handler) DeleteInfo(ctx context.Context, req *helloworld.DeleteInfoRequ
 		logger.Infof(ctx, "%v Do DeleteInfo", acc.Name)
 	}
 
-	if req.Id == 0 {
-		return errors.BadRequest("Id required")
+	err := util.IsZero(req, "id")
+	if err != nil {
+		return errors.BadRequest(err.Error())
 	}
 
 	session, err := db.InitDb(ctx)
@@ -47,8 +49,9 @@ func (h *Handler) UpdateInfo(ctx context.Context, req *helloworld.UpdateInfoRequ
 		logger.Infof(ctx, "%v Do UpdateInfo", acc.Name)
 	}
 
-	if len(req.Name) == 0 {
-		return errors.BadRequest("Name required")
+	err := util.IsZero(req, "id")
+	if err != nil {
+		return errors.BadRequest(err.Error())
 	}
 
 	session, err := db.InitDb(ctx)
@@ -83,10 +86,6 @@ func (h *Handler) InsertInfo(ctx context.Context, req *helloworld.InsertInfoRequ
 		logger.Infof(ctx, "%v Do InsertInfo", acc.Name)
 	}
 
-	if len(req.Name) == 0 {
-		return errors.BadRequest("Name required")
-	}
-
 	session, err := db.InitDb(ctx)
 	if err != nil {
 		return errors.InternalServerError("InitDb failed %v", err)
@@ -112,6 +111,11 @@ func (h *Handler) QueryInfoDetail(ctx context.Context, req *helloworld.QueryInfo
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do QueryInfoDetail", acc.Name)
+	}
+
+	err := util.IsZero(req, "id")
+	if err != nil {
+		return errors.BadRequest(err.Error())
 	}
 
 	session, err := db.InitDb(ctx)
