@@ -9,6 +9,7 @@ import (
 	"context"
 	"helloworld-service/model"
 	"proto/helloworld"
+	"time"
 )
 
 // DeleteInfo defined TODO
@@ -96,6 +97,8 @@ func (h *Handler) InsertInfo(ctx context.Context, req *helloworld.InsertInfoRequ
 		return errors.InternalServerError("Unmarshal failed %v", err.Error())
 	}
 
+	info.CreatedAt = time.Now()
+	info.UpdatedAt = time.Now()
 	err = h.InsertInfoDB(ctx, session, &info)
 	if err != nil {
 		logger.Errorf(ctx, "InsertSchedulePositionDB failed %v", err)
