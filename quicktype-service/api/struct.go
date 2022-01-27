@@ -15,10 +15,19 @@ func Table2Struct(t *schemas.Table) (string, error) {
 	msgTemplate := `package model
 
 import (
+	"fmt"
 	"time"
-
+	"database/sql"
 	"github.com/jinzhu/copier"
+	"github.com/guregu/null"
 	"gorm.io/gorm"
+)
+
+var (
+    _ = time.Second
+    _ = sql.LevelDefault
+    _ = null.Bool{}
+	_ = fmt.State.Write
 )
 
 type {{.Name}} struct {

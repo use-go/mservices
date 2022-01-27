@@ -9,9 +9,9 @@ import (
 
 func Table2Handler(t *schemas.Table) (string, error) {
 	message := tables2Handler(t)
-	msgTemplate := `package {{.Name}};
+	msgTemplate := `syntax = "proto3";
 
-option go_package = "./proto;{{.Name}}";
+package proto;
 
 service Handler {
 	// Insert{{.Name}} defined todo

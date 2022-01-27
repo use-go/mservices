@@ -9,8 +9,7 @@ import (
 
 func Table2RW(t *schemas.Table) (string, error) {
 	message := tables2RW(t)
-	msgTemplate := `syntax = "proto3";
-package handler
+	msgTemplate := `package handler
 
 import (
 	"comm/auth"
