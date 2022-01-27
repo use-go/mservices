@@ -63,7 +63,7 @@ func (h *Handler) Table2Go(rw http.ResponseWriter, r *http.Request) {
 	}
 	for _, schema := range schemas {
 		if schema.Name == table {
-			proto, err := api.Table2Proto(schema)
+			proto, err := api.Table2Struct(schema)
 			if err != nil {
 				whttp.Fail(rw, r, err)
 				return
@@ -110,8 +110,60 @@ func (h *Handler) Table2Proto(rw http.ResponseWriter, r *http.Request) {
 func (h *Handler) Table2Handler(rw http.ResponseWriter, r *http.Request) {
 	acc, ok := auth.FromContext(r.Context())
 	if ok {
-		logger.Infof(r.Context(), "%v Do Table2Handler", acc.Name)
+		logger.Infof(r.Context(), "%v Do Table2Proto", acc.Name)
 	}
+	db, err := h.DB(r)
+	if err != nil {
+		whttp.Fail(rw, r, err)
+		return
+	}
+	table := r.URL.Query().Get("table")
+	schemas, err := db.DBMetas()
+	if err != nil {
+		whttp.Fail(rw, r, err)
+		return
+	}
+	for _, schema := range schemas {
+		if schema.Name == table {
+			proto, err := api.Table2Handler(schema)
+			if err != nil {
+				whttp.Fail(rw, r, err)
+				return
+			}
+			whttp.Success(rw, r, proto)
+			return
+		}
+	}
+	whttp.Fail(rw, r, errors.New("not found"))
+}
 
-	whttp.OutputHTML(rw, r, "static/index.html")
+// Table2RW defined TODO
+func (h *Handler) Table2RW(rw http.ResponseWriter, r *http.Request) {
+	acc, ok := auth.FromContext(r.Context())
+	if ok {
+		logger.Infof(r.Context(), "%v Do Table2Proto", acc.Name)
+	}
+	db, err := h.DB(r)
+	if err != nil {
+		whttp.Fail(rw, r, err)
+		return
+	}
+	table := r.URL.Query().Get("table")
+	schemas, err := db.DBMetas()
+	if err != nil {
+		whttp.Fail(rw, r, err)
+		return
+	}
+	for _, schema := range schemas {
+		if schema.Name == table {
+			proto, err := api.Table2RW(schema)
+			if err != nil {
+				whttp.Fail(rw, r, err)
+				return
+			}
+			whttp.Success(rw, r, proto)
+			return
+		}
+	}
+	whttp.Fail(rw, r, errors.New("not found"))
 }

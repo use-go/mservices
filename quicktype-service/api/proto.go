@@ -13,13 +13,15 @@ import (
 func Table2Proto(t *schemas.Table) (string, error) {
 	message := tables2Message(t)
 	msgTemplate := `syntax = "proto3";
+
 package proto;
+
 message {{.Name}} {
 {{- range .Fields}}
 {{- if .IsRepeated}}
-  repeated {{.TypeName}} {{.Name}} = {{.Order}};
+	repeated {{.TypeName}} {{.Name}} = {{.Order}};
 {{- else}}
-  {{.TypeName}} {{.Name}} = {{.Order}} [json_name = "{{.Name}}"];
+	{{.TypeName}} {{.Name}} = {{.Order}} [json_name = "{{.Name}}"];
 {{- end}}
 {{- end}}
 }

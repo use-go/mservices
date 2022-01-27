@@ -21,6 +21,9 @@
         align-content: stretch;
         align-items: stretch;
     }
+    .item {
+        padding: 5px;
+    }
     .left {
         width: 18%;
         order: 1;
@@ -28,6 +31,12 @@
         flex-basis: auto;
         flex-grow: 0;
         flex-shrink: 1;
+    }
+    .left ul {
+        background: #f6f6f6;
+        border:1px solid;
+        border-color: #f9f9f9;
+        border-radius: 5px;
     }
     .right {
         width: 78%;
@@ -37,18 +46,25 @@
         flex-grow: 0;
         flex-shrink: 1;
     }
-    .container{
-        background: #f6f6f6
+    .left ul>li {
+        list-style:none;
+        padding: 4px;
     }
-    ul>li {
-        padding: 2px;
-    }
-    ul>li:hover{
+    .left ul>li:hover{
+        cursor:pointer;
         background-color:#ccc !important;
+    }
+    .act{
+        cursor:pointer;
+    }
+    .act-nav {
+        width: 100%;
+        height: 32px;
+        line-height:32px;
+        background: #f6f6f6;
     }
     .act-bar{
         display:flex;
-        background-color:tomato;
         width: 100%;
         height: 32px;
         line-height:32px;
@@ -57,6 +73,7 @@
         justify-content: flex-start;
         align-content: stretch;
         align-items: stretch;
+        background: #f6f6f6;
     }
     .act-1 {
         height: 32px;
@@ -90,6 +107,12 @@
         flex-shrink: 1;
         margin-left: 4px;
     }
+    .code {
+        background-color:#444;
+        color:#fff;
+        padding: 10px;
+        font-size: 12px;
+    }
     </style>
 </head>
 
@@ -98,19 +121,20 @@
         <div class="row">
             <div class="item left">
                 <ul>
-                    <li v-for="tb in tables" v-on:click="say('auth_group')">
+                    <li v-for="tb in tables" v-on:click="table2proto(tb)">
                         {{ tb }}
                     </li>
                 </ul>
             </div>
             <div class="item right">
+                <div class="act-nav">{{ db }}/{{ table }}</div>
                 <div class="act-bar">
-                    <div class="act act-1">Proto</div>
-                    <div class="act act-2">Struct</div>
-                    <div class="act act-3">Handler</div>
-                    <div class="act act-4">Read/Write</div>
+                    <div class="act act-1" v-on:click="table2proto(table)">Proto</div>
+                    <div class="act act-2" v-on:click="table2go(table)">Struct</div>
+                    <div class="act act-3" v-on:click="table2handler(table)">Handler</div>
+                    <div class="act act-4" v-on:click="table2rw(table)">Read/Write</div>
                 </div>
-                <div class="code">{{ json.strin }}</div>
+                <div class="code" v-html="code" style="white-space: pre-wrap;"></div>
             </div>
         </div>
     </div>
@@ -120,6 +144,8 @@
         el: '#app',
         data: {
             tables: [],
+            table: '',
+            db: 'yearning',
             code: ''
         },
         mounted () {
@@ -128,17 +154,44 @@
             .then(response => response.data)
             .then(res => {
                 this.tables = res.data
+                this.table2proto(this.tables[0])
+                this.table = this.tables[0]
             })
         },
         methods: {
-            say: function (message) {
+            table2go: function (tb) {
                 axios
-                .get('/quicktype/type/table2proto?table=auth_group&dsn=root%3Agmt%40tcp(192.168.202.128%3A3306)%2Fyearning%3Fcharset%3Dutf8mb4%26parseTime%3DTrue%26loc%3DLocal')
+                .get('/quicktype/type/table2go?table=' + tb + '&dsn=root%3Agmt%40tcp(192.168.202.128%3A3306)%2Fyearning%3Fcharset%3Dutf8mb4%26parseTime%3DTrue%26loc%3DLocal')
                 .then(response => response.data)
                 .then(res => {
                     this.code = res.data
                 })
-            }
+            },
+            table2proto: function (tb) {
+                axios
+                .get('/quicktype/type/table2proto?table=' + tb + '&dsn=root%3Agmt%40tcp(192.168.202.128%3A3306)%2Fyearning%3Fcharset%3Dutf8mb4%26parseTime%3DTrue%26loc%3DLocal')
+                .then(response => response.data)
+                .then(res => {
+                    this.code = res.data
+                    this.table = tb
+                })
+            },
+            table2handler: function (tb) {
+                axios
+                .get('/quicktype/type/table2handler?table=' + tb + '&dsn=root%3Agmt%40tcp(192.168.202.128%3A3306)%2Fyearning%3Fcharset%3Dutf8mb4%26parseTime%3DTrue%26loc%3DLocal')
+                .then(response => response.data)
+                .then(res => {
+                    this.code = res.data
+                })
+            },
+            table2rw: function (tb) {
+                axios
+                .get('/quicktype/type/table2rw?table=' + tb + '&dsn=root%3Agmt%40tcp(192.168.202.128%3A3306)%2Fyearning%3Fcharset%3Dutf8mb4%26parseTime%3DTrue%26loc%3DLocal')
+                .then(response => response.data)
+                .then(res => {
+                    this.code = res.data
+                })
+            },
         }
     })
 </script>

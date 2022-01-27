@@ -17,6 +17,7 @@ func main() {
 	srv.HandleFunc("/type/table2go", hdl.Table2Go)
 	srv.HandleFunc("/type/table2proto", hdl.Table2Proto)
 	srv.HandleFunc("/type/table2handler", hdl.Table2Handler)
+	srv.HandleFunc("/type/table2rw", hdl.Table2RW)
 	if err := srv.Run(); err != nil {
 		logger.Fatal(define.TODO, err)
 	}
