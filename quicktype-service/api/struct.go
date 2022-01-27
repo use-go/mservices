@@ -24,8 +24,10 @@ import (
 type {{.Name}} struct {
 {{- range .Fields}}
 {{- if .IsRepeated}}
+	// {{.Name}} defined TODO
 	{{.Name}} []{{.TypeName}} ` + "`gorm:\"column:{{.JsonName}}\" json:\"{{.JsonName}}\"`" + `
 {{- else}}
+	// {{.Name}} defined TODO
 	{{.Name}} {{.TypeName}} ` + "`gorm:\"column:{{.JsonName}}\" json:\"{{.JsonName}}\"`" + `
 {{- end}}
 {{- end}}

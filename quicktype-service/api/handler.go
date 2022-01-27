@@ -14,18 +14,25 @@ func Table2Handler(t *schemas.Table) (string, error) {
 option go_package = "./proto;{{.Name}}";
 
 service Handler {
+	// Insert{{.Name}} defined TODO
 	rpc Insert{{.Name}} (Insert{{.Name}}Request) returns (Insert{{.Name}}Response) {}
+	// Delete{{.Name}} defined TODO
 	rpc Delete{{.Name}} (Delete{{.Name}}Request) returns (Delete{{.Name}}Response) {}
+	// Update{{.Name}} defined TODO
 	rpc Update{{.Name}} (Update{{.Name}}Request) returns (Update{{.Name}}Response) {}
+	// Query{{.Name}} defined TODO
 	rpc Query{{.Name}} (Query{{.Name}}Request) returns (Query{{.Name}}Response) {}
+	// Query{{.Name}}Detail defined TODO
 	rpc Query{{.Name}}Detail (Query{{.Name}}DetailRequest) returns (Query{{.Name}}DetailResponse) {}
 }
 
 message Insert{{.Name}}Request {
 {{- range .Fields}}
 {{- if .IsRepeated}}
+	// {{.Name}} defined TODO
 	repeated {{.TypeName}} {{.Name}} = {{.Order}};
 {{- else}}
+	// {{.Name}} defined TODO
 	{{.TypeName}} {{.Name}} = {{.Order}} [json_name = "{{.Name}}"];
 {{- end}}
 {{- end}}
@@ -34,8 +41,10 @@ message Insert{{.Name}}Request {
 message Insert{{.Name}}Response {
 {{- range .Fields}}
 {{- if .IsRepeated}}
+	// {{.Name}} defined TODO
 	repeated {{.TypeName}} {{.Name}} = {{.Order}};
 {{- else}}
+	// {{.Name}} defined TODO
 	{{.TypeName}} {{.Name}} = {{.Order}} [json_name = "{{.Name}}"];
 {{- end}}
 {{- end}}
@@ -52,8 +61,10 @@ message Delete{{.Name}}Response {
 message Update{{.Name}}Request {
 {{- range .Fields}}
 {{- if .IsRepeated}}
+	// {{.Name}} defined TODO
 	repeated {{.TypeName}} {{.Name}} = {{.Order}};
 {{- else}}
+	// {{.Name}} defined TODO
 	{{.TypeName}} {{.Name}} = {{.Order}} [json_name = "{{.Name}}"];
 {{- end}}
 {{- end}}
@@ -73,8 +84,10 @@ message Query{{.Name}}Request {
 message Query{{.Name}}ResponseItem {
 {{- range .Fields}}
 {{- if .IsRepeated}}
+	// {{.Name}} defined TODO
 	repeated {{.TypeName}} {{.Name}} = {{.Order}};
 {{- else}}
+	// {{.Name}} defined TODO
 	{{.TypeName}} {{.Name}} = {{.Order}} [json_name = "{{.Name}}"];
 {{- end}}
 {{- end}}
@@ -94,8 +107,10 @@ message Query{{.Name}}DetailRequest {
 message Query{{.Name}}DetailResponse {
 {{- range .Fields}}
 {{- if .IsRepeated}}
+	// {{.Name}} defined TODO
 	repeated {{.TypeName}} {{.Name}} = {{.Order}};
 {{- else}}
+	// {{.Name}} defined TODO
 	{{.TypeName}} {{.Name}} = {{.Order}} [json_name = "{{.Name}}"];
 {{- end}}
 {{- end}}

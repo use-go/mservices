@@ -19,8 +19,10 @@ package proto;
 message {{.Name}} {
 {{- range .Fields}}
 {{- if .IsRepeated}}
+	// {{.Name}} defined TODO
 	repeated {{.TypeName}} {{.Name}} = {{.Order}};
 {{- else}}
+	// {{.Name}} defined TODO
 	{{.TypeName}} {{.Name}} = {{.Order}} [json_name = "{{.Name}}"];
 {{- end}}
 {{- end}}
