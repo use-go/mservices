@@ -9,18 +9,16 @@ import (
 
 func Table2Handler(t *schemas.Table) (string, error) {
 	message := tables2Handler(t)
-	msgTemplate := `syntax = "proto3";
-
-package {{.Name}};
+	msgTemplate := `package {{.Name}};
 
 option go_package = "./proto;{{.Name}}";
 
 service Handler {
 	rpc Insert{{.Name}} (Insert{{.Name}}Request) returns (Insert{{.Name}}Response) {}
 	rpc Delete{{.Name}} (Delete{{.Name}}Request) returns (Delete{{.Name}}Response) {}
-    rpc Update{{.Name}} (Update{{.Name}}Request) returns (Update{{.Name}}Response) {}
-    rpc Query{{.Name}} (Query{{.Name}}Request) returns (Query{{.Name}}Response) {}
-    rpc Query{{.Name}}Detail (Query{{.Name}}DetailRequest) returns (Query{{.Name}}DetailResponse) {}
+	rpc Update{{.Name}} (Update{{.Name}}Request) returns (Update{{.Name}}Response) {}
+	rpc Query{{.Name}} (Query{{.Name}}Request) returns (Query{{.Name}}Response) {}
+	rpc Query{{.Name}}Detail (Query{{.Name}}DetailRequest) returns (Query{{.Name}}DetailResponse) {}
 }
 
 message Insert{{.Name}}Request {

@@ -62,6 +62,8 @@
         height: 32px;
         line-height:32px;
         background: #f6f6f6;
+        font-size: 14px;
+        color: #555;
     }
     .act-bar{
         display:flex;
@@ -74,6 +76,8 @@
         align-content: stretch;
         align-items: stretch;
         background: #f6f6f6;
+        font-size: 14px;
+        color: #555;
     }
     .act-1 {
         height: 32px;
@@ -133,6 +137,7 @@
                     <div class="act act-2" v-on:click="table2go(table)">Struct</div>
                     <div class="act act-3" v-on:click="table2handler(table)">Handler</div>
                     <div class="act act-4" v-on:click="table2rw(table)">Read/Write</div>
+                    <div class="act act-4" v-on:click="table2db(table)">DB</div>
                 </div>
                 <div class="code" v-html="code" style="white-space: pre-wrap;"></div>
             </div>
@@ -192,6 +197,14 @@
                     this.code = res.data
                 })
             },
+            table2db: function (tb) {
+                axios
+                .get('/quicktype/type/table2db?table=' + tb + '&dsn=root%3Agmt%40tcp(192.168.202.128%3A3306)%2Fyearning%3Fcharset%3Dutf8mb4%26parseTime%3DTrue%26loc%3DLocal')
+                .then(response => response.data)
+                .then(res => {
+                    this.code = res.data
+                })
+            }
         }
     })
 </script>
