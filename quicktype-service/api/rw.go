@@ -19,13 +19,13 @@ import (
 	"comm/logger"
 	"comm/util"
 	"context"
-	"helloworld-service/model"
-	"proto/helloworld"
+	"xxx-service/model"
+	"proto/xxx"
 	"time"
 )
 
-// Delete{{.Name}} defined TODO
-func (h *Handler) Delete{{.Name}}(ctx context.Context, req *helloworld.Delete{{.Name}}Request, rsp *helloworld.Delete{{.Name}}Response) error {
+// Delete{{.Name}} defined todo
+func (h *Handler) Delete{{.Name}}(ctx context.Context, req *xxx.Delete{{.Name}}Request, rsp *xxx.Delete{{.Name}}Response) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Delete{{.Name}}", acc.Name)
@@ -53,8 +53,8 @@ func (h *Handler) Delete{{.Name}}(ctx context.Context, req *helloworld.Delete{{.
 	return nil
 }
 
-// Update{{.Name}} defined TODO
-func (h *Handler) Update{{.Name}}(ctx context.Context, req *helloworld.Update{{.Name}}Request, rsp *helloworld.Update{{.Name}}Response) error {
+// Update{{.Name}} defined todo
+func (h *Handler) Update{{.Name}}(ctx context.Context, req *xxx.Update{{.Name}}Request, rsp *xxx.Update{{.Name}}Response) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Update{{.Name}}", acc.Name)
@@ -90,8 +90,8 @@ func (h *Handler) Update{{.Name}}(ctx context.Context, req *helloworld.Update{{.
 	return nil
 }
 
-// Insert{{.Name}} defined TODO
-func (h *Handler) Insert{{.Name}}(ctx context.Context, req *helloworld.Insert{{.Name}}Request, rsp *helloworld.Insert{{.Name}}Response) error {
+// Insert{{.Name}} defined todo
+func (h *Handler) Insert{{.Name}}(ctx context.Context, req *xxx.Insert{{.Name}}Request, rsp *xxx.Insert{{.Name}}Response) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Insert{{.Name}}", acc.Name)
@@ -119,8 +119,8 @@ func (h *Handler) Insert{{.Name}}(ctx context.Context, req *helloworld.Insert{{.
 	return nil
 }
 
-// Query{{.Name}}Detail defined TODO
-func (h *Handler) Query{{.Name}}Detail(ctx context.Context, req *helloworld.Query{{.Name}}DetailRequest, rsp *helloworld.Query{{.Name}}DetailResponse) error {
+// Query{{.Name}}Detail defined todo
+func (h *Handler) Query{{.Name}}Detail(ctx context.Context, req *xxx.Query{{.Name}}DetailRequest, rsp *xxx.Query{{.Name}}DetailResponse) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Query{{.Name}}Detail", acc.Name)
@@ -152,8 +152,8 @@ func (h *Handler) Query{{.Name}}Detail(ctx context.Context, req *helloworld.Quer
 	return nil
 }
 
-// Query{{.Name}} defined TODO
-func (h *Handler) Query{{.Name}}(ctx context.Context, req *helloworld.Query{{.Name}}Request, rsp *helloworld.Query{{.Name}}Response) error {
+// Query{{.Name}} defined todo
+func (h *Handler) Query{{.Name}}(ctx context.Context, req *xxx.Query{{.Name}}Request, rsp *xxx.Query{{.Name}}Response) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Query{{.Name}}", acc.Name)

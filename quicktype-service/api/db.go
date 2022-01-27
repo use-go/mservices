@@ -15,12 +15,12 @@ import (
 	"comm/errors"
 	"comm/logger"
 	"context"
-	"helloworld-service/model"
+	"xxx-service/model"
 
 	"gorm.io/gorm"
 )
 
-// Query{{.Name}}DB defined TODO
+// Query{{.Name}}DB defined todo
 func (h *Handler) Query{{.Name}}DB(ctx context.Context, session *gorm.DB, where *model.{{.Name}}, list *[]*model.{{.Name}}, count ...*int64) error {
 	session = session.Table(where.TableName()).Where(where).Find(list)
 	if len(count) > 0 {
@@ -33,7 +33,7 @@ func (h *Handler) Query{{.Name}}DB(ctx context.Context, session *gorm.DB, where 
 	return nil
 }
 
-// Query{{.Name}}DetailDB defined TODO
+// Query{{.Name}}DetailDB defined todo
 func (h *Handler) Query{{.Name}}DetailDB(ctx context.Context, session *gorm.DB, where *model.{{.Name}}, data *model.{{.Name}}) error {
 	var lst []*model.{{.Name}}
 	err := h.Query{{.Name}}DB(ctx, session, where, &lst)
@@ -49,7 +49,7 @@ func (h *Handler) Query{{.Name}}DetailDB(ctx context.Context, session *gorm.DB, 
 	return nil
 }
 
-// Insert{{.Name}}DB defined TODO
+// Insert{{.Name}}DB defined todo
 func (h *Handler) Insert{{.Name}}DB(ctx context.Context, session *gorm.DB, data *model.{{.Name}}) error {
 	err := session.Create(data).Error
 	if err != nil {
@@ -59,7 +59,7 @@ func (h *Handler) Insert{{.Name}}DB(ctx context.Context, session *gorm.DB, data 
 	return nil
 }
 
-// Update{{.Name}}DB defined TODO
+// Update{{.Name}}DB defined todo
 func (h *Handler) Update{{.Name}}DB(ctx context.Context, session *gorm.DB, data *model.{{.Name}}) error {
 	err := session.Table(data.TableName()).Model(&data).Updates(&data).Error
 	if err != nil {
@@ -69,7 +69,7 @@ func (h *Handler) Update{{.Name}}DB(ctx context.Context, session *gorm.DB, data 
 	return nil
 }
 
-// Save{{.Name}}DB defined TODO
+// Save{{.Name}}DB defined todo
 func (h *Handler) Save{{.Name}}DB(ctx context.Context, session *gorm.DB, data *model.{{.Name}}) error {
 	err := session.Save(data).Error
 	if err != nil {
@@ -79,7 +79,7 @@ func (h *Handler) Save{{.Name}}DB(ctx context.Context, session *gorm.DB, data *m
 	return nil
 }
 
-// Delete{{.Name}}DB defined TODO
+// Delete{{.Name}}DB defined todo
 func (h *Handler) Delete{{.Name}}DB(ctx context.Context, session *gorm.DB, data *model.{{.Name}}) error {
 	err := session.Where(data).Delete(&data).Error
 	if err != nil {
