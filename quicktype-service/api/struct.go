@@ -24,9 +24,9 @@ import (
 )
 
 var (
-    _ = time.Second
-    _ = sql.LevelDefault
-    _ = null.Bool{}
+	_ = time.Second
+	_ = sql.LevelDefault
+	_ = null.Bool{}
 	_ = fmt.State.Write
 )
 

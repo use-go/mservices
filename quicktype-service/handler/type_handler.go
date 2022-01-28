@@ -9,8 +9,8 @@ import (
 	"quicktype-service/api"
 )
 
-// Type defined TODO
-func (h *Handler) Type(rw http.ResponseWriter, r *http.Request) {
+// Index defined TODO
+func (h *Handler) Index(rw http.ResponseWriter, r *http.Request) {
 	acc, ok := auth.FromContext(r.Context())
 	if ok {
 		logger.Infof(r.Context(), "%v Do Type", acc.Name)

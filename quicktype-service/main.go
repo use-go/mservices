@@ -12,7 +12,7 @@ import (
 func main() {
 	hdl := handler.Handler{}
 	srv := web.New(web.Name("quicktype"))
-	srv.HandleFunc("/type/index", hdl.Type)
+	srv.HandleFunc("/", hdl.Index)
 	srv.HandleFunc("/type/tables", hdl.Tables)
 	srv.HandleFunc("/type/table2go", hdl.Table2Go)
 	srv.HandleFunc("/type/table2proto", hdl.Table2Proto)

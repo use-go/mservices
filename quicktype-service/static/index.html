@@ -25,22 +25,25 @@
         padding: 5px;
     }
     .left {
-        width: 18%;
+        width: 16%;
         order: 1;
         align-self: auto;
         flex-basis: auto;
         flex-grow: 0;
         flex-shrink: 1;
-        background: #f6f6f6;
+        background: #fff;
     }
     .left ul {
-        border:1px solid;
-        border-color: #f9f9f9;
         border-radius: 5px;
         padding-inline-start: 0px;
+        height:calc(100vh - 31px);
+        overflow: scroll;
+        color: #555;
+        margin: 0px;
+        margin-left: 5px;
     }
     .right {
-        width: 78%;
+        width: 84%;
         order: 1;
         align-self: auto;
         flex-basis: auto;
@@ -55,7 +58,7 @@
     }
     .left ul>li:hover{
         cursor:pointer;
-        background-color:#ccc !important;
+        background:#eee !important;
     }
     .act{
         cursor:pointer;
@@ -130,16 +133,30 @@
         padding-right: 6px;
     }
     .code {
-        background-color:#444;
+        background-color:#333;
         color:#fff;
         padding: 10px;
         font-size: 12px;
         margin-top:5px;
+        height:calc(100vh - 64px - 51px);
+        overflow: scroll;
+    }
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+        border-radius: 5px;
+        background: #ccc;
+    }
+    ::-webkit-scrollbar-track {
+        border-radius: 0px;
+        background: #fff;
     }
     </style>
 </head>
 
-<body>
+<body style="background: #f0f2f5;">
     <div class="container" id="app">
         <div class="row">
             <div class="item left">
@@ -167,6 +184,7 @@
     new Vue({
         el: '#app',
         data: {
+            dns: "root:gmt@tcp(192.168.202.128:3306)/yearning?charset=utf8mb4&parseTime=True&loc=Local",
             tables: [],
             table: '',
             db: 'yearning',
