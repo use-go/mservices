@@ -165,7 +165,7 @@
         height:calc(100vh - 64px - 51px);
         overflow: scroll;
     }
-    input { 
+    .showDialog input { 
         font-size: 8pt; 
         line-height:15px;
         color: #000000;
@@ -179,6 +179,13 @@
         border-bottom-width: 1px;
         border-left-width: 0px;
         outline:none;
+    }
+    .showDialog label {
+        display: inline-block;
+        padding: 3px 6px;
+        text-align: right;
+        width: 45%;
+        vertical-align: top;
     }
     ::-webkit-scrollbar {
         width: 8px;
@@ -348,11 +355,12 @@
                 var id = 'showDialog' + Math.random()*(999999-0)+0;
                 var m = document.createElement('div');  
                 m.id= id;
+                m.className = 'showDialog';
                 for(item of items) {
-                    m.innerHTML += '<div>'+ item.name + ':' +'<input type="text" name="' + item.name + '" prop="' + item.prop + '" value="' + item.value + '"></div>';
+                    m.innerHTML += '<div><label style="font-size:13px;" name="' + item.name + '">'+ item.name +':</label><input type="text" name="' + item.name + '" prop="' + item.prop + '" value="' + item.value + '"></div>';
                 }
-                m.innerHTML += '<div><button type="button" onclick="document.body.removeChild(document.getElementById('+"'"+id+"'"+'))">cancel</button><button type="button" onclick="(function(){var dialog=document.getElementById('+"'"+id+"'"+');var obj={};for(d of dialog.children){obj[d.children[0].getAttribute('+"'prop'"+')]=d.children[0].value}('+ cb +')(obj);document.body.removeChild(document.getElementById('+"'"+id+"'"+'))})()">confirm</button></div>';
-                m.style.cssText="width:20%; min-width:50px; background:#fff; padding: 10px; opacity:0.9; height:auto;min-height: 35px; color:#333; text-align:center; border-radius:4px; position:fixed; top:40%; left:40%; z-index:999999;";  
+                m.innerHTML += '<div style="margin-top:10px;text-align: center;"><button type="button" onclick="document.body.removeChild(document.getElementById('+"'"+id+"'"+'))">cancel</button><button type="button" onclick="(function(){var dialog=document.getElementById('+"'"+id+"'"+');var obj={};for(d of dialog.children){obj[d.children[0].getAttribute('+"'prop'"+')]=d.children[0].value}('+ cb +')(obj);document.body.removeChild(document.getElementById('+"'"+id+"'"+'))})()">confirm</button></div>';
+                m.style.cssText="width:20%; min-width:50px; background:#fff; padding: 18px; opacity:0.9; height:auto;min-height: 35px; color:#333; border-radius:4px; position:fixed; top:40%; left:40%; z-index:999999;";  
                 document.body.appendChild(m);
             },
             showDataSouceDialog() {
