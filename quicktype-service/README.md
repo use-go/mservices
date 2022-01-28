@@ -12,7 +12,10 @@ Run the service
 make up
 ```
 
-Request the service
+Open url in your brower
 
 ```
+http://192.168.202.128:8080/quicktype/
 ```
+
+

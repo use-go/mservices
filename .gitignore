@@ -30,7 +30,6 @@ coverage.txt
 coverage.out
 
 # ignore locally built binaries
-assert
 !micro/
 dist
 
