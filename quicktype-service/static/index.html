@@ -201,13 +201,13 @@
         data: {
             dns: "root:gmt@tcp(192.168.202.128:3306)/yearning?charset=utf8mb4&parseTime=True&loc=Local",
             tables: [],
-            table: '',
+            table: 'auth_group',
             db: 'yearning',
-            code: ''
+            code: 'todo'
         },
         mounted () {
             axios
-            .get('/quicktype/type/tables?dsn=root%3Agmt%40tcp(192.168.202.128%3A3306)%2Fyearning%3Fcharset%3Dutf8mb4%26parseTime%3DTrue%26loc%3DLocal')
+            .get('/quicktype/type/tables?dsn='+this.dns)
             .then(response => response.data)
             .then(res => {
                 this.tables = res.data
@@ -233,7 +233,7 @@
             },
             table2go: function (tb) {
                 axios
-                .get('/quicktype/type/table2go?table=' + tb + '&dsn=root%3Agmt%40tcp(192.168.202.128%3A3306)%2Fyearning%3Fcharset%3Dutf8mb4%26parseTime%3DTrue%26loc%3DLocal')
+                .get('/quicktype/type/table2go?table=' + tb + '&dsn=' + this.dns)
                 .then(response => response.data)
                 .then(res => {
                     this.code = res.data
@@ -241,7 +241,7 @@
             },
             table2proto: function (tb) {
                 axios
-                .get('/quicktype/type/table2proto?table=' + tb + '&dsn=root%3Agmt%40tcp(192.168.202.128%3A3306)%2Fyearning%3Fcharset%3Dutf8mb4%26parseTime%3DTrue%26loc%3DLocal')
+                .get('/quicktype/type/table2proto?table=' + tb + '&dsn=' + this.dns)
                 .then(response => response.data)
                 .then(res => {
                     this.code = res.data
@@ -250,7 +250,7 @@
             },
             table2handler: function (tb) {
                 axios
-                .get('/quicktype/type/table2handler?table=' + tb + '&dsn=root%3Agmt%40tcp(192.168.202.128%3A3306)%2Fyearning%3Fcharset%3Dutf8mb4%26parseTime%3DTrue%26loc%3DLocal')
+                .get('/quicktype/type/table2handler?table=' + tb + '&dsn=' + this.dns)
                 .then(response => response.data)
                 .then(res => {
                     this.code = res.data
@@ -258,7 +258,7 @@
             },
             table2rw: function (tb) {
                 axios
-                .get('/quicktype/type/table2rw?table=' + tb + '&dsn=root%3Agmt%40tcp(192.168.202.128%3A3306)%2Fyearning%3Fcharset%3Dutf8mb4%26parseTime%3DTrue%26loc%3DLocal')
+                .get('/quicktype/type/table2rw?table=' + tb + '&dsn=' + this.dns)
                 .then(response => response.data)
                 .then(res => {
                     this.code = res.data
@@ -266,7 +266,7 @@
             },
             table2db: function (tb) {
                 axios
-                .get('/quicktype/type/table2db?table=' + tb + '&dsn=root%3Agmt%40tcp(192.168.202.128%3A3306)%2Fyearning%3Fcharset%3Dutf8mb4%26parseTime%3DTrue%26loc%3DLocal')
+                .get('/quicktype/type/table2db?table=' + tb + '&dsn=' + this.dns)
                 .then(response => response.data)
                 .then(res => {
                     this.code = res.data
