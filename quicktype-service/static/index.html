@@ -144,6 +144,18 @@
         padding-right: 6px;
         padding-top: 5px;
     }
+    .act-6 {
+        order: 1;
+        align-self: auto;
+        flex-basis: auto;
+        flex-grow: 0;
+        flex-shrink: 1;
+        margin-left: 4px;
+        border-radius: 4px;
+        padding-left: 6px;
+        padding-right: 6px;
+        padding-top: 5px;
+    }
     .code {
         background-color:#333;
         color:#fff;
@@ -152,6 +164,21 @@
         margin-top:5px;
         height:calc(100vh - 64px - 51px);
         overflow: scroll;
+    }
+    input { 
+        font-size: 8pt; 
+        line-height:15px;
+        color: #000000;
+        border-top-style: none;
+        border-right-style: none;
+        border-bottom-style: dashed;
+        border-left-style: none;
+        border-bottom-color: #000000;
+        border-top-width: 0px;
+        border-right-width: 0px;
+        border-bottom-width: 1px;
+        border-left-width: 0px;
+        outline:none;
     }
     ::-webkit-scrollbar {
         width: 8px;
@@ -179,7 +206,7 @@
                 </ul>
             </div>
             <div class="item right">
-                <div class="act-nav">{{ db }}/{{ table }}</div>
+                <div class="act-nav">{{ dataSource.db }}/{{ table }}</div>
                 <div class="act-bar">
                     <div class="act act-1" v-on:click="table2proto(table)">Proto</div>
                     <div class="act act-2" v-on:click="table2go(table)">Struct</div>
@@ -189,33 +216,65 @@
                     <div class="act act-5" v-on:click="copyToClipboard(code)">
                         <svg t="1643340468837" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1676" width="23" height="23"><path d="M568.7 319.8l86.8 86.8v476.6h-466V319.8h379.2m29-70H178.9c-32.8 0-59.4 26.5-59.4 59.3v584.7c0 15.7 6.3 30.8 17.4 42 11.1 11.2 26.2 17.4 42 17.4h487.4c15.7 0 30.8-6.3 41.9-17.4 11.1-11.1 17.3-26.2 17.3-42V377.6L597.7 249.8z" fill="#707070" p-id="1677"></path><path d="M776.7 70.8H357.9c-32.8 0-59.4 26.5-59.4 59.3v100h70v-89.3h379.2l86.8 86.8v476.6h-85.8v70h96.6c15.7 0 30.8-6.3 41.9-17.4 11.1-11.1 17.3-26.2 17.3-42V198.6L776.7 70.8z" fill="#707070" p-id="1678"></path></svg>
                     </div>
-                </div>
+                    <div class="act act-6" v-on:click="showDataSouceDialog()">
+                        <svg t="1643363290951" class="icon" viewBox="0 0 1027 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6367" width="23" height="23"><path d="M517.123192 506.041563c-243.444722 0-434.540316-88.525353-434.540316-201.735661S273.67847 102.144638 517.123192 102.144638s434.540316 88.525353 434.540316 202.161264-191.095594 201.735661-434.540316 201.735661z m0-361.336659c-234.507066 0-391.98005 82.566916-391.98005 159.600998s157.472984 159.175395 391.98005 159.175395S909.103242 383.042394 909.103242 304.305902 751.630258 144.704904 517.123192 144.704904z" p-id="6368" fill="#2c2c2c"></path><path d="M517.123192 712.884456a692.455528 692.455528 0 0 1-349.845387-80.864506 151.088944 151.088944 0 0 1-85.120532-121.296758 150.663342 150.663342 0 0 1 85.120532-121.296758 21.280133 21.280133 0 1 1 22.131339 36.176226c-42.560266 25.53616-64.691604 55.753948-64.691605 85.120532s22.982544 59.584372 64.691605 85.120532a647.767249 647.767249 0 0 0 327.714048 74.480466A644.78803 644.78803 0 0 0 843.986035 595.843724c42.560266-25.53616 65.117207-55.753948 65.117207-85.120532s-22.982544-59.584372-64.691604-85.120532a21.280133 21.280133 0 1 1 22.131338-36.176226 150.663342 150.663342 0 0 1 85.120532 121.296758 150.663342 150.663342 0 0 1-85.120532 121.296758 689.476309 689.476309 0 0 1-349.419784 80.864506z" p-id="6369" fill="#2c2c2c"></path><path d="M517.123192 919.301746c-243.444722 0-434.540316-88.525353-434.540316-202.161264a151.088944 151.088944 0 0 1 85.120532-121.296758 21.705736 21.705736 0 0 1 29.366584 7.235245 20.85453 20.85453 0 0 1-7.235246 28.940981c-42.560266 25.961762-64.691604 56.179551-64.691604 85.120532 0 77.034081 157.472984 159.600998 391.98005 159.600998s391.98005-82.566916 391.98005-159.600998c0-28.940981-22.982544-59.15877-64.691604-85.120532a20.85453 20.85453 0 0 1-7.235246-28.940981 21.705736 21.705736 0 0 1 29.366584-7.235245 151.088944 151.088944 0 0 1 85.120532 121.296758c0 113.63591-191.095594 202.161264-434.540316 202.161264z" p-id="6370" fill="#2c2c2c"></path></svg>                    </div>
+               </div>
                 <div class="code" v-html="code" style="white-space: pre-wrap;"></div>
             </div>
         </div>
     </div>
 </body>
 <script>
-    new Vue({
+    var ve = new Vue({
         el: '#app',
         data: {
-            dns: "root:gmt@tcp(192.168.202.128:3306)/yearning?charset=utf8mb4&parseTime=True&loc=Local",
+            dataSource: {
+                user: 'root',
+                passwd: 'gmt',
+                host: '192.168.202.128',
+                port: '3306',
+                db: 'yearning'
+            },
             tables: [],
             table: 'auth_group',
-            db: 'yearning',
             code: 'todo'
         },
         mounted () {
-            axios
-            .get('/quicktype/type/tables?dsn='+this.dns)
-            .then(response => response.data)
-            .then(res => {
-                this.tables = res.data
-                this.table2proto(this.tables[0])
-                this.table = this.tables[0]
-            })
+            this.refreshDns()
+        },
+        watch : {
+            dataSource: function(val) {
+                this.setCookie(JSON.stringify(val))
+            }
         },
         methods: {
+            dns() {
+                return this.dataSource.user + ":" + this.dataSource.passwd + "@tcp(" + this.dataSource.host + ":" + this.dataSource.port + ")/" + this.dataSource.db + "?charset=utf8mb4&parseTime=True&loc=Local"  
+            },
+            refreshDns() {
+                this.dataSource = Object.assign(this.dataSource, JSON.parse(this.getCookie('dataSource')||'{}'))
+                if (!this.dataSource.user) {
+                    this.showDataSouceDialog()
+                }
+                axios
+                .get('/quicktype/type/tables?dsn='+this.dns())
+                .then(response => response.data)
+                .then(res => {
+                    this.tables = res.data
+                    this.table2proto(this.tables[0])
+                    this.table = this.tables[0]
+                })
+            },
+            setCookie(name,value) { 
+                var Days = 30; 
+                var exp = new Date(); 
+                exp.setTime(exp.getTime() + Days*24*60*60*1000); 
+                document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString(); 
+            },
+            getCookie(name) { 
+                var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)"); 
+                return (arr=document.cookie.match(reg))?unescape(arr[2]):null;
+            },
             copyToClipboard: function(s) {
                 if (window.clipboardData) {
                     window.clipboardData.setData('text', s);
@@ -233,7 +292,7 @@
             },
             table2go: function (tb) {
                 axios
-                .get('/quicktype/type/table2go?table=' + tb + '&dsn=' + this.dns)
+                .get('/quicktype/type/table2go?table=' + tb + '&dsn=' + this.dns())
                 .then(response => response.data)
                 .then(res => {
                     this.code = res.data
@@ -241,7 +300,7 @@
             },
             table2proto: function (tb) {
                 axios
-                .get('/quicktype/type/table2proto?table=' + tb + '&dsn=' + this.dns)
+                .get('/quicktype/type/table2proto?table=' + tb + '&dsn=' + this.dns())
                 .then(response => response.data)
                 .then(res => {
                     this.code = res.data
@@ -250,7 +309,7 @@
             },
             table2handler: function (tb) {
                 axios
-                .get('/quicktype/type/table2handler?table=' + tb + '&dsn=' + this.dns)
+                .get('/quicktype/type/table2handler?table=' + tb + '&dsn=' + this.dns())
                 .then(response => response.data)
                 .then(res => {
                     this.code = res.data
@@ -258,7 +317,7 @@
             },
             table2rw: function (tb) {
                 axios
-                .get('/quicktype/type/table2rw?table=' + tb + '&dsn=' + this.dns)
+                .get('/quicktype/type/table2rw?table=' + tb + '&dsn=' + this.dns())
                 .then(response => response.data)
                 .then(res => {
                     this.code = res.data
@@ -266,7 +325,7 @@
             },
             table2db: function (tb) {
                 axios
-                .get('/quicktype/type/table2db?table=' + tb + '&dsn=' + this.dns)
+                .get('/quicktype/type/table2db?table=' + tb + '&dsn=' + this.dns())
                 .then(response => response.data)
                 .then(res => {
                     this.code = res.data
@@ -276,7 +335,7 @@
                 duration=isNaN(duration)?3000:duration;  
                 var m = document.createElement('div');  
                 m.innerHTML = msg;  
-                m.style.cssText="width:10%; min-width:50px; background:#fff; opacity:0.6; height:auto;min-height: 35px; color:#333; line-height:35px; text-align:center; border-radius:4px; position:fixed; top:40%; left:45%; z-index:999999;";  
+                m.style.cssText="width:10%; min-width:50px; background:#fff; opacity:0.9; height:auto;min-height: 35px; color:#333; line-height:35px; text-align:center; border-radius:4px; position:fixed; top:40%; left:45%; z-index:999999;";  
                 document.body.appendChild(m);  
                 setTimeout(function() {  
                     var d = 0.5;  
@@ -284,7 +343,22 @@
                     m.style.opacity = '0';  
                     setTimeout(function() { document.body.removeChild(m) }, d * 1000);  
                 }, duration);  
-            }
+            },
+            showDialog(items, cb) {
+                var id = 'showDialog' + Math.random()*(999999-0)+0;
+                var m = document.createElement('div');  
+                m.id= id;
+                for(item of items) {
+                    m.innerHTML += '<div>'+ item.name + ':' +'<input type="text" name="' + item.name + '" prop="' + item.prop + '" value="' + item.value + '"></div>';
+                }
+                m.innerHTML += '<div><button type="button" onclick="document.body.removeChild(document.getElementById('+"'"+id+"'"+'))">cancel</button><button type="button" onclick="(function(){var dialog=document.getElementById('+"'"+id+"'"+');var obj={};for(d of dialog.children){obj[d.children[0].getAttribute('+"'prop'"+')]=d.children[0].value}('+ cb +')(obj);document.body.removeChild(document.getElementById('+"'"+id+"'"+'))})()">confirm</button></div>';
+                m.style.cssText="width:20%; min-width:50px; background:#fff; padding: 10px; opacity:0.9; height:auto;min-height: 35px; color:#333; text-align:center; border-radius:4px; position:fixed; top:40%; left:40%; z-index:999999;";  
+                document.body.appendChild(m);
+            },
+            showDataSouceDialog() {
+                var dataSource = Object.assign(this.dataSource, JSON.parse(this.getCookie('dataSource')||'{}'))
+                this.showDialog([{ name: "User", prop: 'user', value: dataSource.user }, { name: "PassWd", prop: 'passwd', value: dataSource.passwd }, { name: "Host", prop: 'host', value: dataSource.host }, { name: "Port", prop: 'port', value: dataSource.port }, { name: "DB", prop: 'db', value: dataSource.db }], function(val){ve.setCookie('dataSource', JSON.stringify(val));ve.refreshDns()})
+            },
         }
     })
 </script>
