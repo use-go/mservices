@@ -13,7 +13,7 @@ import (
 func (h *Handler) Index(rw http.ResponseWriter, r *http.Request) {
 	acc, ok := auth.FromContext(r.Context())
 	if ok {
-		logger.Infof(r.Context(), "%v Do Type", acc.Name)
+		logger.Infof(r.Context(), "%v Do Index", acc.Name)
 	}
 
 	whttp.OutputHTML(rw, r, "static/index.html")
@@ -110,7 +110,7 @@ func (h *Handler) Table2Proto(rw http.ResponseWriter, r *http.Request) {
 func (h *Handler) Table2Handler(rw http.ResponseWriter, r *http.Request) {
 	acc, ok := auth.FromContext(r.Context())
 	if ok {
-		logger.Infof(r.Context(), "%v Do Table2Proto", acc.Name)
+		logger.Infof(r.Context(), "%v Do Table2Handler", acc.Name)
 	}
 	db, err := h.DB(r)
 	if err != nil {
@@ -141,7 +141,7 @@ func (h *Handler) Table2Handler(rw http.ResponseWriter, r *http.Request) {
 func (h *Handler) Table2RW(rw http.ResponseWriter, r *http.Request) {
 	acc, ok := auth.FromContext(r.Context())
 	if ok {
-		logger.Infof(r.Context(), "%v Do Table2Proto", acc.Name)
+		logger.Infof(r.Context(), "%v Do Table2RW", acc.Name)
 	}
 	db, err := h.DB(r)
 	if err != nil {
@@ -172,7 +172,7 @@ func (h *Handler) Table2RW(rw http.ResponseWriter, r *http.Request) {
 func (h *Handler) Table2DB(rw http.ResponseWriter, r *http.Request) {
 	acc, ok := auth.FromContext(r.Context())
 	if ok {
-		logger.Infof(r.Context(), "%v Do Table2Proto", acc.Name)
+		logger.Infof(r.Context(), "%v Do Table2DB", acc.Name)
 	}
 	db, err := h.DB(r)
 	if err != nil {
