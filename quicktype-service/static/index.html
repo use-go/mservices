@@ -249,11 +249,13 @@
                 db: 'yearning'
             },
             tables: [],
-            table: 'auth_group',
-            code: 'todo'
+            table: '',
+            code: '',
+            authentication: { authorize_url: 'http://192.168.202.128:8080/cas/client/authorize', token_url: 'http://192.168.202.128:8080/cas/client/token', redirect_uri: encodeURIComponent(window.location.href.match('([a-z][a-z0-9+\-.]*://[^?#&=]+)/?')[1]), state: 'xyz' }
         },
         mounted () {
-            this.refreshDns()
+            this.init(this.authentication);
+            this.authCallback(this.authentication).then(() => {this.refreshDns()})
         },
         watch : {
             dataSource: function(val) {
@@ -263,6 +265,60 @@
         methods: {
             dns() {
                 return this.dataSource.user + ":" + this.dataSource.passwd + "@tcp(" + this.dataSource.host + ":" + this.dataSource.port + ")/" + this.dataSource.db + "?charset=utf8mb4&parseTime=True&loc=Local"  
+            },
+            authCallback({ authorize_url, token_url, redirect_uri, state }){
+                var _this = this 
+                return new Promise(function(resolve, reject){
+                    var code = _this.getQueryString("code")
+                    if (!!code) {
+                        // remove code for safty
+                        history.pushState(null, document.title, _this.urlDelParams(['code', 'state']))
+                        // fetch token
+                        if (!_this.getCookie('token')) {
+                            var data = new URLSearchParams()
+                            data.append('redirect_uri', redirect_uri)
+                            data.append('code', code)
+                            fetch(token_url, { method: 'POST', body: data }).then(function(response) {
+                                return response.json()
+                            }).then(function(res) {
+                                if (!!res.access_token) {
+                                    _this.setCookie('token', res.access_token)
+                                    resolve()
+                                }
+                            })
+                        }
+                    } else {
+                        resolve()
+                    }
+                });
+            },
+            init({ authorize_url, token_url, redirect_uri, state }){
+                // axios interceptors
+                axios.interceptors.request.use(function (config) {
+                    var token = this.ve.getCookie('token')
+                    if (!!token) {
+                        config.headers['Authorization'] = 'Bearer ' + this.ve.getCookie('token')
+                    }
+                    return config;
+                }, function (error) {
+                    return error;
+                });
+                axios.interceptors.response.use(function (response) {
+                    if (response.data && response.data.code === 401) {
+                        return Promise.reject(new Error('unauthorized request'))
+                    }
+                    return response;
+                }, function (error) {
+                    var status = error.response.status || error.response.data.code
+                    if (status === 401) {
+                        this.ve.delCookie('token')
+                        if (window.confirm('Authentication failure')) {
+                            window.location.href= authorize_url +"?state=" + state + "&redirect_uri=" + redirect_uri
+                        }
+                        return Promise.reject(new Error('unauthorized request'))
+                    }
+                    return Promise.reject(error);
+                });
             },
             refreshDns() {
                 this.dataSource = Object.assign(this.dataSource, JSON.parse(this.getCookie('dataSource')||'{}'))
@@ -287,6 +343,46 @@
             getCookie(name) { 
                 var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)"); 
                 return (arr=document.cookie.match(reg))?unescape(arr[2]):null;
+            },
+            delCookie(name) { 
+                var exp = new Date(); 
+                exp.setTime(exp.getTime() - 1); 
+                var cval=this.getCookie(name);
+                if(cval!=null) document.cookie= name + "="+cval+";expires="+exp.toGMTString(); 
+            },
+            urlDelParams(keys) {
+                var loca = window.location
+                var baseUrl = loca.origin + loca.pathname
+                var query = loca.search.substr(1)
+
+                var obj = {}
+                var arr = query.split('&')
+                for (var i = 0; i < arr.length; i++) {
+                    arr[i] = arr[i].split('=')
+                    obj[arr[i][0]] = arr[i][1]
+                }
+                for(var key of keys) {
+                    delete obj[key]
+                }
+                if (Object.keys(obj).length > 0) {
+                    baseUrl += '?'
+                }
+
+                var url =
+                    baseUrl +
+                    JSON.stringify(obj)
+                    .replace(/[\"\{\}]/g, '')
+                    .replace(/\:/g, '=')
+                    .replace(/\,/g, '&')
+                return url
+            },
+            getQueryString(name) {
+                var reg = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i')
+                var r = window.location.search.substr(1).match(reg)
+                if (r != null) {
+                    return unescape(r[2])
+                }
+                return null
             },
             copyToClipboard: function(s) {
                 if (window.clipboardData) {

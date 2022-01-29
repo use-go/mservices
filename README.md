@@ -26,7 +26,7 @@ micro auth create rule --access=granted --scope='*' --resource="*:*:*" onlylogge
 micro auth create rule --access=granted --resource="service:auth:*" auth-public
 micro auth create rule --access=granted --resource="service:micro.:*" micro-public
 micro auth create rule --access=granted --resource="service:assert:*" assert-public
-micro auth create rule --access=granted --resource="service:quicktype:*" quicktype-public
+micro auth create rule --access=granted --resource="service:quicktype:Quicktype.Call" quicktype-public
 micro auth create rule --access=granted --resource="service:cas:*" cas-public
 ```
 
