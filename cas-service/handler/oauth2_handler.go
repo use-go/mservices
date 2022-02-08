@@ -4,6 +4,7 @@ import (
 	"comm/auth"
 	"comm/logger"
 	whttp "comm/service/web/http"
+	"fmt"
 	"net/http"
 	"net/url"
 
@@ -89,7 +90,7 @@ func (h *Handler) UserAuthorizeHandler(rw http.ResponseWriter, r *http.Request) 
 		rw.WriteHeader(http.StatusFound)
 		return
 	}
-	userID = uid.(string)
+	userID = fmt.Sprintf("%v", uid)
 	store.Save()
 	return
 }

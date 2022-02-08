@@ -15,7 +15,6 @@ func (h *Handler) UserLogin(rw http.ResponseWriter, r *http.Request) {
 		logger.Infof(r.Context(), "%v Do UserLogin", acc.Name)
 	}
 
-	// outputHTML
 	if r.Method == "GET" {
 		whttp.OutputHTML(rw, r, "static/login.html")
 		return
@@ -31,7 +30,8 @@ func (h *Handler) UserLogin(rw http.ResponseWriter, r *http.Request) {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	store.Set("LoggedInUserID", r.Form.Get("username"))
+	userID := r.Form.Get("username")
+	store.Set("LoggedInUserID", userID)
 	store.Save()
 	rw.Header().Set("Location", "/cas/oauth2/affirm")
 	rw.WriteHeader(http.StatusFound)

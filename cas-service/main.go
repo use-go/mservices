@@ -30,10 +30,7 @@ func main() {
 	// Create oauth2 server
 	manager := manage.NewDefaultManager()
 	// Adapter grpc apigateway jwt check
-	manager.MapAccessGenerate(auth.NewJWTAccessGenerate(
-		token.WithPublicKey(sAuth.DefaultAuth.Options().PublicKey),
-		token.WithPrivateKey(sAuth.DefaultAuth.Options().PrivateKey),
-	))
+	manager.MapAccessGenerate(auth.NewJWTAccessGenerate(token.WithPublicKey(sAuth.DefaultAuth.Options().PublicKey), token.WithPrivateKey(sAuth.DefaultAuth.Options().PrivateKey)))
 	manager.MustTokenStorage(store.NewMemoryTokenStore())
 	clientStore := store.NewClientStore()
 	manager.MapClientStorage(clientStore)
