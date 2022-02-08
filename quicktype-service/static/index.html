@@ -221,7 +221,7 @@
                 </ul>
             </div>
             <div class="item right">
-                <div class="act-nav">{{ dataSource.db }}/{{ table }}</div>
+                <div class="act-nav">{{ dataSource.db }}/{{ table }}<span style="float: right;margin-right: 10px;cursor: pointer;" v-on:click="logout()">logout</span></div>
                 <div class="act-bar">
                     <div class="act act-1" v-on:click="table2proto(table)">Proto</div>
                     <div class="act act-2" v-on:click="table2go(table)">Struct</div>
@@ -337,6 +337,10 @@
                     this.table = this.tables[0]
                 })
             },
+            logout(){
+                this.delCookie('token');
+                location.reload();
+            },
             setCookie(name,value) { 
                 var Days = 30; 
                 var exp = new Date(); 
@@ -348,10 +352,12 @@
                 return (arr=document.cookie.match(reg))?unescape(arr[2]):null;
             },
             delCookie(name) { 
-                var exp = new Date(); 
-                exp.setTime(exp.getTime() - 1); 
-                var cval=this.getCookie(name);
-                if(cval!=null) document.cookie= name + "="+cval+";expires="+exp.toGMTString(); 
+                var date = new Date();
+                date.setTime(date.getTime() - 1);
+                var delValue = this.getCookie(name);
+                if (!!delValue) {
+                    document.cookie = name+'='+delValue+';expires='+date.toGMTString();
+                }
             },
             urlDelParams(keys) {
                 var loca = window.location
