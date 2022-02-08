@@ -13,6 +13,7 @@ func main() {
 	hdl := handler.Handler{}
 	srv := web.New(web.Name("quicktype"))
 	srv.HandleFunc("/", hdl.Index)
+	srv.HandleFunc("/logout", hdl.Logout)
 	srv.HandleFunc("/type/tables", hdl.Tables)
 	srv.HandleFunc("/type/table2go", hdl.Table2Go)
 	srv.HandleFunc("/type/table2proto", hdl.Table2Proto)

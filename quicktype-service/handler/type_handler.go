@@ -198,3 +198,7 @@ func (h *Handler) Table2DB(rw http.ResponseWriter, r *http.Request) {
 	}
 	whttp.Fail(rw, r, errors.New("not found"))
 }
+
+// Logout defined TODO
+func (h *Handler) Logout(rw http.ResponseWriter, r *http.Request) {
+}
