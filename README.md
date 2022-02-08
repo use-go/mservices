@@ -30,3 +30,15 @@ micro auth create rule --access=granted --resource="service:quicktype:Quicktype.
 micro auth create rule --access=granted --resource="service:cas:*" cas-public
 ```
 
+#### Service List
+
+- assert-service
+- cache-service
+- cas-service
+- email-service
+- helloworld-service
+- id-service
+- quicktype-service
+- screenshot-service
+- subscribe-service
+- user-service
