@@ -16,5 +16,3 @@ replace (
 	comm => ../comm
 	proto => ../proto
 )
-
-replace github.com/2637309949/micro/v3 => ../../micro

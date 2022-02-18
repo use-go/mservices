@@ -12,8 +12,8 @@ cloud.google.com/go/pubsub v1.0.1/go.mod h1:R0Gpsv3s54REJCy4fxDixWD93lHJMoZTyQ2k
 cloud.google.com/go/storage v1.0.0/go.mod h1:IhtSnM/ZTZV8YYJWCY8RULGVqBDmpoyjwiyrjsg+URw=
 contrib.go.opencensus.io/exporter/ocagent v0.4.12/go.mod h1:450APlNTSR6FrvC3CTRqYosuDstRB9un7SOx2k/9ckA=
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
-github.com/2637309949/micro/v3 v3.8.2 h1:HuZLHU3SmkWe57bojzC3AKE+f0q+7lRm3LVBaGl+YZs=
-github.com/2637309949/micro/v3 v3.8.2/go.mod h1:1HICLREtqeIYZQUgtJliuwfH+aQn2r7kkTBHrj9i5c4=
+github.com/2637309949/micro/v3 v3.8.4 h1:ntlsX+Dwu87CDBPSk4Z0fWjJ6UxXHrk8wwBtGHn3/DI=
+github.com/2637309949/micro/v3 v3.8.4/go.mod h1:PBMC2zay+8r3/+AQiR7wSH1vS3jKHRUhvjNu2O/dw1I=
 github.com/Azure/azure-sdk-for-go v32.4.0+incompatible/go.mod h1:9XXNKU+eRnpl9moKnB4QOLf1HestfXbmab5FXxiDBjc=
 github.com/Azure/go-autorest/autorest v0.1.0/go.mod h1:AKyIcETwSUFxIcs/Wnq/C+kwCtlEYGUVd7FPNb2slmg=
 github.com/Azure/go-autorest/autorest v0.5.0/go.mod h1:9HLKlQjVBH6U3oDfsXOeVc56THsLPw1L03yban4xThw=
@@ -639,8 +639,9 @@ google.golang.org/grpc v1.33.1/go.mod h1:fr5YgcSWrqhRRxogOsw7RzIpsmvOZ6IcH4kBYTp
 google.golang.org/grpc v1.36.0/go.mod h1:qjiiYl8FncCW8feJPdyg3v6XW24KsRHe+dy9BAGRRjU=
 google.golang.org/grpc v1.40.0 h1:AGJ0Ih4mHjSeibYkFGh1dD9KJ/eOtZ93I6hoHhukQ5Q=
 google.golang.org/grpc v1.40.0/go.mod h1:ogyxbiOoUXAkP+4+xa6PZSE9DZgIHtSpzjDTB9KAK34=
-google.golang.org/grpc/examples v0.0.0-20211015201449-4757d0249e2d h1:7kLNk36YAdCPlG6XQNj3nHUek0QM/Beuo5o7vgT3Uco=
 google.golang.org/grpc/examples v0.0.0-20211015201449-4757d0249e2d/go.mod h1:gID3PKrg7pWKntu9Ss6zTLJ0ttC0X9IHgREOCZwbCVU=
+google.golang.org/grpc/examples v0.0.0-20211223220205-344b93a28588 h1:ZQ7z/jOeBI+PDiA7DBcZsOC3zMUFkcByNAW++phPsYc=
+google.golang.org/grpc/examples v0.0.0-20211223220205-344b93a28588/go.mod h1:gID3PKrg7pWKntu9Ss6zTLJ0ttC0X9IHgREOCZwbCVU=
 google.golang.org/protobuf v0.0.0-20200109180630-ec00e32a8dfd/go.mod h1:DFci5gLYBciE7Vtevhsrf46CRTquxDuWsQurQQe4oz8=
 google.golang.org/protobuf v0.0.0-20200221191635-4d8936d0db64/go.mod h1:kwYJMbMJ01Woi6D6+Kah6886xMZcty6N08ah7+eCXa0=
 google.golang.org/protobuf v0.0.0-20200228230310-ab0ca4ff8a60/go.mod h1:cfTl7dwQJ+fmap5saPgwCLgHXTUD7jkjRqWcaiX5VyM=

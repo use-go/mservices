@@ -13,7 +13,4 @@ require (
 	github.com/urfave/cli/v2 v2.3.0
 	gorm.io/driver/mysql v1.2.3
 	gorm.io/gorm v1.22.5
-
 )
-
-replace github.com/2637309949/micro/v3 => ../../micro
