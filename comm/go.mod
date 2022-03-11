@@ -11,6 +11,7 @@ require (
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
 	github.com/lestrrat-go/strftime v1.0.5 // indirect
 	github.com/urfave/cli/v2 v2.3.0
+	gopkg.in/yaml.v2 v2.3.0
 	gorm.io/driver/mysql v1.2.3
 	gorm.io/gorm v1.22.5
 )
