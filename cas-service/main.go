@@ -61,6 +61,7 @@ func main() {
 	srv.HandleFunc("/user/login", hdl.UserLogin)
 	srv.HandleFunc("/user/logout", hdl.UserLogout)
 
+	// Implicit Grant​
 	// Client Authorization
 	srv.HandleFunc("/client/authorize", hdl.ClientAuthorize)
 	srv.HandleFunc("/client/token", hdl.ClientToken)
