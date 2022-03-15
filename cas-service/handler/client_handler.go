@@ -25,6 +25,7 @@ func (h *Handler) ClientAuthorize(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// should be checked in production
 	h.ClientStore.Set(base.Host, &models.Client{
 		ID:     base.Host,
 		Secret: fmt.Sprintf("%v#4!", base.Host),
