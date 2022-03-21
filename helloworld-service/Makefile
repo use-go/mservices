@@ -30,7 +30,7 @@ build:
 
 .PHONY: up
 up:
-	@go run . server --name=$(NAME)
+	@proclimit -cpu=50 -memory=512M ./helloworld server --name=$(NAME)
 
 .PHONY: test
 test:

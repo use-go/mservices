@@ -12,6 +12,10 @@ Run micro server with the following commands:
 micro server
 ```
 
+```shell
+go get github.com/aoldershaw/proclimit/cmd/proclimit
+```
+
 #### Usage
 
 ```shell
