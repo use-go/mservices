@@ -21,14 +21,14 @@ func TestNewCoordinator(t *testing.T) {
 		return nil
 	}
 
-	config := NewConfig(consumer,
+	cfg := NewConfig(consumer,
 		SetBatchSize(10),
 		SetNumConsumer(2),
 		SetBufferSize(maxLoop),
 		SetBatchInterval(time.Second),
 		SetRejectPolicy(Block),
 	)
-	c := NewCoordinator(config)
+	c := NewCoordinator(cfg)
 	c.Start()
 
 	for i := 0; i < maxLoop; i++ {
