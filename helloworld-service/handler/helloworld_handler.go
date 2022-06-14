@@ -5,6 +5,7 @@ import (
 	"comm/db"
 	"comm/errors"
 	"comm/logger"
+	"comm/mark"
 	"comm/util"
 	"context"
 	"helloworld-service/model"
@@ -14,6 +15,10 @@ import (
 
 // DeleteInfo defined TODO
 func (h *Handler) DeleteInfo(ctx context.Context, req *helloworld.DeleteInfoRequest, rsp *helloworld.DeleteInfoResponse) error {
+	var err error
+	var timemark mark.TimeMark
+	defer timemark.Init(ctx, "DeleteInfo")()
+
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do DeleteInfo", acc.Name)
@@ -25,6 +30,7 @@ func (h *Handler) DeleteInfo(ctx context.Context, req *helloworld.DeleteInfoRequ
 	}
 
 	session, err := db.InitDb(ctx)
+	timemark.Mark("InitDb")
 	if err != nil {
 		return errors.InternalServerError("init db error %v", err)
 	}
