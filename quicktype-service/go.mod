@@ -12,7 +12,6 @@ require (
 	github.com/bndr/gotabulate v1.1.2 // indirect
 	github.com/clbanning/mxj v1.8.4 // indirect
 	github.com/go-sql-driver/mysql v1.6.0
-	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/mattn/go-sqlite3 v1.14.10 // indirect
 	github.com/syndtr/goleveldb v1.0.0 // indirect
 	github.com/tealeg/xlsx v1.0.5 // indirect

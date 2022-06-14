@@ -5,14 +5,14 @@ import (
 	"comm/db"
 	"comm/errors"
 	"comm/logger"
+	"comm/mark"
 	"context"
+	"github.com/jinzhu/copier"
 	"proto/user"
 	"regexp"
 	"strings"
 	"time"
 	"user-service/model"
-
-	"github.com/jinzhu/copier"
 )
 
 var (
@@ -20,6 +20,10 @@ var (
 )
 
 func (h *Handler) Create(ctx context.Context, req *user.CreateRequest, rsp *user.CreateResponse) error {
+	var err error
+	var timemark mark.TimeMark
+	defer timemark.Init(ctx, "Create")()
+
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Create", acc.Name)
@@ -43,6 +47,7 @@ func (h *Handler) Create(ctx context.Context, req *user.CreateRequest, rsp *user
 
 	users := []model.User{}
 	err = h.QueryUserDB(ctx, session, &model.User{Username: req.Username}, &users)
+	timemark.Mark("QueryUserDB")
 	if err != nil && !errors.Is(err, errors.RecordNotFound) {
 		return err
 	}
@@ -51,6 +56,7 @@ func (h *Handler) Create(ctx context.Context, req *user.CreateRequest, rsp *user
 	}
 
 	err = h.QueryUserDB(ctx, session, &model.User{Email: req.Email}, &users)
+	timemark.Mark("QueryUserDB")
 	if err != nil && !errors.Is(err, errors.RecordNotFound) {
 		return err
 	}
@@ -66,6 +72,7 @@ func (h *Handler) Create(ctx context.Context, req *user.CreateRequest, rsp *user
 		Updated:  uint32(time.Now().Unix()),
 	}
 	mu.GenerateFromPassword(req.Password)
+	timemark.Mark("GenerateFromPassword")
 	err = h.InsertUserDB(ctx, session, &mu)
 	if err != nil {
 		return err

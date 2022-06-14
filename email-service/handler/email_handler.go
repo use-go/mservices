@@ -2,18 +2,18 @@ package handler
 
 import (
 	"bytes"
+	"comm/auth"
+	"comm/errors"
+	"comm/logger"
+	"comm/mark"
 	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"proto/email"
 	"regexp"
 	"time"
-
-	"comm/auth"
-	"comm/errors"
-	"comm/logger"
-	"proto/email"
 
 	"github.com/Teamwork/spamc"
 	"gopkg.in/gomail.v2"
@@ -31,6 +31,10 @@ func validEmail(email string) bool {
 }
 
 func (h *Handler) Send(ctx context.Context, request *email.SendRequest, response *email.SendResponse) error {
+	var err error
+	var timemark mark.TimeMark
+	defer timemark.Init(ctx, "Send")()
+
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Send", acc.Name)
@@ -56,7 +60,8 @@ func (h *Handler) Send(ctx context.Context, request *email.SendRequest, response
 		Subject:  request.Subject,
 	}
 	rsp := email.ClassifyResponse{}
-	err := h.Classify(ctx, spamReq, &rsp)
+	err = h.Classify(ctx, spamReq, &rsp)
+	timemark.Mark("Classify")
 	if err != nil || rsp.IsSpam {
 		logger.Errorf(ctx, "Error validating email %s %v", err, rsp)
 		return errors.InternalServerError("Error validating email")
@@ -66,11 +71,16 @@ func (h *Handler) Send(ctx context.Context, request *email.SendRequest, response
 		logger.Errorf(ctx, "Error sending email: %v\n", err)
 		return errors.InternalServerError("Error sending email")
 	}
+	timemark.Mark("sendEmail")
 
 	return nil
 }
 
 func (h *Handler) Classify(ctx context.Context, request *email.ClassifyRequest, response *email.ClassifyResponse) error {
+	var err error
+	var timemark mark.TimeMark
+	defer timemark.Init(ctx, "Classify")()
+
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Classify", acc.Name)
@@ -114,8 +124,9 @@ func (h *Handler) Classify(ctx context.Context, request *email.ClassifyRequest, 
 	}
 	response.IsSpam = rc.IsSpam
 	response.Score = rc.Score
-
 	response.Details = []string{}
+	timemark.Mark("Report")
+
 	for _, v := range rc.Report.Table {
 		response.Details = append(response.Details, fmt.Sprintf("%s, %s, %v", v.Rule, v.Description, v.Points))
 	}

@@ -7,6 +7,7 @@ import (
 	"comm/auth"
 	"comm/errors"
 	"comm/logger"
+	"comm/mark"
 	"proto/id"
 
 	"github.com/google/uuid"
@@ -14,6 +15,9 @@ import (
 )
 
 func (h *Handler) Generate(ctx context.Context, req *id.GenerateRequest, rsp *id.GenerateResponse) error {
+	var timemark mark.TimeMark
+	defer timemark.Init(ctx, "Generate")()
+
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Generate", acc.Name)
@@ -58,6 +62,9 @@ func (h *Handler) Generate(ctx context.Context, req *id.GenerateRequest, rsp *id
 }
 
 func (h *Handler) Types(ctx context.Context, req *id.TypesRequest, rsp *id.TypesResponse) error {
+	var timemark mark.TimeMark
+	defer timemark.Init(ctx, "Types")()
+
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Types", acc.Name)

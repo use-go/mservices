@@ -24,7 +24,7 @@ func (h *Handler) DeleteInfo(ctx context.Context, req *helloworld.DeleteInfoRequ
 		logger.Infof(ctx, "%v Do DeleteInfo", acc.Name)
 	}
 
-	err := util.IsZero(req, "id")
+	err = util.IsZero(req, "id")
 	if err != nil {
 		return errors.BadRequest(err.Error())
 	}
@@ -39,6 +39,7 @@ func (h *Handler) DeleteInfo(ctx context.Context, req *helloworld.DeleteInfoRequ
 		Id: req.Id,
 	}
 	err = h.DeleteInfoDB(ctx, session, &where)
+	timemark.Mark("DeleteInfoDB")
 	if err != nil {
 		logger.Errorf(ctx, "DeleteInfoDB failed. [%v]", err)
 		return errors.InternalServerError("deleteInfoDB failed %v", err.Error())
@@ -49,17 +50,22 @@ func (h *Handler) DeleteInfo(ctx context.Context, req *helloworld.DeleteInfoRequ
 
 // UpdateInfo defined TODO
 func (h *Handler) UpdateInfo(ctx context.Context, req *helloworld.UpdateInfoRequest, rsp *helloworld.UpdateInfoResponse) error {
+	var err error
+	var timemark mark.TimeMark
+	defer timemark.Init(ctx, "UpdateInfo")()
+
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do UpdateInfo", acc.Name)
 	}
 
-	err := util.IsZero(req, "id")
+	err = util.IsZero(req, "id")
 	if err != nil {
 		return errors.BadRequest(err.Error())
 	}
 
 	session, err := db.InitDb(ctx)
+	timemark.Mark("InitDb")
 	if err != nil {
 		return errors.InternalServerError("init db error %v", err)
 	}
@@ -71,6 +77,7 @@ func (h *Handler) UpdateInfo(ctx context.Context, req *helloworld.UpdateInfoRequ
 		return errors.InternalServerError("Unmarshal failed %v", err)
 	}
 	err = h.UpdateInfoDB(ctx, session, &info)
+	timemark.Mark("UpdateInfoDB")
 	if err != nil {
 		logger.Errorf(ctx, "UpdateInfoDB failed %v", err)
 		return errors.InternalServerError("UpdateInfoDB failed %v", err)
@@ -86,12 +93,17 @@ func (h *Handler) UpdateInfo(ctx context.Context, req *helloworld.UpdateInfoRequ
 
 // InsertInfo defined TODO
 func (h *Handler) InsertInfo(ctx context.Context, req *helloworld.InsertInfoRequest, rsp *helloworld.InsertInfoResponse) error {
+	var err error
+	var timemark mark.TimeMark
+	defer timemark.Init(ctx, "InsertInfo")()
+
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do InsertInfo", acc.Name)
 	}
 
 	session, err := db.InitDb(ctx)
+	timemark.Mark("InitDb")
 	if err != nil {
 		return errors.InternalServerError("InitDb failed %v", err)
 	}
@@ -106,6 +118,7 @@ func (h *Handler) InsertInfo(ctx context.Context, req *helloworld.InsertInfoRequ
 	info.CreatedAt = time.Now()
 	info.UpdatedAt = time.Now()
 	err = h.InsertInfoDB(ctx, session, &info)
+	timemark.Mark("InsertInfoDB")
 	if err != nil {
 		logger.Errorf(ctx, "InsertSchedulePositionDB failed %v", err)
 		return errors.InternalServerError("InsertSchedulePositionDB failed %v", err.Error())
@@ -115,17 +128,22 @@ func (h *Handler) InsertInfo(ctx context.Context, req *helloworld.InsertInfoRequ
 
 // QueryInfoDetail defined TODO
 func (h *Handler) QueryInfoDetail(ctx context.Context, req *helloworld.QueryInfoDetailRequest, rsp *helloworld.QueryInfoDetailResponse) error {
+	var err error
+	var timemark mark.TimeMark
+	defer timemark.Init(ctx, "QueryInfoDetail")()
+
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do QueryInfoDetail", acc.Name)
 	}
 
-	err := util.IsZero(req, "id")
+	err = util.IsZero(req, "id")
 	if err != nil {
 		return errors.BadRequest(err.Error())
 	}
 
 	session, err := db.InitDb(ctx)
+	timemark.Mark("InitDb")
 	if err != nil {
 		return errors.InternalServerError("InitDb failed %v", err)
 	}
@@ -135,6 +153,7 @@ func (h *Handler) QueryInfoDetail(ctx context.Context, req *helloworld.QueryInfo
 	}
 	info := model.Info{}
 	err = h.QueryInfoDetailDB(ctx, session, &where, &info)
+	timemark.Mark("QueryInfoDetailDB")
 	if err != nil {
 		return errors.InternalServerError("QueryInfoDetailDB failed %v", err)
 	}
@@ -148,6 +167,10 @@ func (h *Handler) QueryInfoDetail(ctx context.Context, req *helloworld.QueryInfo
 
 // QueryInfo defined TODO
 func (h *Handler) QueryInfo(ctx context.Context, req *helloworld.QueryInfoRequest, rsp *helloworld.QueryInfoResponse) error {
+	var err error
+	var timemark mark.TimeMark
+	defer timemark.Init(ctx, "QueryInfo")()
+
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do QueryInfo", acc.Name)
@@ -155,6 +178,7 @@ func (h *Handler) QueryInfo(ctx context.Context, req *helloworld.QueryInfoReques
 
 	session, err := db.InitDb(ctx)
 	session = db.SetLimit(ctx, session, req)
+	timemark.Mark("InitDb")
 	if err != nil {
 		return errors.InternalServerError("InitDb failed %v", err)
 	}
@@ -165,6 +189,7 @@ func (h *Handler) QueryInfo(ctx context.Context, req *helloworld.QueryInfoReques
 		Name: req.GetName(),
 	}
 	err = h.QueryInfoDB(ctx, session, &where, &lst, &totalCount)
+	timemark.Mark("QueryInfoDB")
 	if err != nil {
 		return errors.InternalServerError("QueryInfoDB failed %v", err)
 	}

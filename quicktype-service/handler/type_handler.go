@@ -3,6 +3,7 @@ package handler
 import (
 	"comm/auth"
 	"comm/logger"
+	"comm/mark"
 	whttp "comm/service/web/http"
 	"errors"
 	"net/http"
@@ -11,7 +12,11 @@ import (
 
 // Index defined TODO
 func (h *Handler) Index(rw http.ResponseWriter, r *http.Request) {
+	var timemark mark.TimeMark
+	defer timemark.Init(r.Context(), "Index")()
+
 	acc, ok := auth.FromContext(r.Context())
+	timemark.Mark("FromContext")
 	if ok {
 		logger.Infof(r.Context(), "%v Do Index", acc.Name)
 	}
@@ -21,6 +26,10 @@ func (h *Handler) Index(rw http.ResponseWriter, r *http.Request) {
 
 // Tables defined TODO
 func (h *Handler) Tables(rw http.ResponseWriter, r *http.Request) {
+	var err error
+	var timemark mark.TimeMark
+	defer timemark.Init(r.Context(), "Tables")()
+
 	acc, ok := auth.FromContext(r.Context())
 	if ok {
 		logger.Infof(r.Context(), "%v Do Tables", acc.Name)
@@ -32,6 +41,7 @@ func (h *Handler) Tables(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 	schemas, err := db.DBMetas()
+	timemark.Mark("DBMetas")
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
@@ -46,6 +56,10 @@ func (h *Handler) Tables(rw http.ResponseWriter, r *http.Request) {
 
 // Table2Go defined TODO
 func (h *Handler) Table2Go(rw http.ResponseWriter, r *http.Request) {
+	var err error
+	var timemark mark.TimeMark
+	defer timemark.Init(r.Context(), "Table2Go")()
+
 	acc, ok := auth.FromContext(r.Context())
 	if ok {
 		logger.Infof(r.Context(), "%v Do Table2Go", acc.Name)
@@ -57,6 +71,7 @@ func (h *Handler) Table2Go(rw http.ResponseWriter, r *http.Request) {
 	}
 	table := r.URL.Query().Get("table")
 	schemas, err := db.DBMetas()
+	timemark.Mark("DBMetas")
 	if err != nil {
 		whttp.Fail(rw, r, err)
 		return
@@ -77,6 +92,10 @@ func (h *Handler) Table2Go(rw http.ResponseWriter, r *http.Request) {
 
 // Table2Proto defined TODO
 func (h *Handler) Table2Proto(rw http.ResponseWriter, r *http.Request) {
+	var err error
+	var timemark mark.TimeMark
+	defer timemark.Init(r.Context(), "Table2Proto")()
+
 	acc, ok := auth.FromContext(r.Context())
 	if ok {
 		logger.Infof(r.Context(), "%v Do Table2Proto", acc.Name)
@@ -88,6 +107,7 @@ func (h *Handler) Table2Proto(rw http.ResponseWriter, r *http.Request) {
 	}
 	table := r.URL.Query().Get("table")
 	schemas, err := db.DBMetas()
+	timemark.Mark("DBMetas")
 	if err != nil {
 		whttp.Fail(rw, r, err)
 		return
@@ -108,6 +128,10 @@ func (h *Handler) Table2Proto(rw http.ResponseWriter, r *http.Request) {
 
 // Table2Handler defined TODO
 func (h *Handler) Table2Handler(rw http.ResponseWriter, r *http.Request) {
+	var err error
+	var timemark mark.TimeMark
+	defer timemark.Init(r.Context(), "Table2Handler")()
+
 	acc, ok := auth.FromContext(r.Context())
 	if ok {
 		logger.Infof(r.Context(), "%v Do Table2Handler", acc.Name)
@@ -119,6 +143,7 @@ func (h *Handler) Table2Handler(rw http.ResponseWriter, r *http.Request) {
 	}
 	table := r.URL.Query().Get("table")
 	schemas, err := db.DBMetas()
+	timemark.Mark("DBMetas")
 	if err != nil {
 		whttp.Fail(rw, r, err)
 		return
@@ -139,6 +164,10 @@ func (h *Handler) Table2Handler(rw http.ResponseWriter, r *http.Request) {
 
 // Table2RW defined TODO
 func (h *Handler) Table2RW(rw http.ResponseWriter, r *http.Request) {
+	var err error
+	var timemark mark.TimeMark
+	defer timemark.Init(r.Context(), "Table2RW")()
+
 	acc, ok := auth.FromContext(r.Context())
 	if ok {
 		logger.Infof(r.Context(), "%v Do Table2RW", acc.Name)
@@ -170,6 +199,10 @@ func (h *Handler) Table2RW(rw http.ResponseWriter, r *http.Request) {
 
 // Table2DB defined TODO
 func (h *Handler) Table2DB(rw http.ResponseWriter, r *http.Request) {
+	var err error
+	var timemark mark.TimeMark
+	defer timemark.Init(r.Context(), "Table2DB")()
+
 	acc, ok := auth.FromContext(r.Context())
 	if ok {
 		logger.Infof(r.Context(), "%v Do Table2DB", acc.Name)
@@ -181,6 +214,7 @@ func (h *Handler) Table2DB(rw http.ResponseWriter, r *http.Request) {
 	}
 	table := r.URL.Query().Get("table")
 	schemas, err := db.DBMetas()
+	timemark.Mark("DBMetas")
 	if err != nil {
 		whttp.Fail(rw, r, err)
 		return

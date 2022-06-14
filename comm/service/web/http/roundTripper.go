@@ -5,7 +5,8 @@ import (
 	"math/rand"
 	"net/http"
 
-	"github.com/2637309949/micro/v3/service/errors"
+	"comm/errors"
+
 	"github.com/2637309949/micro/v3/service/registry"
 	"github.com/2637309949/micro/v3/util/selector"
 )

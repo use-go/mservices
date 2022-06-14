@@ -5,12 +5,17 @@ import (
 	"comm/broker"
 	"comm/errors"
 	"comm/logger"
+	"comm/mark"
 	"context"
 	"path"
 	"proto/subscribe"
 )
 
 func (h *Handler) Publish(ctx context.Context, req *subscribe.PublishRequest, rsp *subscribe.PublishResponse) error {
+	var err error
+	var timemark mark.TimeMark
+	defer timemark.Init(ctx, "Publish")()
+
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Call", acc.Name)
@@ -22,7 +27,8 @@ func (h *Handler) Publish(ctx context.Context, req *subscribe.PublishRequest, rs
 	logger.Infof(ctx, "Publishing to %v\n", req.Topic)
 
 	topic := path.Join("event", req.Topic)
-	err := broker.Publish(topic, &broker.Message{Body: req.Message})
+	err = broker.Publish(topic, &broker.Message{Body: req.Message})
+	timemark.Mark("Publish")
 	if err != nil {
 		return errors.InternalServerError("Failed to publish %v", err.Error())
 	}
@@ -31,6 +37,10 @@ func (h *Handler) Publish(ctx context.Context, req *subscribe.PublishRequest, rs
 
 // Subscribe defined TODO, setting timeout should be careful
 func (h *Handler) Subscribe(ctx context.Context, req *subscribe.SubscribeRequest, stream subscribe.Subscribe_SubscribeStream) error {
+	var err error
+	var timemark mark.TimeMark
+	defer timemark.Init(ctx, "Subscribe")()
+
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Subscribe", acc.Name)
@@ -43,7 +53,7 @@ func (h *Handler) Subscribe(ctx context.Context, req *subscribe.SubscribeRequest
 
 	topic := path.Join("event", req.Topic)
 	ch := make(chan *broker.Message, 100)
-	_, err := broker.Subscribe(topic, func(msg *broker.Message) error {
+	_, err = broker.Subscribe(topic, func(msg *broker.Message) error {
 		ch <- msg
 		return nil
 	})
@@ -57,6 +67,7 @@ func (h *Handler) Subscribe(ctx context.Context, req *subscribe.SubscribeRequest
 		}); err != nil {
 			logger.Infof(ctx, "Failed to Send %v", err)
 		}
+		timemark.Mark("Send")
 	}
 	return nil
 }
