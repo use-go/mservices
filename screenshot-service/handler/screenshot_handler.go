@@ -12,7 +12,7 @@ import (
 	"comm/auth"
 	"comm/errors"
 	"comm/logger"
-
+	"comm/mark"
 	"proto/screenshot"
 
 	"github.com/google/uuid"
@@ -21,6 +21,10 @@ import (
 const screenshotPath = "/usr/src/app"
 
 func (h *Handler) Screenshot(ctx context.Context, req *screenshot.ScreenshotRequest, rsp *screenshot.ScreenshotResponse) error {
+	var err error
+	var timemark mark.TimeMark
+	defer timemark.Init(ctx, "Screenshot")()
+
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Screenshot", acc.Name)
@@ -42,7 +46,9 @@ func (h *Handler) Screenshot(ctx context.Context, req *screenshot.ScreenshotRequ
 	cmd := exec.Command("/usr/bin/chromium-browser",
 		"--headless", "--window-size="+width+","+height, "--no-sandbox", "--screenshot="+imagePath,
 		"--hide-scrollbars", "--disable-setuid-sandbox", "--single-process", "--no-zygote", "--disable-gpu", req.Url)
+
 	outp, err := cmd.CombinedOutput()
+	timemark.Mark("Command")
 	logger.Info(ctx, string(outp))
 	if err != nil {
 		logger.Error(ctx, string(outp)+err.Error())
