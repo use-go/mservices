@@ -5,7 +5,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/AddReq"
+              "$ref": "#/components/schemas/AddRequest"
             }
           }
         },
@@ -15,7 +15,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/DecrementReq"
+              "$ref": "#/components/schemas/DecrementRequest"
             }
           }
         },
@@ -25,7 +25,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/DeleteReq"
+              "$ref": "#/components/schemas/DeleteRequest"
             }
           }
         },
@@ -35,7 +35,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/FlushReq"
+              "$ref": "#/components/schemas/FlushRequest"
             }
           }
         },
@@ -45,7 +45,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/GetReq"
+              "$ref": "#/components/schemas/GetRequest"
             }
           }
         },
@@ -55,7 +55,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/IncrementReq"
+              "$ref": "#/components/schemas/IncrementRequest"
             }
           }
         },
@@ -65,7 +65,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ReplaceReq"
+              "$ref": "#/components/schemas/ReplaceRequest"
             }
           }
         },
@@ -75,7 +75,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/SetReq"
+              "$ref": "#/components/schemas/SetRequest"
             }
           }
         },
@@ -87,7 +87,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/AddRes"
+              "$ref": "#/components/schemas/AddResponse"
             }
           }
         },
@@ -97,7 +97,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/DecrementRes"
+              "$ref": "#/components/schemas/DecrementResponse"
             }
           }
         },
@@ -107,7 +107,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/DeleteRes"
+              "$ref": "#/components/schemas/DeleteResponse"
             }
           }
         },
@@ -117,7 +117,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/FlushRes"
+              "$ref": "#/components/schemas/FlushResponse"
             }
           }
         },
@@ -127,7 +127,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/GetRes"
+              "$ref": "#/components/schemas/GetResponse"
             }
           }
         },
@@ -137,7 +137,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/IncrementRes"
+              "$ref": "#/components/schemas/IncrementResponse"
             }
           }
         },
@@ -147,7 +147,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ReplaceRes"
+              "$ref": "#/components/schemas/ReplaceResponse"
             }
           }
         },
@@ -157,7 +157,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/SetRes"
+              "$ref": "#/components/schemas/SetResponse"
             }
           }
         },
@@ -197,7 +197,7 @@
       }
     },
     "schemas": {
-      "AddReq": {
+      "AddRequest": {
         "properties": {
           "expire": {
             "format": "int64",
@@ -211,14 +211,14 @@
             "type": "string"
           }
         },
-        "title": "AddReq",
+        "title": "AddRequest",
         "type": "object"
       },
-      "AddRes": {
-        "title": "AddRes",
+      "AddResponse": {
+        "title": "AddResponse",
         "type": "object"
       },
-      "DecrementReq": {
+      "DecrementRequest": {
         "properties": {
           "name": {
             "type": "string"
@@ -228,54 +228,60 @@
             "type": "number"
           }
         },
-        "title": "DecrementReq",
+        "title": "DecrementRequest",
         "type": "object"
       },
-      "DecrementRes": {
-        "title": "DecrementRes",
+      "DecrementResponse": {
+        "properties": {
+          "value": {
+            "format": "int64",
+            "type": "number"
+          }
+        },
+        "title": "DecrementResponse",
         "type": "object"
       },
-      "DeleteReq": {
+      "DeleteRequest": {
         "properties": {
           "name": {
             "type": "string"
           }
         },
-        "title": "DeleteReq",
+        "title": "DeleteRequest",
         "type": "object"
       },
-      "DeleteRes": {
-        "title": "DeleteRes",
+      "DeleteResponse": {
+        "title": "DeleteResponse",
         "type": "object"
       },
-      "FlushReq": {
-        "title": "FlushReq",
+      "FlushRequest": {
+        "title": "FlushRequest",
         "type": "object"
       },
-      "FlushRes": {
-        "title": "FlushRes",
+      "FlushResponse": {
+        "title": "FlushResponse",
         "type": "object"
       },
-      "GetReq": {
+      "GetRequest": {
         "properties": {
           "name": {
             "type": "string"
           }
         },
-        "title": "GetReq",
+        "title": "GetRequest",
         "type": "object"
       },
-      "GetRes": {
+      "GetResponse": {
         "properties": {
           "value": {
             "format": "byte",
             "type": "string"
           }
         },
-        "title": "GetRes",
+        "title": "GetResponse",
         "type": "object"
       },
-      "IncrementReq": {
+      "IncrementRequest": {
         "properties": {
           "name": {
             "type": "string"
@@ -285,14 +291,20 @@
             "type": "number"
           }
         },
-        "title": "IncrementReq",
+        "title": "IncrementRequest",
         "type": "object"
       },
-      "IncrementRes": {
-        "title": "IncrementRes",
+      "IncrementResponse": {
+        "properties": {
+          "value": {
+            "format": "int64",
+            "type": "number"
+          }
+        },
+        "title": "IncrementResponse",
         "type": "object"
       },
-      "ReplaceReq": {
+      "ReplaceRequest": {
         "properties": {
           "expire": {
             "format": "int64",
@@ -306,14 +318,14 @@
             "type": "string"
           }
         },
-        "title": "ReplaceReq",
+        "title": "ReplaceRequest",
         "type": "object"
       },
-      "ReplaceRes": {
-        "title": "ReplaceRes",
+      "ReplaceResponse": {
+        "title": "ReplaceResponse",
         "type": "object"
       },
-      "SetReq": {
+      "SetRequest": {
         "properties": {
           "expire": {
             "format": "int64",
@@ -327,11 +339,11 @@
             "type": "string"
           }
         },
-        "title": "SetReq",
+        "title": "SetRequest",
         "type": "object"
       },
-      "SetRes": {
-        "title": "SetRes",
+      "SetResponse": {
+        "title": "SetResponse",
         "type": "object"
       }
     },
@@ -385,7 +397,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Cache.Add(AddReq)"
+        "summary": "Cache.Add(AddRequest)"
       }
     },
     "/cache/Cache/Decrement": {
@@ -417,7 +429,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Cache.Decrement(DecrementReq)"
+        "summary": "Cache.Decrement(DecrementRequest)"
       }
     },
     "/cache/Cache/Delete": {
@@ -449,7 +461,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Cache.Delete(DeleteReq)"
+        "summary": "Cache.Delete(DeleteRequest)"
       }
     },
     "/cache/Cache/Flush": {
@@ -481,7 +493,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Cache.Flush(FlushReq)"
+        "summary": "Cache.Flush(FlushRequest)"
       }
     },
     "/cache/Cache/Get": {
@@ -513,7 +525,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Cache.Get(GetReq)"
+        "summary": "Cache.Get(GetRequest)"
       }
     },
     "/cache/Cache/Increment": {
@@ -545,7 +557,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Cache.Increment(IncrementReq)"
+        "summary": "Cache.Increment(IncrementRequest)"
       }
     },
     "/cache/Cache/Replace": {
@@ -577,7 +589,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Cache.Replace(ReplaceReq)"
+        "summary": "Cache.Replace(ReplaceRequest)"
       }
     },
     "/cache/Cache/Set": {
@@ -609,7 +621,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Cache.Set(SetReq)"
+        "summary": "Cache.Set(SetRequest)"
       }
     }
   },
