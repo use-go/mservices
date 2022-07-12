@@ -5,7 +5,7 @@ go 1.15
 require (
 	comm v0.0.0-00010101000000-000000000000
 	github.com/jinzhu/copier v0.3.4
-	golang.org/x/crypto v0.0.0-20201016220609-9e8e0b390897
+	golang.org/x/crypto v0.0.0-20220112180741-5e0467b6c7ce
 	gorm.io/gorm v1.22.5
 	proto v0.0.0-00010101000000-000000000000
 )

@@ -3,7 +3,8 @@
 Install micro with the following commands:
 
 ```shell
-go install github.com/2637309949/micro/v3@v3.8.2
+go clone git@github.com:2637309949/micro.git
+go install
 ```
 
 Run micro server with the following commands:
