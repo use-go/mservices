@@ -67,7 +67,7 @@ func (h *Handler) UpdateInfo(ctx context.Context, req *helloworld.UpdateInfoRequ
 	session, err := db.InitDb(ctx)
 	timemark.Mark("InitDb")
 	if err != nil {
-		return errors.InternalServerError("init db error %v", err)
+		return err
 	}
 
 	info := model.Info{}

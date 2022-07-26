@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"comm/config"
+	"comm/errors"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -28,12 +29,18 @@ func InitDb(ctx context.Context, i ...uint64) (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	c := Conf{}
-	if len(i) > 0 {
-		c = db[i[0]]
-	} else {
-		c = db[0]
+
+	if len(db) == 0 {
+		return nil, errors.InternalServerError("db not found")
 	}
+
+	c := Conf{}
+	idx := uint64(0)
+
+	if len(i) > 0 {
+		idx = i[0]
+	}
+	c = db[idx]
 	return gorm.Open(mysql.New(mysql.Config{
 		DSN:                       fmt.Sprintf("%v:%v@tcp(%v:%v)/%v?charset=utf8&parseTime=True&loc=Local", c.User, c.Passwd, c.Host, c.Port, c.DB), // data source name
 		DefaultStringSize:         256,                                                                                                              // default size for string fields
