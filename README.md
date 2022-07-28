@@ -3,8 +3,7 @@
 Install micro with the following commands:
 
 ```shell
-go clone git@github.com:2637309949/micro.git
-go install
+wget -q  https://raw.githubusercontent.com/2637309949/micro/master/scripts/install.sh -O - | /bin/bash
 ```
 
 Run micro server with the following commands:
