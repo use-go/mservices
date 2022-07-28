@@ -18,6 +18,8 @@ micro server
 micro new test && cd test-service && make proto && make up
 ```
 
+[Multi-cluster Deployment](http://hbchen.com/post/microservice/2019-11-15-go-micro-network/)
+
 #### VerifyAccess
 
 ```shell
