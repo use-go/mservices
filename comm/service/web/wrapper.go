@@ -13,7 +13,7 @@ import (
 	sAuth "github.com/2637309949/micro/v3/service/auth"
 	"github.com/2637309949/micro/v3/util/auth"
 	cx "github.com/2637309949/micro/v3/util/ctx"
-	uhttp "github.com/2637309949/micro/v3/util/http"
+	xhttp "github.com/2637309949/micro/v3/util/http"
 )
 
 type responseBodyWriter struct {
@@ -54,12 +54,12 @@ var (
 				case strings.HasPrefix(header, "Basic "):
 					b, err := base64.StdEncoding.DecodeString(strings.TrimPrefix(header, "Basic "))
 					if err != nil {
-						uhttp.WriteError(res, req, errors.Unauthorized("invalid authorization header. Incorrect format"))
+						xhttp.WriteError(res, req, errors.Unauthorized("invalid authorization header. Incorrect format"))
 						return
 					}
 					parts := strings.SplitN(string(b), ":", 2)
 					if len(parts) != 2 {
-						uhttp.WriteError(res, req, errors.Unauthorized("invalid authorization header. Incorrect format"))
+						xhttp.WriteError(res, req, errors.Unauthorized("invalid authorization header. Incorrect format"))
 						return
 					}
 					token = parts[1]
@@ -85,13 +85,13 @@ var (
 			// Verify the caller has access to the resource.
 			err := sAuth.Verify(acc, re, sAuth.VerifyNamespace(ns))
 			if err == sAuth.ErrForbidden && acc != nil {
-				uhttp.WriteError(res, req, errors.Forbidden("Forbidden call made to %v:%v by %v", re.Name, re.Endpoint, acc.ID))
+				xhttp.WriteError(res, req, errors.Forbidden("Forbidden call made to %v:%v by %v", re.Name, re.Endpoint, acc.ID))
 				return
 			} else if err == sAuth.ErrForbidden {
-				uhttp.WriteError(res, req, errors.Unauthorized("Unauthorized call made to %v:%v", re.Name, re.Endpoint))
+				xhttp.WriteError(res, req, errors.Unauthorized("Unauthorized call made to %v:%v", re.Name, re.Endpoint))
 				return
 			} else if err != nil {
-				uhttp.WriteError(res, req, errors.InternalServerError("Error authorizing request: %v", err))
+				xhttp.WriteError(res, req, errors.InternalServerError("Error authorizing request: %v", err))
 				return
 			}
 			call(res, req)
