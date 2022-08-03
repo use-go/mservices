@@ -9,9 +9,6 @@ require (
 	github.com/opensearch-project/opensearch-go v1.1.0
 	google.golang.org/protobuf v1.27.1
 	proto v0.0.0-00010101000000-000000000000
-)
-
-require (
 	github.com/2637309949/micro/v3 v3.8.7 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.1 // indirect
