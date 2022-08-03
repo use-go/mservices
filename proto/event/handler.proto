@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package event;
+
+option go_package = "./proto;event";
+import "google/protobuf/struct.proto";
+
+service Event {
+	rpc Publish(PublishRequest) returns (PublishResponse) {}
+	rpc Consume(ConsumeRequest) returns (stream ConsumeResponse) {}
+	rpc Read(ReadRequest) returns (ReadResponse) {}
+}
+
+message Ev {
+	string id = 1;
+	string timestamp = 2;
+	google.protobuf.Struct message = 3;
+}
+
+// Publish a event to the event stream.
+message PublishRequest {
+	string topic = 1;
+	google.protobuf.Struct message = 4;
+}
+
+message PublishResponse {}
+
+message ConsumeRequest {
+	string topic = 1;
+	string group = 2;
+	string offset = 3;
+}
+
+message ConsumeResponse {
+	string topic = 1;
+	string id = 2;
+	string timestamp = 3;
+	google.protobuf.Struct message = 4;
+}
+
+message ReadRequest {
+	string topic = 1;
+	int32 limit = 2;
+	int32 offset = 3;
+}
+
+message ReadResponse {
+	repeated Ev events = 1;
+}

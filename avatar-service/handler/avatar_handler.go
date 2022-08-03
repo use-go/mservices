@@ -20,7 +20,7 @@ import (
 func (h *Handler) Generate(ctx context.Context, req *avatar.GenerateRequest, rsp *avatar.GenerateResponse) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
-		logger.Infof(ctx, "%v Do DeleteInfo", acc.Name)
+		logger.Infof(ctx, "%v Do Generate", acc.Name)
 	}
 
 	var gender govatar.Gender

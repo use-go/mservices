@@ -28,6 +28,9 @@
 			"path": "subscribe-service"
 		},
 		{
+			"path": "event-service"
+		},
+		{
 			"path": "id-service"
 		},
 		{
