@@ -247,14 +247,14 @@
             dataSource: {
                 user: 'root',
                 passwd: 'gmt',
-                host: '192.168.202.128',
+                host: '81.71.122.245',
                 port: '3306',
                 db: 'yearning'
             },
             tables: [],
             table: '',
             code: '',
-            authentication: { authorize_url: 'http://192.168.202.128:8080/cas/client/authorize', token_url: 'http://192.168.202.128:8080/cas/client/token', redirect_uri: encodeURIComponent(window.location.href.match('([a-z][a-z0-9+\-.]*://[^?#&=]+)/?')[1]), state: 'xyz' }
+            authentication: { authorize_url: 'http://81.71.122.245:8080/cas/client/authorize', token_url: 'http://81.71.122.245:8080/cas/client/token', redirect_uri: encodeURIComponent(window.location.href.match('([a-z][a-z0-9+\-.]*://[^?#&=]+)/?')[1]), state: 'xyz' }
         },
         mounted () {
             this.init(this.authentication);

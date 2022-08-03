@@ -15,7 +15,7 @@ make up
 Request the service
 
 ```
-[double@double] curl http://192.168.202.128:8080/file/upload
+[double@double] curl http://81.71.122.245:8080/file/upload
 level=info trace= Starting [service] assert
 level=info trace= HTTP API Listening on [::]:43227
 level=info trace= Registry [service] Registering node: assert-350d533e-8477-42f6-aab1-bcf46a9e06ae

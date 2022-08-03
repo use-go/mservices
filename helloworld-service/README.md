@@ -15,7 +15,7 @@ make up
 Request the service
 
 ```
-[double@double] curl http://192.168.202.128:8080/helloworld/helloworld/UpdateInfo
+[double@double] curl http://81.71.122.245:8080/helloworld/helloworld/UpdateInfo
 level=info Starting [service] helloworld
 level=info Server [grpc] Listening on [::]:35653
 level=info Registry [service] Registering node: helloworld-964a58bf-ffeb-47c2-a4f5-a18491c7e644

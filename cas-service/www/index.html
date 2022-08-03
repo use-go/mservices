@@ -9,8 +9,8 @@
     <meta name="keywords" content="网站关键字" />
     <meta name="description" content="网站描述" />
     <script>
-        var authorize_url = 'http://192.168.202.128:8080/cas/client/authorize'
-        var token_url = 'http://192.168.202.128:8080/cas/client/token'
+        var authorize_url = 'http://81.71.122.245:8080/cas/client/authorize'
+        var token_url = 'http://81.71.122.245:8080/cas/client/token'
         var redirect_uri = encodeURIComponent(window.location.href.match('([a-z][a-z0-9+\-.]*://[^?#&=]+)/?')[1]) 
         var state = 'xyz'
 
@@ -93,7 +93,7 @@
         }
 
         function queryInfoDetail() {
-            return request('http://192.168.202.128:8080/helloworld/queryInfoDetail').then(function(json) {
+            return request('http://81.71.122.245:8080/helloworld/queryInfoDetail').then(function(json) {
                 var body = document.body
                 var div = document.createElement("div")
                 div.innerText = JSON.stringify(json, null, 4)
@@ -128,6 +128,6 @@
     </script>
   </head>
   <body>
-    <a href="javascript:void(0)" onclick="queryInfoDetail()">http://192.168.202.128:8080/helloworld/updateInfo</a>
+    <a href="javascript:void(0)" onclick="queryInfoDetail()">http://81.71.122.245:8080/helloworld/updateInfo</a>
   </body>
 </html>

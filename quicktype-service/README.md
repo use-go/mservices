@@ -15,7 +15,7 @@ make up
 Open url in your brower
 
 ```
-http://192.168.202.128:8080/quicktype/
+http://81.71.122.245:8080/quicktype/
 ```
 
 
