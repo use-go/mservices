@@ -1,3 +1,4 @@
+Generate unique IDs (uuid, snowflake, etc)
 ## Usage
 
 Generate the proto code
