@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package commets;
+
+option go_package = "./proto;commets";
+
+import "proto/commets/commets.proto";
+
+service Commets {
+    rpc InsertInfo (InsertInfoRequest) returns (InsertInfoResponse) {}
+	rpc DeleteInfo (DeleteInfoRequest) returns (DeleteInfoResponse) {}
+    rpc UpdateInfo (UpdateInfoRequest) returns (UpdateInfoResponse) {}
+    rpc QueryInfo (QueryInfoRequest) returns (QueryInfoResponse) {}
+    rpc QueryInfoDetail (QueryInfoDetailRequest) returns (QueryInfoDetailResponse) {}
+}

@@ -1,6 +1,25 @@
 #### Install
 
-Install micro with the following commands:
+Installing protoc with the following commands:
+
+```shell
+PROTOC_ZIP=protoc-3.14.0-linux-x86_64.zip
+curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v3.14.0/$PROTOC_ZIP
+sudo unzip -o $PROTOC_ZIP -d /usr/local bin/protoc
+sudo unzip -o $PROTOC_ZIP -d /usr/local 'include/*'
+rm -f $PROTOC_ZIP
+```
+
+Installing micro cli with the following commands:
+
+```shell
+go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+go install github.com/2637309949/micro/v3/cmd/protoc-gen-micro@latest
+go install github.com/2637309949/micro/v3/cmd/protoc-gen-openapi@latest
+```
+
+
+Installing micro server with the following commands:
 
 ```shell
 wget -q  https://raw.githubusercontent.com/2637309949/micro/master/scripts/install.sh -O - | /bin/bash
@@ -11,6 +30,7 @@ Run micro server with the following commands:
 ```shell
 micro server
 ```
+
 #### Usage
 
 ```shell

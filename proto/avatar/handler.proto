@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package avatar;
+
+option go_package = "./proto;avatar";
+
+service Avatar {
+    rpc Generate (GenerateRequest) returns (GenerateResponse) {}
+}
+
+message GenerateRequest {
+  string gender = 1;
+  string username = 2;
+  string format = 3;
+  bool upload = 4;
+}
+
+message GenerateResponse {
+  string url = 1;
+  string base64 = 2;
+}
