@@ -24,11 +24,11 @@ micro new test && cd test-service && make proto && make up
 ```shell
 micro auth delete rule default
 micro auth create rule --access=granted --scope='*' --resource="*:*:*" onlyloggedin
-micro auth create rule --access=granted --resource="service:auth:*" auth-public
-micro auth create rule --access=granted --resource="service:micro.:*" micro-public
-micro auth create rule --access=granted --resource="service:assert:*" assert-public
-micro auth create rule --access=granted --resource="service:quicktype:Quicktype.Call" quicktype-public
-micro auth create rule --access=granted --resource="service:cas:*" cas-public
+micro auth create rule --access=granted --resource="service:auth:*" auth
+micro auth create rule --access=granted --resource="service:micro.:*" micro
+micro auth create rule --access=granted --resource="service:assert:*" assert
+micro auth create rule --access=granted --resource="service:quicktype:Quicktype.Call" quicktype
+micro auth create rule --access=granted --resource="service:cas:*" cas
 ```
 
 #### Service List

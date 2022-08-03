@@ -52,22 +52,23 @@ func (h *Handler) Subscribe(ctx context.Context, req *subscribe.SubscribeRequest
 	logger.Infof(ctx, "Subscribing to %v\n", req.Topic)
 
 	topic := path.Join("event", req.Topic)
-	ch := make(chan *broker.Message, 100)
-	_, err = broker.Subscribe(topic, func(msg *broker.Message) error {
-		ch <- msg
+	sub := make(chan *broker.Message, 100)
+	bs, err := broker.Subscribe(topic, func(msg *broker.Message) error {
+		sub <- msg
 		return nil
 	})
+	defer bs.Unsubscribe()
 	if err != nil {
 		return errors.InternalServerError("Failed to subscribe %v", err.Error())
 	}
-	for m := range ch {
-		if err := stream.Send(&subscribe.SubscribeResponse{
+	for msg := range sub {
+		err := stream.Send(&subscribe.SubscribeResponse{
 			Topic:   req.Topic,
-			Message: m.Body,
-		}); err != nil {
+			Message: msg.Body,
+		})
+		if err != nil {
 			logger.Infof(ctx, "Failed to Send %v", err)
 		}
-		timemark.Mark("Send")
 	}
 	return nil
 }
