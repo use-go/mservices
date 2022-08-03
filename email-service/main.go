@@ -26,7 +26,7 @@ func main() {
 	}
 
 	scf := handler.SpamcConf{}
-	val, err = config.Get("micro.spam")
+	val, err = config.Get("spam")
 	if err != nil {
 		logger.Warn(define.TODO, err)
 	}
