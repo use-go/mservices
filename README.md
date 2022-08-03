@@ -10,19 +10,19 @@ sudo unzip -o $PROTOC_ZIP -d /usr/local 'include/*'
 rm -f $PROTOC_ZIP
 ```
 
-#### Installing micro cli
+#### Installing micro
 
 ```shell
 go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-go install github.com/2637309949/micro/v3/cmd/protoc-gen-micro@latest
-go install github.com/2637309949/micro/v3/cmd/protoc-gen-openapi@latest
 ```
 
-
-#### Installing micro server
-
 ```shell
-wget -q  https://raw.githubusercontent.com/2637309949/micro/master/scripts/install.sh -O - | /bin/bash
+git clone git@github.com:2637309949/micro.git --depth=1
+cd micro && go install && cd ..
+cd micro/cmd/protoc-gen-micro && go install && cd ../../../
+cd micro/cmd/protoc-gen-openapi && go install && cd ../../../
+cd micro/cmd/protoc-gen-client && go install && cd ../../../
+rm micro -rf
 ```
 
 #### Run micro server
