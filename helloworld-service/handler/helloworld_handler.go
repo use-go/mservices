@@ -176,12 +176,13 @@ func (h *Handler) QueryInfo(ctx context.Context, req *helloworld.QueryInfoReques
 		logger.Infof(ctx, "%v Do QueryInfo", acc.Name)
 	}
 
-	session, err := db.InitDb(ctx)
-	session = db.SetLimit(ctx, session, req)
 	timemark.Mark("InitDb")
+	session, err := db.InitDb(ctx)
 	if err != nil {
 		return errors.InternalServerError("InitDb failed %v", err)
 	}
+	session = db.SetLimit(ctx, session, req)
+	session = db.SetOrder(ctx, session, req)
 
 	var totalCount int64
 	var lst []*model.Info

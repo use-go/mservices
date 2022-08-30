@@ -32,10 +32,10 @@ message UpdateInfoResponse {
 message QueryInfoRequest {
 	uint32 id = 1 [json_name = "id"];
 	string name = 2 [json_name = "name"];
-
 	int64 page = 3 [json_name = "page"];
 	int64 size = 4 [json_name = "size"];
-	string order = 5 [json_name = "order"];
+	int32 order_type = 5 [json_name = "order_type"];
+	string order_col = 6 [json_name = "order_col"];
 }
 
 message QueryInfoResponseItem {
