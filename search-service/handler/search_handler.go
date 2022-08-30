@@ -135,7 +135,6 @@ func (h *Handler) Search(ctx context.Context, request *search.SearchRequest, res
 	// - Autocomplete (prefix) queries
 	// - pagination
 	// - Sorting
-	//
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Search", acc.Name)

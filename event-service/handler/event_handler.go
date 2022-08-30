@@ -2,7 +2,6 @@ package handler
 
 import (
 	"context"
-	"fmt"
 	"path"
 	"time"
 
@@ -65,7 +64,7 @@ func (h *Handler) Consume(ctx context.Context, req *event.ConsumeRequest, stream
 
 	// range over the messages until the subscriber is closed
 	for msg := range sub {
-		fmt.Println("got message, sending")
+		logger.Info(ctx, "got message, sending")
 		// unmarshal the message into a struct
 		d := &structpb.Struct{}
 		d.UnmarshalJSON(msg.Payload)
