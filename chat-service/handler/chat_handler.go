@@ -483,6 +483,7 @@ func (h *Handler) Kick(ctx context.Context, req *chat.KickRequest, rsp *chat.Kic
 
 	return nil
 }
+
 func (h *Handler) Leave(ctx context.Context, req *chat.LeaveRequest, rsp *chat.LeaveResponse) error {
 	acc, ok := auth.FromContext(ctx)
 	if ok {
