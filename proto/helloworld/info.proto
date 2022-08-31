@@ -45,7 +45,6 @@ message QueryInfoResponseItem {
 
 message QueryInfoResponse {
     repeated QueryInfoResponseItem data = 1 [json_name = "data"];
-
 	int64 page = 2 [json_name = "page"];
 	int64 size = 3 [json_name = "size"];
 	int64 total_count = 4 [json_name = "total_count"];
