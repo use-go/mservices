@@ -41,8 +41,9 @@ Update the spam rules by running
 sa-update
 ```
 
-### Test
+## Test
 
+Classify email
 ```shell
 curl -X POST \
   http://127.0.0.1:8080/email/Classify \
@@ -72,5 +73,25 @@ curl -X POST \
         "MISSING_DATE, Missing Date: header, 1.4",
         "NO_HEADERS_MESSAGE, Message appears to be missing most RFC-822 headers, 0"
     ]
+}
+```
+
+
+Send email
+```shell
+curl -X POST \
+  http://127.0.0.1:8080/email/Send \
+  -H 'cache-control: no-cache' \
+  -d '{
+	"to": "2637309949@qq.com",
+	"subject": "中奖通知",
+	"text_body": "123$"
+}'
+```
+
+```json
+{
+    "request_id": "94b27929-a85e-4d6e-867b-c10c5a0eb306",
+    "code": 200
 }
 ```
