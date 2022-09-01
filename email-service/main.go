@@ -5,7 +5,6 @@ import (
 	"comm/define"
 	"comm/logger"
 	"comm/service"
-	"fmt"
 
 	"email-service/handler"
 	"proto/email"
@@ -17,8 +16,8 @@ func main() {
 	// Create server
 	srv := service.New(service.Name("email"))
 
-	sgc := handler.SendGridConf{}
-	val, err := config.Get("sendgridapi")
+	sgc := handler.Smtp{}
+	val, err := config.Get("smtp")
 	if err != nil {
 		logger.Warn(define.TODO, err)
 	}
@@ -32,15 +31,14 @@ func main() {
 		logger.Warn(define.TODO, err)
 	}
 
-	fmt.Println("--------", val.String("123"))
 	if err := val.Scan(&scf); err != nil {
 		logger.Fatal(define.TODO, err)
 	}
 
 	// Create handler
 	hdl := handler.Handler{
-		Config: sgc,
-		Spamc:  spamc.New(scf.SpamdAddress, nil),
+		Smtp:  &sgc,
+		Spamc: spamc.New(scf.SpamdAddress, nil),
 	}
 	// Registe service
 	email.RegisterEmailHandler(srv.Server(), &hdl)

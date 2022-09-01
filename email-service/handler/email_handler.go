@@ -7,15 +7,14 @@ import (
 	"comm/logger"
 	"comm/mark"
 	"context"
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"net/http"
+	"net/smtp"
 	"proto/email"
 	"regexp"
 	"time"
 
 	"github.com/Teamwork/spamc"
+	el "github.com/jordan-wright/email"
 	"gopkg.in/gomail.v2"
 )
 
@@ -38,9 +37,6 @@ func (h *Handler) Send(ctx context.Context, request *email.SendRequest, response
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Send", acc.Name)
-	}
-	if len(request.From) == 0 {
-		return errors.BadRequest("email", "Missing from name")
 	}
 	if !validEmail(request.To) {
 		return errors.BadRequest("email", "Invalid to address")
@@ -134,73 +130,21 @@ func (h *Handler) Classify(ctx context.Context, request *email.ClassifyRequest, 
 }
 
 func (h *Handler) sendEmail(ctx context.Context, req *email.SendRequest) error {
-	content := []interface{}{}
-	replyTo := h.Config.EmailFrom
-	if len(req.ReplyTo) > 0 {
-		replyTo = req.ReplyTo
+	fromName := h.Smtp.UserName
+	if len(req.From) > 0 {
+		fromName = req.From
 	}
-
-	if len(req.TextBody) > 0 {
-		content = append(content, map[string]string{
-			"type":  "text/plain",
-			"value": req.TextBody,
-		})
+	ele := el.Email{
+		Subject: req.Subject,
+		From:    fromName,
+		To:      []string{req.To},
+		Text:    []byte(req.TextBody),
+		HTML:    []byte(req.HtmlBody),
+		ReplyTo: []string{req.ReplyTo},
 	}
-
-	if len(req.HtmlBody) > 0 {
-		content = append(content, map[string]string{
-			"type":  "text/html",
-			"value": req.HtmlBody,
-		})
-	}
-
-	reqMap := map[string]interface{}{
-		"from": map[string]string{
-			"email": h.Config.EmailFrom,
-			"name":  req.From,
-		},
-		"reply_to": map[string]string{
-			"email": replyTo,
-		},
-		"subject": req.Subject,
-		"content": content,
-		"personalizations": []interface{}{
-			map[string]interface{}{
-				"to": []map[string]string{
-					{
-						"email": req.To,
-					},
-				},
-			},
-		},
-	}
-	if len(h.Config.PoolName) > 0 {
-		reqMap["ip_pool_name"] = h.Config.PoolName
-	}
-
-	reqBody, _ := json.Marshal(reqMap)
-
-	httpReq, err := http.NewRequest("POST", "https://api.sendgrid.com/v3/mail/send", bytes.NewBuffer(reqBody))
+	err := ele.Send(h.Smtp.Addr, smtp.PlainAuth(h.Smtp.Identity, h.Smtp.UserName, h.Smtp.Password, h.Smtp.Host))
 	if err != nil {
 		return err
 	}
-
-	httpReq.Header.Set("Authorization", "Bearer "+h.Config.Key)
-	httpReq.Header.Set("Content-Type", "application/json")
-
-	rsp, err := new(http.Client).Do(httpReq)
-	if err != nil {
-		return fmt.Errorf("could not send email, error: %v", err)
-	}
-	defer rsp.Body.Close()
-
-	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
-		bytes, err := ioutil.ReadAll(rsp.Body)
-		if err != nil {
-			return err
-		}
-		return fmt.Errorf("could not send email, error: %v", string(bytes))
-	}
-
 	return nil
 }

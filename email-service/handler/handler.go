@@ -4,10 +4,12 @@ import (
 	"github.com/Teamwork/spamc"
 )
 
-type SendGridConf struct {
-	Key       string `json:"key"`
-	EmailFrom string `json:"email_from"`
-	PoolName  string `json:"ip_pool_name"`
+type Smtp struct {
+	Addr     string `json:"addr"`
+	UserName string `json:"username"`
+	Identity string `json:"identity"`
+	Password string `json:"password"`
+	Host     string `json:"host"`
 }
 
 type SpamcConf struct {
@@ -20,6 +22,6 @@ type Sent struct {
 }
 
 type Handler struct {
-	Config SendGridConf
-	Spamc  *spamc.Client
+	Smtp  *Smtp
+	Spamc *spamc.Client
 }

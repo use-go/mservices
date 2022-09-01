@@ -1,8 +1,13 @@
 ## Usage
 
-### Setting spamd
+### Setting config
 ```shell
 micro config set email.spam.spamd_address 127.0.0.1:783
+micro config set email.smtp.addr smtp.qq.com:25
+micro config set email.smtp.username 2637309949@qq.com
+micro config set email.smtp.identity 
+micro config set email.smtp.password jhprqpetmlfteabe
+micro config set email.smtp.host smtp.qq.com
 ```
 
 ### Install spamassassin
