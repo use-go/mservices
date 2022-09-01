@@ -20,3 +20,5 @@ replace (
 // This can be removed once etcd becomes go gettable, version 3.4 and 3.5 is not,
 // see https://github.com/etcd-io/etcd/issues/11154 and https://github.com/etcd-io/etcd/issues/11931.
 replace google.golang.org/grpc => google.golang.org/grpc v1.27.1
+
+replace github.com/2637309949/micro/v3 => ../../micro

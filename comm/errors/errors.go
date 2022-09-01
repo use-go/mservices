@@ -7,8 +7,9 @@ import (
 )
 
 // New generates a custom error.
-func New(detail string, code int32) error {
+func New(id, detail string, code int32) error {
 	return &errors.Error{
+		Id:     id,
 		Code:   code,
 		Detail: detail,
 		Status: http.StatusText(int(code)),

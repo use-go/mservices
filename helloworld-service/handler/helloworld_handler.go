@@ -6,6 +6,7 @@ import (
 	"comm/errors"
 	"comm/logger"
 	"comm/mark"
+	"comm/service"
 	"comm/util"
 	"context"
 	"helloworld-service/model"
@@ -26,13 +27,13 @@ func (h *Handler) DeleteInfo(ctx context.Context, req *helloworld.DeleteInfoRequ
 
 	err = util.IsZero(req, "id")
 	if err != nil {
-		return errors.BadRequest(err.Error())
+		return errors.BadRequest(service.GetName(), service.GetName(), err.Error())
 	}
 
 	session, err := db.InitDb(ctx)
 	timemark.Mark("InitDb")
 	if err != nil {
-		return errors.InternalServerError("init db error %v", err)
+		return errors.InternalServerError(service.GetName(), "init db error %v", err)
 	}
 
 	where := model.Info{
@@ -61,7 +62,7 @@ func (h *Handler) UpdateInfo(ctx context.Context, req *helloworld.UpdateInfoRequ
 
 	err = util.IsZero(req, "id")
 	if err != nil {
-		return errors.BadRequest(err.Error())
+		return errors.BadRequest(service.GetName(), err.Error())
 	}
 
 	session, err := db.InitDb(ctx)
@@ -74,19 +75,19 @@ func (h *Handler) UpdateInfo(ctx context.Context, req *helloworld.UpdateInfoRequ
 	err = info.Unmarshal(req)
 	if err != nil {
 		logger.Errorf(ctx, "Unmarshal failed %v", err)
-		return errors.InternalServerError("Unmarshal failed %v", err)
+		return errors.InternalServerError(service.GetName(), "Unmarshal failed %v", err)
 	}
 	err = h.UpdateInfoDB(ctx, session, &info)
 	timemark.Mark("UpdateInfoDB")
 	if err != nil {
 		logger.Errorf(ctx, "UpdateInfoDB failed %v", err)
-		return errors.InternalServerError("UpdateInfoDB failed %v", err)
+		return errors.InternalServerError(service.GetName(), "UpdateInfoDB failed %v", err)
 	}
 
 	err = info.Marshal(rsp)
 	if err != nil {
 		logger.Errorf(ctx, "Marshal failed %v", err)
-		return errors.InternalServerError("Marshal failed %v", err)
+		return errors.InternalServerError(service.GetName(), "Marshal failed %v", err)
 	}
 	return nil
 }
@@ -105,14 +106,14 @@ func (h *Handler) InsertInfo(ctx context.Context, req *helloworld.InsertInfoRequ
 	session, err := db.InitDb(ctx)
 	timemark.Mark("InitDb")
 	if err != nil {
-		return errors.InternalServerError("InitDb failed %v", err)
+		return errors.InternalServerError(service.GetName(), "InitDb failed %v", err)
 	}
 
 	info := model.Info{}
 	err = info.Unmarshal(req)
 	if err != nil {
 		logger.Errorf(ctx, "Unmarshal failed %v", err)
-		return errors.InternalServerError("Unmarshal failed %v", err.Error())
+		return errors.InternalServerError(service.GetName(), "Unmarshal failed %v", err.Error())
 	}
 
 	info.CreatedAt = time.Now()
@@ -139,13 +140,13 @@ func (h *Handler) QueryInfoDetail(ctx context.Context, req *helloworld.QueryInfo
 
 	err = util.IsZero(req, "id")
 	if err != nil {
-		return errors.BadRequest(err.Error())
+		return errors.BadRequest(service.GetName(), err.Error())
 	}
 
 	session, err := db.InitDb(ctx)
 	timemark.Mark("InitDb")
 	if err != nil {
-		return errors.InternalServerError("InitDb failed %v", err)
+		return errors.InternalServerError(service.GetName(), "InitDb failed %v", err)
 	}
 
 	where := model.Info{
@@ -155,12 +156,12 @@ func (h *Handler) QueryInfoDetail(ctx context.Context, req *helloworld.QueryInfo
 	err = h.QueryInfoDetailDB(ctx, session, &where, &info)
 	timemark.Mark("QueryInfoDetailDB")
 	if err != nil {
-		return errors.InternalServerError("QueryInfoDetailDB failed %v", err)
+		return errors.InternalServerError(service.GetName(), "QueryInfoDetailDB failed %v", err)
 	}
 	err = info.Marshal(rsp)
 	if err != nil {
 		logger.Errorf(ctx, "Marshal failed %v", err)
-		return errors.InternalServerError("Marshal failed %v", err)
+		return errors.InternalServerError(service.GetName(), "Marshal failed %v", err)
 	}
 	return nil
 }
@@ -179,7 +180,7 @@ func (h *Handler) QueryInfo(ctx context.Context, req *helloworld.QueryInfoReques
 	timemark.Mark("InitDb")
 	session, err := db.InitDb(ctx)
 	if err != nil {
-		return errors.InternalServerError("InitDb failed %v", err)
+		return errors.InternalServerError(service.GetName(), "InitDb failed %v", err)
 	}
 	session = db.SetLimit(ctx, session, req)
 	session = db.SetOrder(ctx, session, req)
@@ -192,12 +193,12 @@ func (h *Handler) QueryInfo(ctx context.Context, req *helloworld.QueryInfoReques
 	err = h.QueryInfoDB(ctx, session, &where, &lst, &totalCount)
 	timemark.Mark("QueryInfoDB")
 	if err != nil {
-		return errors.InternalServerError("QueryInfoDB failed %v", err)
+		return errors.InternalServerError(service.GetName(), "QueryInfoDB failed %v", err)
 	}
 
 	err = model.InfoUnmarshalLst(&lst, &rsp.Data)
 	if err != nil {
-		return errors.InternalServerError("InfoUnmarshalLst failed %v", err)
+		return errors.InternalServerError(service.GetName(), "InfoUnmarshalLst failed %v", err)
 	}
 
 	rsp.TotalCount = totalCount

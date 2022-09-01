@@ -8,6 +8,7 @@ import (
 	"comm/config"
 	"comm/errors"
 	"comm/logger"
+	"comm/service"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -73,7 +74,7 @@ func InitDb(ctx context.Context, ix ...int) (*gorm.DB, error) {
 	}
 
 	if len(dbs) < idx+1 {
-		return nil, errors.InternalServerError("initDb fail")
+		return nil, errors.InternalServerError(service.GetName(), "initDb fail")
 	}
 	return dbs[idx], nil
 }

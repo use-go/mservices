@@ -5,6 +5,7 @@ import (
 	"comm/define"
 	"comm/logger"
 	"comm/service"
+	"fmt"
 
 	"email-service/handler"
 	"proto/email"
@@ -30,6 +31,8 @@ func main() {
 	if err != nil {
 		logger.Warn(define.TODO, err)
 	}
+
+	fmt.Println("--------", val.String("123"))
 	if err := val.Scan(&scf); err != nil {
 		logger.Fatal(define.TODO, err)
 	}

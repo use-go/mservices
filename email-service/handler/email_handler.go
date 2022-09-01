@@ -40,16 +40,16 @@ func (h *Handler) Send(ctx context.Context, request *email.SendRequest, response
 		logger.Infof(ctx, "%v Do Send", acc.Name)
 	}
 	if len(request.From) == 0 {
-		return errors.BadRequest("Missing from name")
+		return errors.BadRequest("email", "Missing from name")
 	}
 	if !validEmail(request.To) {
-		return errors.BadRequest("Invalid to address")
+		return errors.BadRequest("email", "Invalid to address")
 	}
 	if len(request.Subject) == 0 {
-		return errors.BadRequest("Missing subject")
+		return errors.BadRequest("email", "Missing subject")
 	}
 	if len(request.TextBody) == 0 && len(request.HtmlBody) == 0 {
-		return errors.BadRequest("Missing email body")
+		return errors.BadRequest("email", "Missing email body")
 	}
 
 	spamReq := &email.ClassifyRequest{
@@ -64,12 +64,12 @@ func (h *Handler) Send(ctx context.Context, request *email.SendRequest, response
 	timemark.Mark("Classify")
 	if err != nil || rsp.IsSpam {
 		logger.Errorf(ctx, "Error validating email %s %v", err, rsp)
-		return errors.InternalServerError("Error validating email")
+		return errors.InternalServerError("email", "Error validating email")
 	}
 
 	if err := h.sendEmail(ctx, request); err != nil {
 		logger.Errorf(ctx, "Error sending email: %v\n", err)
-		return errors.InternalServerError("Error sending email")
+		return errors.InternalServerError("email", "Error sending email")
 	}
 	timemark.Mark("sendEmail")
 
@@ -86,7 +86,7 @@ func (h *Handler) Classify(ctx context.Context, request *email.ClassifyRequest, 
 		logger.Infof(ctx, "%v Do Classify", acc.Name)
 	}
 	if len(request.EmailBody) == 0 && len(request.TextBody) == 0 && len(request.HtmlBody) == 0 {
-		return errors.BadRequest("spam.Classify", "Missing one of email_body, html_body, text_body")
+		return errors.BadRequest("email", "spam.Classify %v", "Missing one of email_body, html_body, text_body")
 	}
 	bf := bytes.Buffer{}
 
@@ -112,15 +112,15 @@ func (h *Handler) Classify(ctx context.Context, request *email.ClassifyRequest, 
 			m.SetBody("text/html", request.HtmlBody)
 		}
 		if _, err := m.WriteTo(&bf); err != nil {
-			logger.Errorf(ctx, "Error classifying email %s", err)
-			return errors.InternalServerError("spam.Classify", "Error classifying email")
+			logger.Errorf(ctx, "Error classifying email %v", err)
+			return errors.InternalServerError("email", "spam.Classify %v", err)
 		}
 
 	}
 	rc, err := h.Spamc.Report(ctx, &bf, spamc.Header{}.Set("Content-Length", fmt.Sprintf("%d", bf.Len())))
 	if err != nil {
 		logger.Errorf(ctx, "Error checking spamd %s", err)
-		return errors.InternalServerError("spam.Classify", "Error classifying email")
+		return errors.InternalServerError("email", "spam.Classify %v", err)
 	}
 	response.IsSpam = rc.IsSpam
 	response.Score = rc.Score

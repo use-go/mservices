@@ -10,8 +10,9 @@ const (
 	StatusRecordNotFound = 100
 )
 
-func RecordNotFound(format string, a ...interface{}) error {
+func RecordNotFound(id, format string, a ...interface{}) error {
 	return &errors.Error{
+		Id:     id,
 		Code:   StatusRecordNotFound,
 		Detail: fmt.Sprintf(format, a...),
 		Status: "RecordNotFound",
