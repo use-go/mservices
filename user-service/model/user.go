@@ -42,9 +42,9 @@ type User struct {
 	// alphanumeric username
 	Username string `gorm:"column:username" json:"username,omitempty"`
 	// alphanumeric salt
-	Salt string `gorm:"column:salt" json:"-,omitempty"`
+	Salt string `gorm:"column:salt" json:"-"`
 	// an salt password
-	Password string `gorm:"column:password" json:"-,omitempty"`
+	Password string `gorm:"column:password" json:"-"`
 	// an email address
 	Email string `gorm:"column:email" json:"email,omitempty"`
 	// unix timestamp

@@ -202,6 +202,6 @@ func (c *cache) Flush(ctx context.Context, opts ...client.CallOption) error {
 	return nil
 }
 
-func CacheStore(srv interface{}) Cache {
+func CacheService(srv interface{}) Cache {
 	return &cache{srv}
 }

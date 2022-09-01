@@ -52,6 +52,7 @@ type AccountService interface {
 	SendVerificationEmail(ctx context.Context, in *SendVerificationEmailRequest, opts ...client.CallOption) (*SendVerificationEmailResponse, error)
 	SendPasswordResetEmail(ctx context.Context, in *SendPasswordResetEmailRequest, opts ...client.CallOption) (*SendPasswordResetEmailResponse, error)
 	ResetPassword(ctx context.Context, in *ResetPasswordRequest, opts ...client.CallOption) (*ResetPasswordResponse, error)
+	ValidPassword(ctx context.Context, in *ValidPasswordRequest, opts ...client.CallOption) (*ValidPasswordResponse, error)
 }
 
 type accountService struct {
@@ -166,6 +167,16 @@ func (c *accountService) ResetPassword(ctx context.Context, in *ResetPasswordReq
 	return out, nil
 }
 
+func (c *accountService) ValidPassword(ctx context.Context, in *ValidPasswordRequest, opts ...client.CallOption) (*ValidPasswordResponse, error) {
+	req := c.c.NewRequest(c.name, "Account.ValidPassword", in)
+	out := new(ValidPasswordResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Account service
 
 type AccountHandler interface {
@@ -179,6 +190,7 @@ type AccountHandler interface {
 	SendVerificationEmail(context.Context, *SendVerificationEmailRequest, *SendVerificationEmailResponse) error
 	SendPasswordResetEmail(context.Context, *SendPasswordResetEmailRequest, *SendPasswordResetEmailResponse) error
 	ResetPassword(context.Context, *ResetPasswordRequest, *ResetPasswordResponse) error
+	ValidPassword(context.Context, *ValidPasswordRequest, *ValidPasswordResponse) error
 }
 
 func RegisterAccountHandler(s server.Server, hdlr AccountHandler, opts ...server.HandlerOption) error {
@@ -193,6 +205,7 @@ func RegisterAccountHandler(s server.Server, hdlr AccountHandler, opts ...server
 		SendVerificationEmail(ctx context.Context, in *SendVerificationEmailRequest, out *SendVerificationEmailResponse) error
 		SendPasswordResetEmail(ctx context.Context, in *SendPasswordResetEmailRequest, out *SendPasswordResetEmailResponse) error
 		ResetPassword(ctx context.Context, in *ResetPasswordRequest, out *ResetPasswordResponse) error
+		ValidPassword(ctx context.Context, in *ValidPasswordRequest, out *ValidPasswordResponse) error
 	}
 	type Account struct {
 		account
@@ -243,4 +256,8 @@ func (h *accountHandler) SendPasswordResetEmail(ctx context.Context, in *SendPas
 
 func (h *accountHandler) ResetPassword(ctx context.Context, in *ResetPasswordRequest, out *ResetPasswordResponse) error {
 	return h.AccountHandler.ResetPassword(ctx, in, out)
+}
+
+func (h *accountHandler) ValidPassword(ctx context.Context, in *ValidPasswordRequest, out *ValidPasswordResponse) error {
+	return h.AccountHandler.ValidPassword(ctx, in, out)
 }

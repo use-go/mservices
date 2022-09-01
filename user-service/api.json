@@ -5,7 +5,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/CreateReq"
+              "$ref": "#/components/schemas/CreateRequest"
             }
           }
         },
@@ -15,7 +15,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/DeleteReq"
+              "$ref": "#/components/schemas/DeleteRequest"
             }
           }
         },
@@ -25,7 +25,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ListReq"
+              "$ref": "#/components/schemas/ListRequest"
             }
           }
         },
@@ -35,7 +35,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ReadReq"
+              "$ref": "#/components/schemas/ReadRequest"
             }
           }
         },
@@ -45,7 +45,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ResetPasswordReq"
+              "$ref": "#/components/schemas/ResetPasswordRequest"
             }
           }
         },
@@ -55,7 +55,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/SendPasswordResetEmailReq"
+              "$ref": "#/components/schemas/SendPasswordResetEmailRequest"
             }
           }
         },
@@ -65,7 +65,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/SendVerificationEmailReq"
+              "$ref": "#/components/schemas/SendVerificationEmailRequest"
             }
           }
         },
@@ -75,7 +75,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/UpdatePasswordReq"
+              "$ref": "#/components/schemas/UpdatePasswordRequest"
             }
           }
         },
@@ -85,17 +85,27 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/UpdateReq"
+              "$ref": "#/components/schemas/UpdateRequest"
             }
           }
         },
         "description": "AccountUpdateRequest"
       },
+      "AccountValidPasswordRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ValidPasswordRequest"
+            }
+          }
+        },
+        "description": "AccountValidPasswordRequest"
+      },
       "AccountVerifyEmailRequest": {
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/VerifyEmailReq"
+              "$ref": "#/components/schemas/VerifyEmailRequest"
             }
           }
         },
@@ -107,7 +117,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/CreateRes"
+              "$ref": "#/components/schemas/CreateResponse"
             }
           }
         },
@@ -117,7 +127,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/DeleteRes"
+              "$ref": "#/components/schemas/DeleteResponse"
             }
           }
         },
@@ -127,7 +137,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ListRes"
+              "$ref": "#/components/schemas/ListResponse"
             }
           }
         },
@@ -137,7 +147,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ReadRes"
+              "$ref": "#/components/schemas/ReadResponse"
             }
           }
         },
@@ -147,7 +157,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ResetPasswordRes"
+              "$ref": "#/components/schemas/ResetPasswordResponse"
             }
           }
         },
@@ -157,7 +167,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/SendPasswordResetEmailRes"
+              "$ref": "#/components/schemas/SendPasswordResetEmailResponse"
             }
           }
         },
@@ -167,7 +177,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/SendVerificationEmailRes"
+              "$ref": "#/components/schemas/SendVerificationEmailResponse"
             }
           }
         },
@@ -177,7 +187,7 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/UpdatePasswordRes"
+              "$ref": "#/components/schemas/UpdatePasswordResponse"
             }
           }
         },
@@ -187,17 +197,27 @@
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/UpdateRes"
+              "$ref": "#/components/schemas/UpdateResponse"
             }
           }
         },
         "description": "AccountUpdateResponse"
       },
+      "AccountValidPasswordResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ValidPasswordResponse"
+            }
+          }
+        },
+        "description": "AccountValidPasswordResponse"
+      },
       "AccountVerifyEmailResponse": {
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/VerifyEmailRes"
+              "$ref": "#/components/schemas/VerifyEmailResponse"
             }
           }
         },
@@ -237,7 +257,7 @@
       }
     },
     "schemas": {
-      "CreateReq": {
+      "CreateRequest": {
         "properties": {
           "email": {
             "type": "string"
@@ -255,34 +275,40 @@
             "type": "string"
           }
         },
-        "title": "CreateReq",
+        "title": "CreateRequest",
         "type": "object"
       },
-      "CreateRes": {
+      "CreateResponse": {
         "properties": {
           "id": {
             "format": "int32",
             "type": "number"
           }
         },
-        "title": "CreateRes",
+        "title": "CreateResponse",
         "type": "object"
       },
-      "DeleteReq": {
+      "DeleteRequest": {
         "properties": {
           "id": {
             "format": "int32",
             "type": "number"
           }
         },
-        "title": "DeleteReq",
+        "title": "DeleteRequest",
         "type": "object"
       },
-      "DeleteRes": {
-        "title": "DeleteRes",
+      "DeleteResponse": {
+        "properties": {
+          "id": {
+            "format": "int32",
+            "type": "number"
+          }
+        },
+        "title": "DeleteResponse",
         "type": "object"
       },
-      "ListReq": {
+      "ListRequest": {
         "properties": {
           "limit": {
             "format": "int32",
@@ -291,12 +317,19 @@
           "offset": {
             "format": "int32",
             "type": "number"
+          },
+          "orderCol": {
+            "type": "string"
+          },
+          "orderType": {
+            "format": "int32",
+            "type": "number"
           }
         },
-        "title": "ListReq",
+        "title": "ListRequest",
         "type": "object"
       },
-      "ListRes": {
+      "ListResponse": {
         "properties": {
           "users": {
             "items": {
@@ -338,172 +371,10 @@
             "type": "array"
           }
         },
-        "title": "ListRes",
+        "title": "ListResponse",
         "type": "object"
       },
-      "ReadReq": {
-        "properties": {
-          "email": {
-            "type": "string"
-          },
-          "id": {
-            "format": "int32",
-            "type": "number"
-          },
-          "username": {
-            "type": "string"
-          }
-        },
-        "title": "ReadReq",
-        "type": "object"
-      },
-      "ReadRes": {
-        "properties": {
-          "email": {
-            "type": "string"
-          },
-          "id": {
-            "format": "int32",
-            "type": "number"
-          },
-          "password": {
-            "type": "string"
-          },
-          "profile": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object"
-          },
-          "username": {
-            "type": "string"
-          }
-        },
-        "title": "ReadRes",
-        "type": "object"
-      },
-      "ResetPasswordReq": {
-        "properties": {
-          "code": {
-            "type": "string"
-          },
-          "confirmPassword": {
-            "type": "string"
-          },
-          "email": {
-            "type": "string"
-          },
-          "newPassword": {
-            "type": "string"
-          }
-        },
-        "title": "ResetPasswordReq",
-        "type": "object"
-      },
-      "ResetPasswordRes": {
-        "title": "ResetPasswordRes",
-        "type": "object"
-      },
-      "SendPasswordResetEmailReq": {
-        "properties": {
-          "email": {
-            "type": "string"
-          },
-          "fromName": {
-            "type": "string"
-          },
-          "subject": {
-            "type": "string"
-          },
-          "textContent": {
-            "type": "string"
-          }
-        },
-        "title": "SendPasswordResetEmailReq",
-        "type": "object"
-      },
-      "SendPasswordResetEmailRes": {
-        "title": "SendPasswordResetEmailRes",
-        "type": "object"
-      },
-      "SendVerificationEmailReq": {
-        "properties": {
-          "email": {
-            "type": "string"
-          },
-          "failureRedirectUrl": {
-            "type": "string"
-          },
-          "fromName": {
-            "type": "string"
-          },
-          "redirectUrl": {
-            "type": "string"
-          },
-          "subject": {
-            "type": "string"
-          },
-          "textContent": {
-            "type": "string"
-          }
-        },
-        "title": "SendVerificationEmailReq",
-        "type": "object"
-      },
-      "SendVerificationEmailRes": {
-        "title": "SendVerificationEmailRes",
-        "type": "object"
-      },
-      "UpdatePasswordReq": {
-        "properties": {
-          "confirmPassword": {
-            "type": "string"
-          },
-          "id": {
-            "format": "int32",
-            "type": "number"
-          },
-          "newPassword": {
-            "type": "string"
-          },
-          "oldPassword": {
-            "type": "string"
-          }
-        },
-        "title": "UpdatePasswordReq",
-        "type": "object"
-      },
-      "UpdatePasswordRes": {
-        "title": "UpdatePasswordRes",
-        "type": "object"
-      },
-      "UpdateReq": {
-        "properties": {
-          "email": {
-            "type": "string"
-          },
-          "id": {
-            "format": "int32",
-            "type": "number"
-          },
-          "profile": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "type": "object"
-          },
-          "username": {
-            "type": "string"
-          }
-        },
-        "title": "UpdateReq",
-        "type": "object"
-      },
-      "UpdateRes": {
-        "title": "UpdateRes",
-        "type": "object"
-      },
-      "User": {
+      "ListResponseItem": {
         "properties": {
           "created": {
             "format": "int64",
@@ -537,10 +408,201 @@
             "type": "boolean"
           }
         },
-        "title": "User",
+        "title": "ListResponseItem",
         "type": "object"
       },
-      "VerifyEmailReq": {
+      "ReadRequest": {
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "id": {
+            "format": "int32",
+            "type": "number"
+          },
+          "username": {
+            "type": "string"
+          }
+        },
+        "title": "ReadRequest",
+        "type": "object"
+      },
+      "ReadResponse": {
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "id": {
+            "format": "int32",
+            "type": "number"
+          },
+          "password": {
+            "type": "string"
+          },
+          "profile": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "username": {
+            "type": "string"
+          }
+        },
+        "title": "ReadResponse",
+        "type": "object"
+      },
+      "ResetPasswordRequest": {
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "confirmPassword": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "newPassword": {
+            "type": "string"
+          }
+        },
+        "title": "ResetPasswordRequest",
+        "type": "object"
+      },
+      "ResetPasswordResponse": {
+        "title": "ResetPasswordResponse",
+        "type": "object"
+      },
+      "SendPasswordResetEmailRequest": {
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "fromName": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "textContent": {
+            "type": "string"
+          }
+        },
+        "title": "SendPasswordResetEmailRequest",
+        "type": "object"
+      },
+      "SendPasswordResetEmailResponse": {
+        "title": "SendPasswordResetEmailResponse",
+        "type": "object"
+      },
+      "SendVerificationEmailRequest": {
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "failureRedirectUrl": {
+            "type": "string"
+          },
+          "fromName": {
+            "type": "string"
+          },
+          "redirectUrl": {
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "textContent": {
+            "type": "string"
+          }
+        },
+        "title": "SendVerificationEmailRequest",
+        "type": "object"
+      },
+      "SendVerificationEmailResponse": {
+        "title": "SendVerificationEmailResponse",
+        "type": "object"
+      },
+      "UpdatePasswordRequest": {
+        "properties": {
+          "confirmPassword": {
+            "type": "string"
+          },
+          "id": {
+            "format": "int32",
+            "type": "number"
+          },
+          "newPassword": {
+            "type": "string"
+          },
+          "oldPassword": {
+            "type": "string"
+          }
+        },
+        "title": "UpdatePasswordRequest",
+        "type": "object"
+      },
+      "UpdatePasswordResponse": {
+        "properties": {
+          "id": {
+            "format": "int32",
+            "type": "number"
+          }
+        },
+        "title": "UpdatePasswordResponse",
+        "type": "object"
+      },
+      "UpdateRequest": {
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "id": {
+            "format": "int32",
+            "type": "number"
+          },
+          "profile": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object"
+          },
+          "username": {
+            "type": "string"
+          }
+        },
+        "title": "UpdateRequest",
+        "type": "object"
+      },
+      "UpdateResponse": {
+        "properties": {
+          "id": {
+            "format": "int32",
+            "type": "number"
+          }
+        },
+        "title": "UpdateResponse",
+        "type": "object"
+      },
+      "ValidPasswordRequest": {
+        "properties": {
+          "id": {
+            "format": "int32",
+            "type": "number"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "title": "ValidPasswordRequest",
+        "type": "object"
+      },
+      "ValidPasswordResponse": {
+        "title": "ValidPasswordResponse",
+        "type": "object"
+      },
+      "VerifyEmailRequest": {
         "properties": {
           "email": {
             "type": "string"
@@ -549,11 +611,11 @@
             "type": "string"
           }
         },
-        "title": "VerifyEmailReq",
+        "title": "VerifyEmailRequest",
         "type": "object"
       },
-      "VerifyEmailRes": {
-        "title": "VerifyEmailRes",
+      "VerifyEmailResponse": {
+        "title": "VerifyEmailResponse",
         "type": "object"
       }
     },
@@ -573,7 +635,7 @@
     "x-logo": {
       "altText": "Micro logo",
       "backgroundColor": "#FFFFFF",
-      "url": "https://micro.mu/images/brand.png"
+      "url": "https://micro.dev/images/brand.png"
     }
   },
   "openapi": "3.0.0",
@@ -607,7 +669,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Account.Create(CreateReq)"
+        "summary": "Account.Create(CreateRequest)"
       }
     },
     "/user/Account/Delete": {
@@ -639,7 +701,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Account.Delete(DeleteReq)"
+        "summary": "Account.Delete(DeleteRequest)"
       }
     },
     "/user/Account/List": {
@@ -671,7 +733,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Account.List(ListReq)"
+        "summary": "Account.List(ListRequest)"
       }
     },
     "/user/Account/Read": {
@@ -703,7 +765,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Account.Read(ReadReq)"
+        "summary": "Account.Read(ReadRequest)"
       }
     },
     "/user/Account/ResetPassword": {
@@ -735,7 +797,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Account.ResetPassword(ResetPasswordReq)"
+        "summary": "Account.ResetPassword(ResetPasswordRequest)"
       }
     },
     "/user/Account/SendPasswordResetEmail": {
@@ -767,7 +829,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Account.SendPasswordResetEmail(SendPasswordResetEmailReq)"
+        "summary": "Account.SendPasswordResetEmail(SendPasswordResetEmailRequest)"
       }
     },
     "/user/Account/SendVerificationEmail": {
@@ -799,7 +861,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Account.SendVerificationEmail(SendVerificationEmailReq)"
+        "summary": "Account.SendVerificationEmail(SendVerificationEmailRequest)"
       }
     },
     "/user/Account/Update": {
@@ -831,7 +893,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Account.Update(UpdateReq)"
+        "summary": "Account.Update(UpdateRequest)"
       }
     },
     "/user/Account/UpdatePassword": {
@@ -863,7 +925,39 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Account.UpdatePassword(UpdatePasswordReq)"
+        "summary": "Account.UpdatePassword(UpdatePasswordRequest)"
+      }
+    },
+    "/user/Account/ValidPassword": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/AccountValidPasswordRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/AccountValidPasswordResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Account.ValidPassword(ValidPasswordRequest)"
       }
     },
     "/user/Account/VerifyEmail": {
@@ -895,7 +989,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Account.VerifyEmail(VerifyEmailReq)"
+        "summary": "Account.VerifyEmail(VerifyEmailRequest)"
       }
     }
   },

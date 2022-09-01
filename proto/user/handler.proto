@@ -17,4 +17,5 @@ service Account {
 	rpc SendVerificationEmail(SendVerificationEmailRequest) returns (SendVerificationEmailResponse) {}
 	rpc SendPasswordResetEmail(SendPasswordResetEmailRequest) returns (SendPasswordResetEmailResponse) {}
 	rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse) {}
+	rpc ValidPassword(ValidPasswordRequest) returns (ValidPasswordResponse) {}
 }

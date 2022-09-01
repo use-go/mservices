@@ -9,6 +9,7 @@ import (
 	"github.com/go-session/session/v3"
 )
 
+// UserLogin defined todo
 func (h *Handler) UserLogin(rw http.ResponseWriter, r *http.Request) {
 	acc, ok := auth.FromContext(r.Context())
 	if ok {
@@ -30,13 +31,16 @@ func (h *Handler) UserLogin(rw http.ResponseWriter, r *http.Request) {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	userID := r.Form.Get("username")
-	store.Set("LoggedInUserID", userID)
+	// valid user idx
+	email, username, password := r.Form.Get("email"), r.Form.Get("username"), r.Form.Get("password")
+	_, _ = email, password
+	store.Set("LoggedInUserID", username)
 	store.Save()
 	rw.Header().Set("Location", "/cas/oauth2/affirm")
 	rw.WriteHeader(http.StatusFound)
 }
 
+// UserLogout defined todo
 func (h *Handler) UserLogout(rw http.ResponseWriter, r *http.Request) {
 	acc, ok := auth.FromContext(r.Context())
 	if ok {

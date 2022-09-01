@@ -15,7 +15,7 @@ import (
 func main() {
 	srv := service.New(service.Name("helloworld"))
 	hdl := handler.Handler{
-		CacheStore: store.CacheStore(cache.NewCacheService("cache", srv.Client())),
+		CacheService: store.CacheService(cache.NewCacheService("cache", srv.Client())),
 	}
 	helloworld.RegisterHelloworldHandler(srv.Server(), &hdl)
 	if err := srv.Run(); err != nil {

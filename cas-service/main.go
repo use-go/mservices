@@ -1,8 +1,8 @@
 package main
 
 import (
-	"cas-service/api"
 	"cas-service/handler"
+	"cas-service/util/cookie"
 	"comm/auth"
 	"comm/define"
 	"comm/logger"
@@ -71,9 +71,9 @@ func main() {
 	session.InitManager(
 		session.SetCookieName("session_id"),
 		session.SetStore(
-			api.NewCookieStore(
-				api.SetCookieName("store"),
-				api.SetHashKey([]byte(hashKey)),
+			cookie.NewCookieStore(
+				cookie.SetCookieName("store"),
+				cookie.SetHashKey([]byte(hashKey)),
 			),
 		),
 	)

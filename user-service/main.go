@@ -4,7 +4,10 @@ import (
 	"comm/define"
 	"comm/logger"
 	"comm/service"
+	"comm/store"
 
+	"proto/cache"
+	"proto/email"
 	user "proto/user"
 	"user-service/handler"
 )
@@ -14,7 +17,10 @@ func main() {
 	srv := service.New(service.Name("user"))
 
 	// Create handler
-	hdl := handler.Handler{}
+	hdl := handler.Handler{
+		CacheService: store.CacheService(cache.NewCacheService("cache", srv.Client())),
+		EmailService: email.NewEmailService("email", srv.Client()),
+	}
 
 	// Register handler
 	user.RegisterAccountHandler(srv.Server(), &hdl)

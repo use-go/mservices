@@ -60,8 +60,7 @@ message UpdatePasswordResponse {
 }
 
 message VerifyEmailRequest {
-	string email = 1;
-	string token = 2;
+	string token = 1;
 }
 
 message VerifyEmailResponse {
@@ -83,6 +82,7 @@ message SendPasswordResetEmailRequest {
 	string subject = 2;
 	string textContent = 3;
 	string fromName = 4;
+	int64 expiration = 5;
 }
 
 message SendPasswordResetEmailResponse {
@@ -100,6 +100,10 @@ message ResetPasswordResponse {}
 message ListRequest {
 	int32 offset = 1;
 	int32 limit = 2;
+	int32 order_type = 3;
+	string order_col = 4;
+	string username = 5;
+	string email = 6;
 }
 
 message ListResponseItem {
@@ -116,3 +120,10 @@ message ListResponseItem {
 message ListResponse {
 	repeated ListResponseItem users = 1;
 }
+
+message ValidPasswordRequest {
+	uint32 id = 1;
+	string password = 2;
+}
+
+message ValidPasswordResponse {}
