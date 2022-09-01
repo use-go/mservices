@@ -2,6 +2,7 @@ package handler
 
 import (
 	"comm/errors"
+	"comm/service"
 	"comm/store"
 	"context"
 	"crypto/rand"
@@ -36,7 +37,7 @@ type passwordResetCode struct {
 
 func (h *Handler) ReadToken(ctx context.Context, token string) (string, error) {
 	if len(token) == 0 {
-		return "", errors.BadRequest("missing token")
+		return "", errors.BadRequest(service.GetName(), "missing token")
 	}
 	key := generateVerificationTokenStoreKey(token)
 	vt := verificationToken{}
@@ -59,7 +60,7 @@ func (h *Handler) ReadPasswordResetCode(ctx context.Context, userId uint32, code
 
 	// check the expiry
 	if resetCode.Expires.Before(time.Now()) {
-		return nil, errors.InternalServerError("password reset code expired")
+		return nil, errors.InternalServerError(service.GetName(), "password reset code expired")
 	}
 	return resetCode, nil
 }
@@ -98,7 +99,7 @@ func generateVerificationTokenStoreKey(token string) string {
 }
 
 func generatePasswordResetCodeStoreKey(ctx context.Context, userId uint32, code string) string {
-	return fmt.Sprintf("%spassword-reset-codes/%s-%s", getStoreKeyPrefix(ctx), userId, code)
+	return fmt.Sprintf("%vpassword-reset-codes/%v-%v", getStoreKeyPrefix(ctx), userId, code)
 }
 
 func getStoreKeyPrefix(ctx context.Context) string {

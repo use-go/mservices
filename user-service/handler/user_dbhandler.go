@@ -3,6 +3,7 @@ package handler
 import (
 	"comm/errors"
 	"comm/logger"
+	"comm/service"
 	"context"
 	"user-service/model"
 
@@ -17,7 +18,7 @@ func (h *Handler) QueryUserDB(ctx context.Context, session *gorm.DB, where *mode
 	}
 	if err := session.Error; err != nil {
 		logger.Errorf(ctx, "QueryUserDB failed. [%v]", err)
-		return errors.InternalServerError("QueryUserDB fail. [%v]", err)
+		return errors.InternalServerError(service.GetName(), "QueryUserDB fail. [%v]", err)
 	}
 	return nil
 }
@@ -32,7 +33,7 @@ func (h *Handler) QueryUserDetailDB(ctx context.Context, session *gorm.DB, where
 	}
 	if len(lst) == 0 {
 		logger.Warn(ctx, "QueryUserDetailDB empty.")
-		return errors.RecordNotFound("QueryUserDetailDB empty.")
+		return errors.RecordNotFound(service.GetName(), "QueryUserDetailDB empty.")
 	}
 	*data = lst[0]
 	return nil
@@ -43,7 +44,7 @@ func (h *Handler) InsertUserDB(ctx context.Context, session *gorm.DB, data *mode
 	err := session.Create(data).Error
 	if err != nil {
 		logger.Errorf(ctx, "InsertUserDB failed. [%s]", err.Error())
-		return errors.InternalServerError("InsertUserDB fail. [%v]", err)
+		return errors.InternalServerError(service.GetName(), "InsertUserDB fail. [%v]", err)
 	}
 	return nil
 }
@@ -53,7 +54,7 @@ func (h *Handler) UpdateUserDB(ctx context.Context, session *gorm.DB, data *mode
 	err := session.Table(data.TableName()).Model(&data).Updates(&data).Error
 	if err != nil {
 		logger.Errorf(ctx, "UpdateUserDB failed. [%s]", err.Error())
-		return errors.InternalServerError("UpdateUserDB fail. [%v]", err)
+		return errors.InternalServerError(service.GetName(), "UpdateUserDB fail. [%v]", err)
 	}
 	return nil
 }
@@ -63,7 +64,7 @@ func (h *Handler) SaveUserDB(ctx context.Context, session *gorm.DB, data *model.
 	err := session.Save(data).Error
 	if err != nil {
 		logger.Errorf(ctx, "SaveUserDB failed. [%s]", err.Error())
-		return errors.InternalServerError("SaveUserDB fail. [%v]", err)
+		return errors.InternalServerError(service.GetName(), "SaveUserDB fail. [%v]", err)
 	}
 	return nil
 }
@@ -73,7 +74,7 @@ func (h *Handler) DeleteUserDB(ctx context.Context, session *gorm.DB, data *mode
 	err := session.Where(data).Delete(&data).Error
 	if err != nil {
 		logger.Errorf(ctx, "DeleteUserDB failed. [%s]", err.Error())
-		return errors.InternalServerError("DeleteUserDB fail. [%v]", err)
+		return errors.InternalServerError(service.GetName(), "DeleteUserDB fail. [%v]", err)
 	}
 	return nil
 }

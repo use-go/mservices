@@ -2,6 +2,7 @@ package model
 
 import (
 	"comm/errors"
+	"comm/service"
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
@@ -63,7 +64,7 @@ func (h *User) GenerateFromPassword(password string) (string, error) {
 	salt := random(16)
 	hb, err := bcrypt.GenerateFromPassword([]byte(x+salt+password), 10)
 	if err != nil {
-		return "", errors.InternalServerError(err.Error())
+		return "", errors.InternalServerError(service.GetName(), err.Error())
 	}
 	hashedPassword := base64.StdEncoding.EncodeToString(hb)
 	h.Password = hashedPassword
@@ -73,7 +74,7 @@ func (h *User) GenerateFromPassword(password string) (string, error) {
 
 func (h *User) CompareHashAndPassword(password string) error {
 	if err := bcrypt.CompareHashAndPassword([]byte(h.Password), []byte(x+h.Salt+password)); err != nil {
-		return errors.Unauthorized(err.Error())
+		return errors.Unauthorized(service.GetName(), err.Error())
 	}
 	return nil
 }
