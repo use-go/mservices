@@ -15,20 +15,6 @@ type Service struct {
 	*service.Service
 }
 
-// func (s *Service) generateAccount() (*auth.Account, error) {
-// 	accName := GetName() + "-latest"
-// 	opts := []auth.GenerateOption{
-// 		auth.WithIssuer("micro"),
-// 		auth.WithScopes("service"),
-// 		auth.WithType("service"),
-// 	}
-// 	acc, err := auth.Generate(accName, opts...)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return acc, nil
-// }
-
 func (s *Service) Run() error {
 	err := s.streamOutput()
 	if err != nil {
