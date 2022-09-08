@@ -44,8 +44,8 @@ type cache struct {
 }
 
 func (c *cache) Get(ctx context.Context, key string, value interface{}, opts ...client.CallOption) error {
-	funk := reflect.ValueOf(c.srv).MethodByName("Get")
-	getReq := reflect.New(funk.Type().In(1).Elem())
+	fk := reflect.ValueOf(c.srv).MethodByName("Get")
+	getReq := reflect.New(fk.Type().In(1).Elem())
 	getReq.Elem().FieldByName("Key").SetString(key)
 
 	optsv := []reflect.Value{
@@ -55,7 +55,7 @@ func (c *cache) Get(ctx context.Context, key string, value interface{}, opts ...
 	for _, o := range opts {
 		optsv = append(optsv, reflect.ValueOf(o))
 	}
-	out := funk.Call(optsv)
+	out := fk.Call(optsv)
 	if e, ok := out[1].Interface().(error); ok && e != nil {
 		return e
 	}
@@ -65,8 +65,8 @@ func (c *cache) Get(ctx context.Context, key string, value interface{}, opts ...
 }
 
 func (c *cache) Set(ctx context.Context, key string, value interface{}, expire time.Duration, opts ...client.CallOption) error {
-	funk := reflect.ValueOf(c.srv).MethodByName("Set")
-	setReq := reflect.New(funk.Type().In(1).Elem())
+	fk := reflect.ValueOf(c.srv).MethodByName("Set")
+	setReq := reflect.New(fk.Type().In(1).Elem())
 	setReq.Elem().FieldByName("Key").SetString(key)
 	setReq.Elem().FieldByName("Value").SetBytes(encode.MustSerialize(value))
 	setReq.Elem().FieldByName("Expire").SetInt(int64(expire))
@@ -77,7 +77,7 @@ func (c *cache) Set(ctx context.Context, key string, value interface{}, expire t
 	for _, o := range opts {
 		optsv = append(optsv, reflect.ValueOf(o))
 	}
-	out := funk.Call(optsv)
+	out := fk.Call(optsv)
 	if e, ok := out[1].Interface().(error); ok && e != nil {
 		return e
 	}
@@ -85,8 +85,8 @@ func (c *cache) Set(ctx context.Context, key string, value interface{}, expire t
 }
 
 func (c *cache) Add(ctx context.Context, key string, value interface{}, expire time.Duration, opts ...client.CallOption) error {
-	funk := reflect.ValueOf(c.srv).MethodByName("Add")
-	addReq := reflect.New(funk.Type().In(1).Elem())
+	fk := reflect.ValueOf(c.srv).MethodByName("Add")
+	addReq := reflect.New(fk.Type().In(1).Elem())
 	addReq.Elem().FieldByName("Key").SetString(key)
 	addReq.Elem().FieldByName("Value").SetBytes(encode.MustSerialize(value))
 	addReq.Elem().FieldByName("Expire").SetInt(int64(expire))
@@ -98,7 +98,7 @@ func (c *cache) Add(ctx context.Context, key string, value interface{}, expire t
 	for _, o := range opts {
 		optsv = append(optsv, reflect.ValueOf(o))
 	}
-	out := funk.Call(optsv)
+	out := fk.Call(optsv)
 	if e, ok := out[1].Interface().(error); ok && e != nil {
 		return e
 	}
@@ -106,8 +106,8 @@ func (c *cache) Add(ctx context.Context, key string, value interface{}, expire t
 }
 
 func (c *cache) Replace(ctx context.Context, key string, data interface{}, expire time.Duration, opts ...client.CallOption) error {
-	funk := reflect.ValueOf(c.srv).MethodByName("Replace")
-	replaceReq := reflect.New(funk.Type().In(1).Elem())
+	fk := reflect.ValueOf(c.srv).MethodByName("Replace")
+	replaceReq := reflect.New(fk.Type().In(1).Elem())
 	replaceReq.Elem().FieldByName("Key").SetString(key)
 	replaceReq.Elem().FieldByName("Value").SetBytes(encode.MustSerialize(data))
 	replaceReq.Elem().FieldByName("Expire").SetInt(int64(expire))
@@ -119,7 +119,7 @@ func (c *cache) Replace(ctx context.Context, key string, data interface{}, expir
 	for _, o := range opts {
 		optsv = append(optsv, reflect.ValueOf(o))
 	}
-	out := funk.Call(optsv)
+	out := fk.Call(optsv)
 	if e, ok := out[1].Interface().(error); ok && e != nil {
 		return e
 	}
@@ -127,8 +127,8 @@ func (c *cache) Replace(ctx context.Context, key string, data interface{}, expir
 }
 
 func (c *cache) Delete(ctx context.Context, key string, opts ...client.CallOption) error {
-	funk := reflect.ValueOf(c.srv).MethodByName("Delete")
-	deleteReq := reflect.New(funk.Type().In(1).Elem())
+	fk := reflect.ValueOf(c.srv).MethodByName("Delete")
+	deleteReq := reflect.New(fk.Type().In(1).Elem())
 	deleteReq.Elem().FieldByName("Key").SetString(key)
 
 	optsv := []reflect.Value{
@@ -138,7 +138,7 @@ func (c *cache) Delete(ctx context.Context, key string, opts ...client.CallOptio
 	for _, o := range opts {
 		optsv = append(optsv, reflect.ValueOf(o))
 	}
-	out := funk.Call(optsv)
+	out := fk.Call(optsv)
 	if e, ok := out[1].Interface().(error); ok && e != nil {
 		return e
 	}
@@ -146,8 +146,8 @@ func (c *cache) Delete(ctx context.Context, key string, opts ...client.CallOptio
 }
 
 func (c *cache) Increment(ctx context.Context, key string, data uint64, opts ...client.CallOption) (uint64, error) {
-	funk := reflect.ValueOf(c.srv).MethodByName("Increment")
-	incrementReq := reflect.New(funk.Type().In(1).Elem())
+	fk := reflect.ValueOf(c.srv).MethodByName("Increment")
+	incrementReq := reflect.New(fk.Type().In(1).Elem())
 	incrementReq.Elem().FieldByName("Key").SetString(key)
 	incrementReq.Elem().FieldByName("Value").SetInt(int64(data))
 
@@ -158,7 +158,7 @@ func (c *cache) Increment(ctx context.Context, key string, data uint64, opts ...
 	for _, o := range opts {
 		optsv = append(optsv, reflect.ValueOf(o))
 	}
-	out := funk.Call(optsv)
+	out := fk.Call(optsv)
 	if e, ok := out[1].Interface().(error); ok && e != nil {
 		return 0, e
 	}
@@ -167,8 +167,8 @@ func (c *cache) Increment(ctx context.Context, key string, data uint64, opts ...
 }
 
 func (c *cache) Decrement(ctx context.Context, key string, data uint64, opts ...client.CallOption) (uint64, error) {
-	funk := reflect.ValueOf(c.srv).MethodByName("Decrement")
-	decrementReq := reflect.New(funk.Type().In(1).Elem())
+	fk := reflect.ValueOf(c.srv).MethodByName("Decrement")
+	decrementReq := reflect.New(fk.Type().In(1).Elem())
 	decrementReq.Elem().FieldByName("Key").SetString(key)
 	decrementReq.Elem().FieldByName("Value").SetInt(int64(data))
 
@@ -179,7 +179,7 @@ func (c *cache) Decrement(ctx context.Context, key string, data uint64, opts ...
 	for _, o := range opts {
 		optsv = append(optsv, reflect.ValueOf(o))
 	}
-	out := funk.Call(optsv)
+	out := fk.Call(optsv)
 	if e, ok := out[1].Interface().(error); ok && e != nil {
 		return 0, e
 	}
@@ -188,14 +188,14 @@ func (c *cache) Decrement(ctx context.Context, key string, data uint64, opts ...
 }
 
 func (c *cache) Flush(ctx context.Context, opts ...client.CallOption) error {
-	funk := reflect.ValueOf(c.srv).MethodByName("Flush")
+	fk := reflect.ValueOf(c.srv).MethodByName("Flush")
 	optsv := []reflect.Value{
 		reflect.ValueOf(ctx),
 	}
 	for _, o := range opts {
 		optsv = append(optsv, reflect.ValueOf(o))
 	}
-	out := funk.Call(optsv)
+	out := fk.Call(optsv)
 	if e, ok := out[1].Interface().(error); ok && e != nil {
 		return e
 	}

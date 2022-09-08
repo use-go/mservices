@@ -168,6 +168,7 @@ func (h *Handler) QueryInfoDetail(ctx context.Context, req *helloworld.QueryInfo
 
 // QueryInfo defined TODO
 func (h *Handler) QueryInfo(ctx context.Context, req *helloworld.QueryInfoRequest, rsp *helloworld.QueryInfoResponse) error {
+	h.CacheService.Get(ctx, "123123", "123")
 	var err error
 	var timemark mark.TimeMark
 	defer timemark.Init(ctx, "QueryInfo")()

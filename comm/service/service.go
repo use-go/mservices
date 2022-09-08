@@ -62,6 +62,7 @@ func newOptions(opts ...service.Option) []service.Option {
 	opts = append(opts, service.RegisterTTL(5*time.Second))
 	opts = append(opts, service.RegisterInterval(5*time.Second))
 	opts = append(opts, debugWrapper)
+	opts = append(opts, service.WrapClient(FromService(GetName())))
 	return opts
 }
 

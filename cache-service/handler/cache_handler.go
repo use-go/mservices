@@ -25,7 +25,7 @@ func (h *Handler) Get(ctx context.Context, req *cache.GetRequest, rsp *cache.Get
 	err = h.CacheStore.Get(req.Key, &rsp.Value)
 	timemark.Mark("Get")
 	if err != nil {
-		return errors.InternalServerError(service.GetName, "CacheStore.Get failed %v", err.Error())
+		return errors.InternalServerError(service.GetName(), "CacheStore.Get failed %v", err.Error())
 	}
 	return nil
 }
@@ -42,7 +42,7 @@ func (h *Handler) Set(ctx context.Context, req *cache.SetRequest, rsp *cache.Set
 	err = h.CacheStore.Set(req.Key, req.Value, time.Duration(req.Expire))
 	timemark.Mark("Set")
 	if err != nil {
-		return errors.InternalServerError(service.GetName, "CacheStore.Set failed %v", err.Error())
+		return errors.InternalServerError(service.GetName(), "CacheStore.Set failed %v", err.Error())
 	}
 	return nil
 }
@@ -59,7 +59,7 @@ func (h *Handler) Add(ctx context.Context, req *cache.AddRequest, rsp *cache.Add
 	err = h.CacheStore.Add(req.Key, req.Value, time.Duration(req.Expire))
 	timemark.Mark("Add")
 	if err != nil {
-		return errors.InternalServerError(service.GetName, "CacheStore.Add failed %v", err.Error())
+		return errors.InternalServerError(service.GetName(), "CacheStore.Add failed %v", err.Error())
 	}
 	return nil
 }
@@ -76,7 +76,7 @@ func (h *Handler) Replace(ctx context.Context, req *cache.ReplaceRequest, rsp *c
 	err = h.CacheStore.Replace(req.Key, req.Value, time.Duration(req.Expire))
 	timemark.Mark("Replace")
 	if err != nil {
-		return errors.InternalServerError(service.GetName, "CacheStore.Replace failed %v", err.Error())
+		return errors.InternalServerError(service.GetName(), "CacheStore.Replace failed %v", err.Error())
 	}
 	return nil
 }
@@ -93,7 +93,7 @@ func (h *Handler) Delete(ctx context.Context, req *cache.DeleteRequest, rsp *cac
 	err = h.CacheStore.Delete(req.Key)
 	timemark.Mark("Delete")
 	if err != nil {
-		return errors.InternalServerError(service.GetName, "CacheStore.Delete failed %v", err.Error())
+		return errors.InternalServerError(service.GetName(), "CacheStore.Delete failed %v", err.Error())
 	}
 	return nil
 }
@@ -110,7 +110,7 @@ func (h *Handler) Increment(ctx context.Context, req *cache.IncrementRequest, rs
 	inc, err := h.CacheStore.Increment(req.Key, uint64(req.Value))
 	timemark.Mark("Increment")
 	if err != nil {
-		return errors.InternalServerError(service.GetName, "CacheStore.Increment failed %v", err.Error())
+		return errors.InternalServerError(service.GetName(), "CacheStore.Increment failed %v", err.Error())
 	}
 	rsp.Value = int64(inc)
 	return nil
@@ -128,7 +128,7 @@ func (h *Handler) Decrement(ctx context.Context, req *cache.DecrementRequest, rs
 	desc, err := h.CacheStore.Decrement(req.Key, uint64(req.Value))
 	timemark.Mark("Decrement")
 	if err != nil {
-		return errors.InternalServerError(service.GetName, "CacheStore.Decrement failed %v", err.Error())
+		return errors.InternalServerError(service.GetName(), "CacheStore.Decrement failed %v", err.Error())
 	}
 	rsp.Value = int64(desc)
 	return nil
@@ -146,7 +146,7 @@ func (h *Handler) Flush(ctx context.Context, req *cache.FlushRequest, rsp *cache
 	err = h.CacheStore.Flush()
 	timemark.Mark("Flush")
 	if err != nil {
-		return errors.InternalServerError(service.GetName, "CacheStore.Flush failed %v", err.Error())
+		return errors.InternalServerError(service.GetName(), "CacheStore.Flush failed %v", err.Error())
 	}
 	return nil
 }
