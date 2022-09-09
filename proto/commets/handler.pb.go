@@ -7,6 +7,10 @@
 package commets
 
 import (
+	context "context"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -108,4 +112,228 @@ func file_proto_commets_handler_proto_init() {
 	file_proto_commets_handler_proto_rawDesc = nil
 	file_proto_commets_handler_proto_goTypes = nil
 	file_proto_commets_handler_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// CommetsClient is the client API for Commets service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type CommetsClient interface {
+	InsertInfo(ctx context.Context, in *InsertInfoRequest, opts ...grpc.CallOption) (*InsertInfoResponse, error)
+	DeleteInfo(ctx context.Context, in *DeleteInfoRequest, opts ...grpc.CallOption) (*DeleteInfoResponse, error)
+	UpdateInfo(ctx context.Context, in *UpdateInfoRequest, opts ...grpc.CallOption) (*UpdateInfoResponse, error)
+	QueryInfo(ctx context.Context, in *QueryInfoRequest, opts ...grpc.CallOption) (*QueryInfoResponse, error)
+	QueryInfoDetail(ctx context.Context, in *QueryInfoDetailRequest, opts ...grpc.CallOption) (*QueryInfoDetailResponse, error)
+}
+
+type commetsClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewCommetsClient(cc grpc.ClientConnInterface) CommetsClient {
+	return &commetsClient{cc}
+}
+
+func (c *commetsClient) InsertInfo(ctx context.Context, in *InsertInfoRequest, opts ...grpc.CallOption) (*InsertInfoResponse, error) {
+	out := new(InsertInfoResponse)
+	err := c.cc.Invoke(ctx, "/commets.Commets/InsertInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *commetsClient) DeleteInfo(ctx context.Context, in *DeleteInfoRequest, opts ...grpc.CallOption) (*DeleteInfoResponse, error) {
+	out := new(DeleteInfoResponse)
+	err := c.cc.Invoke(ctx, "/commets.Commets/DeleteInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *commetsClient) UpdateInfo(ctx context.Context, in *UpdateInfoRequest, opts ...grpc.CallOption) (*UpdateInfoResponse, error) {
+	out := new(UpdateInfoResponse)
+	err := c.cc.Invoke(ctx, "/commets.Commets/UpdateInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *commetsClient) QueryInfo(ctx context.Context, in *QueryInfoRequest, opts ...grpc.CallOption) (*QueryInfoResponse, error) {
+	out := new(QueryInfoResponse)
+	err := c.cc.Invoke(ctx, "/commets.Commets/QueryInfo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *commetsClient) QueryInfoDetail(ctx context.Context, in *QueryInfoDetailRequest, opts ...grpc.CallOption) (*QueryInfoDetailResponse, error) {
+	out := new(QueryInfoDetailResponse)
+	err := c.cc.Invoke(ctx, "/commets.Commets/QueryInfoDetail", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// CommetsServer is the server API for Commets service.
+type CommetsServer interface {
+	InsertInfo(context.Context, *InsertInfoRequest) (*InsertInfoResponse, error)
+	DeleteInfo(context.Context, *DeleteInfoRequest) (*DeleteInfoResponse, error)
+	UpdateInfo(context.Context, *UpdateInfoRequest) (*UpdateInfoResponse, error)
+	QueryInfo(context.Context, *QueryInfoRequest) (*QueryInfoResponse, error)
+	QueryInfoDetail(context.Context, *QueryInfoDetailRequest) (*QueryInfoDetailResponse, error)
+}
+
+// UnimplementedCommetsServer can be embedded to have forward compatible implementations.
+type UnimplementedCommetsServer struct {
+}
+
+func (*UnimplementedCommetsServer) InsertInfo(context.Context, *InsertInfoRequest) (*InsertInfoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method InsertInfo not implemented")
+}
+func (*UnimplementedCommetsServer) DeleteInfo(context.Context, *DeleteInfoRequest) (*DeleteInfoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteInfo not implemented")
+}
+func (*UnimplementedCommetsServer) UpdateInfo(context.Context, *UpdateInfoRequest) (*UpdateInfoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateInfo not implemented")
+}
+func (*UnimplementedCommetsServer) QueryInfo(context.Context, *QueryInfoRequest) (*QueryInfoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryInfo not implemented")
+}
+func (*UnimplementedCommetsServer) QueryInfoDetail(context.Context, *QueryInfoDetailRequest) (*QueryInfoDetailResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method QueryInfoDetail not implemented")
+}
+
+func RegisterCommetsServer(s *grpc.Server, srv CommetsServer) {
+	s.RegisterService(&_Commets_serviceDesc, srv)
+}
+
+func _Commets_InsertInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(InsertInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CommetsServer).InsertInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/commets.Commets/InsertInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommetsServer).InsertInfo(ctx, req.(*InsertInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Commets_DeleteInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CommetsServer).DeleteInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/commets.Commets/DeleteInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommetsServer).DeleteInfo(ctx, req.(*DeleteInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Commets_UpdateInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CommetsServer).UpdateInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/commets.Commets/UpdateInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommetsServer).UpdateInfo(ctx, req.(*UpdateInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Commets_QueryInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryInfoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CommetsServer).QueryInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/commets.Commets/QueryInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommetsServer).QueryInfo(ctx, req.(*QueryInfoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Commets_QueryInfoDetail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryInfoDetailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CommetsServer).QueryInfoDetail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/commets.Commets/QueryInfoDetail",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CommetsServer).QueryInfoDetail(ctx, req.(*QueryInfoDetailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _Commets_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "commets.Commets",
+	HandlerType: (*CommetsServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "InsertInfo",
+			Handler:    _Commets_InsertInfo_Handler,
+		},
+		{
+			MethodName: "DeleteInfo",
+			Handler:    _Commets_DeleteInfo_Handler,
+		},
+		{
+			MethodName: "UpdateInfo",
+			Handler:    _Commets_UpdateInfo_Handler,
+		},
+		{
+			MethodName: "QueryInfo",
+			Handler:    _Commets_QueryInfo_Handler,
+		},
+		{
+			MethodName: "QueryInfoDetail",
+			Handler:    _Commets_QueryInfoDetail_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/commets/handler.proto",
 }

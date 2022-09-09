@@ -7,6 +7,10 @@
 package subscribe
 
 import (
+	context "context"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -82,4 +86,148 @@ func file_proto_subscribe_handler_proto_init() {
 	file_proto_subscribe_handler_proto_rawDesc = nil
 	file_proto_subscribe_handler_proto_goTypes = nil
 	file_proto_subscribe_handler_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// SubscribeClient is the client API for Subscribe service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type SubscribeClient interface {
+	Publish(ctx context.Context, in *PublishRequest, opts ...grpc.CallOption) (*PublishResponse, error)
+	Subscribe(ctx context.Context, in *SubscribeRequest, opts ...grpc.CallOption) (Subscribe_SubscribeClient, error)
+}
+
+type subscribeClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewSubscribeClient(cc grpc.ClientConnInterface) SubscribeClient {
+	return &subscribeClient{cc}
+}
+
+func (c *subscribeClient) Publish(ctx context.Context, in *PublishRequest, opts ...grpc.CallOption) (*PublishResponse, error) {
+	out := new(PublishResponse)
+	err := c.cc.Invoke(ctx, "/subscribe.Subscribe/Publish", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *subscribeClient) Subscribe(ctx context.Context, in *SubscribeRequest, opts ...grpc.CallOption) (Subscribe_SubscribeClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Subscribe_serviceDesc.Streams[0], "/subscribe.Subscribe/Subscribe", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &subscribeSubscribeClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Subscribe_SubscribeClient interface {
+	Recv() (*SubscribeResponse, error)
+	grpc.ClientStream
+}
+
+type subscribeSubscribeClient struct {
+	grpc.ClientStream
+}
+
+func (x *subscribeSubscribeClient) Recv() (*SubscribeResponse, error) {
+	m := new(SubscribeResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// SubscribeServer is the server API for Subscribe service.
+type SubscribeServer interface {
+	Publish(context.Context, *PublishRequest) (*PublishResponse, error)
+	Subscribe(*SubscribeRequest, Subscribe_SubscribeServer) error
+}
+
+// UnimplementedSubscribeServer can be embedded to have forward compatible implementations.
+type UnimplementedSubscribeServer struct {
+}
+
+func (*UnimplementedSubscribeServer) Publish(context.Context, *PublishRequest) (*PublishResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Publish not implemented")
+}
+func (*UnimplementedSubscribeServer) Subscribe(*SubscribeRequest, Subscribe_SubscribeServer) error {
+	return status.Errorf(codes.Unimplemented, "method Subscribe not implemented")
+}
+
+func RegisterSubscribeServer(s *grpc.Server, srv SubscribeServer) {
+	s.RegisterService(&_Subscribe_serviceDesc, srv)
+}
+
+func _Subscribe_Publish_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PublishRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SubscribeServer).Publish(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/subscribe.Subscribe/Publish",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SubscribeServer).Publish(ctx, req.(*PublishRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Subscribe_Subscribe_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(SubscribeRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(SubscribeServer).Subscribe(m, &subscribeSubscribeServer{stream})
+}
+
+type Subscribe_SubscribeServer interface {
+	Send(*SubscribeResponse) error
+	grpc.ServerStream
+}
+
+type subscribeSubscribeServer struct {
+	grpc.ServerStream
+}
+
+func (x *subscribeSubscribeServer) Send(m *SubscribeResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+var _Subscribe_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "subscribe.Subscribe",
+	HandlerType: (*SubscribeServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Publish",
+			Handler:    _Subscribe_Publish_Handler,
+		},
+	},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Subscribe",
+			Handler:       _Subscribe_Subscribe_Handler,
+			ServerStreams: true,
+		},
+	},
+	Metadata: "proto/subscribe/handler.proto",
 }

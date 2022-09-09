@@ -7,6 +7,10 @@
 package event
 
 import (
+	context "context"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	structpb "google.golang.org/protobuf/types/known/structpb"
@@ -630,4 +634,184 @@ func file_proto_event_handler_proto_init() {
 	file_proto_event_handler_proto_rawDesc = nil
 	file_proto_event_handler_proto_goTypes = nil
 	file_proto_event_handler_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// EventClient is the client API for Event service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type EventClient interface {
+	Publish(ctx context.Context, in *PublishRequest, opts ...grpc.CallOption) (*PublishResponse, error)
+	Consume(ctx context.Context, in *ConsumeRequest, opts ...grpc.CallOption) (Event_ConsumeClient, error)
+	Read(ctx context.Context, in *ReadRequest, opts ...grpc.CallOption) (*ReadResponse, error)
+}
+
+type eventClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewEventClient(cc grpc.ClientConnInterface) EventClient {
+	return &eventClient{cc}
+}
+
+func (c *eventClient) Publish(ctx context.Context, in *PublishRequest, opts ...grpc.CallOption) (*PublishResponse, error) {
+	out := new(PublishResponse)
+	err := c.cc.Invoke(ctx, "/event.Event/Publish", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *eventClient) Consume(ctx context.Context, in *ConsumeRequest, opts ...grpc.CallOption) (Event_ConsumeClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Event_serviceDesc.Streams[0], "/event.Event/Consume", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &eventConsumeClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Event_ConsumeClient interface {
+	Recv() (*ConsumeResponse, error)
+	grpc.ClientStream
+}
+
+type eventConsumeClient struct {
+	grpc.ClientStream
+}
+
+func (x *eventConsumeClient) Recv() (*ConsumeResponse, error) {
+	m := new(ConsumeResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *eventClient) Read(ctx context.Context, in *ReadRequest, opts ...grpc.CallOption) (*ReadResponse, error) {
+	out := new(ReadResponse)
+	err := c.cc.Invoke(ctx, "/event.Event/Read", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// EventServer is the server API for Event service.
+type EventServer interface {
+	Publish(context.Context, *PublishRequest) (*PublishResponse, error)
+	Consume(*ConsumeRequest, Event_ConsumeServer) error
+	Read(context.Context, *ReadRequest) (*ReadResponse, error)
+}
+
+// UnimplementedEventServer can be embedded to have forward compatible implementations.
+type UnimplementedEventServer struct {
+}
+
+func (*UnimplementedEventServer) Publish(context.Context, *PublishRequest) (*PublishResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Publish not implemented")
+}
+func (*UnimplementedEventServer) Consume(*ConsumeRequest, Event_ConsumeServer) error {
+	return status.Errorf(codes.Unimplemented, "method Consume not implemented")
+}
+func (*UnimplementedEventServer) Read(context.Context, *ReadRequest) (*ReadResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Read not implemented")
+}
+
+func RegisterEventServer(s *grpc.Server, srv EventServer) {
+	s.RegisterService(&_Event_serviceDesc, srv)
+}
+
+func _Event_Publish_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PublishRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EventServer).Publish(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/event.Event/Publish",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EventServer).Publish(ctx, req.(*PublishRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Event_Consume_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(ConsumeRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(EventServer).Consume(m, &eventConsumeServer{stream})
+}
+
+type Event_ConsumeServer interface {
+	Send(*ConsumeResponse) error
+	grpc.ServerStream
+}
+
+type eventConsumeServer struct {
+	grpc.ServerStream
+}
+
+func (x *eventConsumeServer) Send(m *ConsumeResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func _Event_Read_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReadRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EventServer).Read(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/event.Event/Read",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EventServer).Read(ctx, req.(*ReadRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _Event_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "event.Event",
+	HandlerType: (*EventServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Publish",
+			Handler:    _Event_Publish_Handler,
+		},
+		{
+			MethodName: "Read",
+			Handler:    _Event_Read_Handler,
+		},
+	},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Consume",
+			Handler:       _Event_Consume_Handler,
+			ServerStreams: true,
+		},
+	},
+	Metadata: "proto/event/handler.proto",
 }

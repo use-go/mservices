@@ -7,6 +7,10 @@
 package cache
 
 import (
+	context "context"
+	grpc "google.golang.org/grpc"
+	codes "google.golang.org/grpc/codes"
+	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -123,4 +127,358 @@ func file_proto_cache_handler_proto_init() {
 	file_proto_cache_handler_proto_rawDesc = nil
 	file_proto_cache_handler_proto_goTypes = nil
 	file_proto_cache_handler_proto_depIdxs = nil
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConnInterface
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion6
+
+// CacheClient is the client API for Cache service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type CacheClient interface {
+	// Get retrieves an item from the cache. Returns the item or nil, and a bool indicating
+	// whether the key was found.
+	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
+	// Set sets an item to the cache, replacing any existing item.
+	Set(ctx context.Context, in *SetRequest, opts ...grpc.CallOption) (*SetResponse, error)
+	// Add adds an item to the cache only if an item doesn't already exist for the given
+	// key, or if the existing item has expired. Returns an error otherwise.
+	Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error)
+	// Replace sets a new value for the cache key only if it already exists. Returns an
+	// error if it does not.
+	Replace(ctx context.Context, in *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error)
+	// Delete removes an item from the cache. Does nothing if the key is not in the cache.
+	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
+	// Increment increments a real number, and returns error if the value is not real
+	Increment(ctx context.Context, in *IncrementRequest, opts ...grpc.CallOption) (*IncrementResponse, error)
+	// Decrement decrements a real number, and returns error if the value is not real
+	Decrement(ctx context.Context, in *DecrementRequest, opts ...grpc.CallOption) (*DecrementResponse, error)
+	// Flush seletes all items from the cache.
+	Flush(ctx context.Context, in *FlushRequest, opts ...grpc.CallOption) (*FlushResponse, error)
+}
+
+type cacheClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewCacheClient(cc grpc.ClientConnInterface) CacheClient {
+	return &cacheClient{cc}
+}
+
+func (c *cacheClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
+	out := new(GetResponse)
+	err := c.cc.Invoke(ctx, "/cache.Cache/Get", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheClient) Set(ctx context.Context, in *SetRequest, opts ...grpc.CallOption) (*SetResponse, error) {
+	out := new(SetResponse)
+	err := c.cc.Invoke(ctx, "/cache.Cache/Set", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheClient) Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error) {
+	out := new(AddResponse)
+	err := c.cc.Invoke(ctx, "/cache.Cache/Add", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheClient) Replace(ctx context.Context, in *ReplaceRequest, opts ...grpc.CallOption) (*ReplaceResponse, error) {
+	out := new(ReplaceResponse)
+	err := c.cc.Invoke(ctx, "/cache.Cache/Replace", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error) {
+	out := new(DeleteResponse)
+	err := c.cc.Invoke(ctx, "/cache.Cache/Delete", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheClient) Increment(ctx context.Context, in *IncrementRequest, opts ...grpc.CallOption) (*IncrementResponse, error) {
+	out := new(IncrementResponse)
+	err := c.cc.Invoke(ctx, "/cache.Cache/Increment", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheClient) Decrement(ctx context.Context, in *DecrementRequest, opts ...grpc.CallOption) (*DecrementResponse, error) {
+	out := new(DecrementResponse)
+	err := c.cc.Invoke(ctx, "/cache.Cache/Decrement", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *cacheClient) Flush(ctx context.Context, in *FlushRequest, opts ...grpc.CallOption) (*FlushResponse, error) {
+	out := new(FlushResponse)
+	err := c.cc.Invoke(ctx, "/cache.Cache/Flush", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// CacheServer is the server API for Cache service.
+type CacheServer interface {
+	// Get retrieves an item from the cache. Returns the item or nil, and a bool indicating
+	// whether the key was found.
+	Get(context.Context, *GetRequest) (*GetResponse, error)
+	// Set sets an item to the cache, replacing any existing item.
+	Set(context.Context, *SetRequest) (*SetResponse, error)
+	// Add adds an item to the cache only if an item doesn't already exist for the given
+	// key, or if the existing item has expired. Returns an error otherwise.
+	Add(context.Context, *AddRequest) (*AddResponse, error)
+	// Replace sets a new value for the cache key only if it already exists. Returns an
+	// error if it does not.
+	Replace(context.Context, *ReplaceRequest) (*ReplaceResponse, error)
+	// Delete removes an item from the cache. Does nothing if the key is not in the cache.
+	Delete(context.Context, *DeleteRequest) (*DeleteResponse, error)
+	// Increment increments a real number, and returns error if the value is not real
+	Increment(context.Context, *IncrementRequest) (*IncrementResponse, error)
+	// Decrement decrements a real number, and returns error if the value is not real
+	Decrement(context.Context, *DecrementRequest) (*DecrementResponse, error)
+	// Flush seletes all items from the cache.
+	Flush(context.Context, *FlushRequest) (*FlushResponse, error)
+}
+
+// UnimplementedCacheServer can be embedded to have forward compatible implementations.
+type UnimplementedCacheServer struct {
+}
+
+func (*UnimplementedCacheServer) Get(context.Context, *GetRequest) (*GetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Get not implemented")
+}
+func (*UnimplementedCacheServer) Set(context.Context, *SetRequest) (*SetResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Set not implemented")
+}
+func (*UnimplementedCacheServer) Add(context.Context, *AddRequest) (*AddResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
+}
+func (*UnimplementedCacheServer) Replace(context.Context, *ReplaceRequest) (*ReplaceResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Replace not implemented")
+}
+func (*UnimplementedCacheServer) Delete(context.Context, *DeleteRequest) (*DeleteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+}
+func (*UnimplementedCacheServer) Increment(context.Context, *IncrementRequest) (*IncrementResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Increment not implemented")
+}
+func (*UnimplementedCacheServer) Decrement(context.Context, *DecrementRequest) (*DecrementResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Decrement not implemented")
+}
+func (*UnimplementedCacheServer) Flush(context.Context, *FlushRequest) (*FlushResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Flush not implemented")
+}
+
+func RegisterCacheServer(s *grpc.Server, srv CacheServer) {
+	s.RegisterService(&_Cache_serviceDesc, srv)
+}
+
+func _Cache_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServer).Get(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cache.Cache/Get",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServer).Get(ctx, req.(*GetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Cache_Set_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServer).Set(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cache.Cache/Set",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServer).Set(ctx, req.(*SetRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Cache_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServer).Add(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cache.Cache/Add",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServer).Add(ctx, req.(*AddRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Cache_Replace_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReplaceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServer).Replace(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cache.Cache/Replace",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServer).Replace(ctx, req.(*ReplaceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Cache_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServer).Delete(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cache.Cache/Delete",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServer).Delete(ctx, req.(*DeleteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Cache_Increment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(IncrementRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServer).Increment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cache.Cache/Increment",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServer).Increment(ctx, req.(*IncrementRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Cache_Decrement_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DecrementRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServer).Decrement(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cache.Cache/Decrement",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServer).Decrement(ctx, req.(*DecrementRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Cache_Flush_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FlushRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CacheServer).Flush(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/cache.Cache/Flush",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CacheServer).Flush(ctx, req.(*FlushRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _Cache_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "cache.Cache",
+	HandlerType: (*CacheServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Get",
+			Handler:    _Cache_Get_Handler,
+		},
+		{
+			MethodName: "Set",
+			Handler:    _Cache_Set_Handler,
+		},
+		{
+			MethodName: "Add",
+			Handler:    _Cache_Add_Handler,
+		},
+		{
+			MethodName: "Replace",
+			Handler:    _Cache_Replace_Handler,
+		},
+		{
+			MethodName: "Delete",
+			Handler:    _Cache_Delete_Handler,
+		},
+		{
+			MethodName: "Increment",
+			Handler:    _Cache_Increment_Handler,
+		},
+		{
+			MethodName: "Decrement",
+			Handler:    _Cache_Decrement_Handler,
+		},
+		{
+			MethodName: "Flush",
+			Handler:    _Cache_Flush_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "proto/cache/handler.proto",
 }

@@ -16,8 +16,8 @@ $(foreach v,$(VARS),$(eval $(shell echo export $(v)="$($(v))")))
 all: build
 
 .PHONY: proto
-proto:
-	@find ../proto/ -name '*.proto' -exec protoc --proto_path=$(PROTO_PATH) $(PROTO_FLAGS) --micro_out=$(SRC_DIR) --go_out=:$(SRC_DIR) {} \;
+proto: 
+	@find ../proto/ -name '*.proto' -exec protoc --proto_path=$(PROTO_PATH) $(PROTO_FLAGS) --micro_out=$(SRC_DIR) --go_out=plugins=grpc:$(SRC_DIR) {} \;
 
 .PHONY: api
 api:
