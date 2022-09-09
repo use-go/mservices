@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	comm v0.0.0-00010101000000-000000000000
-	github.com/2637309949/micro/v3 v3.8.8
+	github.com/2637309949/micro/v3 v3.8.9
 	google.golang.org/protobuf v1.28.0
 	proto v0.0.0-00010101000000-000000000000
 )

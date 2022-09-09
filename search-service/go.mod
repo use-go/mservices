@@ -12,7 +12,7 @@ require (
 )
 
 require (
-	github.com/2637309949/micro/v3 v3.8.8 // indirect
+	github.com/2637309949/micro/v3 v3.8.9 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/coreos/go-semver v0.3.0 // indirect
