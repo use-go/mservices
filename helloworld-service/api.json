@@ -208,8 +208,12 @@
           "name": {
             "type": "string"
           },
-          "order": {
+          "order_col": {
             "type": "string"
+          },
+          "order_type": {
+            "format": "int32",
+            "type": "number"
           },
           "page": {
             "format": "int64",
@@ -309,7 +313,7 @@
     "x-logo": {
       "altText": "Micro logo",
       "backgroundColor": "#FFFFFF",
-      "url": "https://micro.mu/images/brand.png"
+      "url": "https://micro.dev/images/brand.png"
     }
   },
   "openapi": "3.0.0",

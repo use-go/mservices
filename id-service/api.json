@@ -1,47 +1,47 @@
 {
   "components": {
     "requestBodies": {
-      "EmailClassifyRequest": {
+      "IdGenerateRequest": {
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ClassifyRequest"
+              "$ref": "#/components/schemas/GenerateRequest"
             }
           }
         },
-        "description": "EmailClassifyRequest"
+        "description": "IdGenerateRequest"
       },
-      "EmailSendRequest": {
+      "IdTypesRequest": {
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/SendRequest"
+              "$ref": "#/components/schemas/TypesRequest"
             }
           }
         },
-        "description": "EmailSendRequest"
+        "description": "IdTypesRequest"
       }
     },
     "responses": {
-      "EmailClassifyResponse": {
+      "IdGenerateResponse": {
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/ClassifyResponse"
+              "$ref": "#/components/schemas/GenerateResponse"
             }
           }
         },
-        "description": "EmailClassifyResponse"
+        "description": "IdGenerateResponse"
       },
-      "EmailSendResponse": {
+      "IdTypesResponse": {
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/SendResponse"
+              "$ref": "#/components/schemas/TypesResponse"
             }
           }
         },
-        "description": "EmailSendResponse"
+        "description": "IdTypesResponse"
       },
       "MicroAPIError": {
         "content": {
@@ -77,92 +77,41 @@
       }
     },
     "schemas": {
-      "ClassifyRequest": {
-        "description": "Check whether an email is likely to be spam based on its attributes",
+      "GenerateRequest": {
         "properties": {
-          "emailBody": {
-            "description": "The raw body of the email including headers etc per RFC 822. Alternatively, use the other parameters to correctly format the message",
-            "type": "string"
-          },
-          "from": {
-            "description": "The email address it has been sent from",
-            "type": "string"
-          },
-          "htmlBody": {
-            "description": "the HTML version of the email body",
-            "type": "string"
-          },
-          "subject": {
-            "description": "The subject of the email",
-            "type": "string"
-          },
-          "textBody": {
-            "description": "the plain text version of the email body",
-            "type": "string"
-          },
-          "to": {
-            "description": "The email address it is being sent to",
+          "type": {
             "type": "string"
           }
         },
-        "title": "ClassifyRequest",
+        "title": "GenerateRequest",
         "type": "object"
       },
-      "ClassifyResponse": {
+      "GenerateResponse": {
         "properties": {
-          "details": {
-            "description": "The rules that have contributed to this score",
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "title": "GenerateResponse",
+        "type": "object"
+      },
+      "TypesRequest": {
+        "title": "TypesRequest",
+        "type": "object"
+      },
+      "TypesResponse": {
+        "properties": {
+          "types": {
             "items": {
               "type": "string"
             },
             "type": "array"
-          },
-          "isSpam": {
-            "description": "Is it spam? Returns true if its score is \u003e 5",
-            "type": "boolean"
-          },
-          "score": {
-            "description": "The score evaluated for this email. A higher number means it is more likely to be spam",
-            "format": "double",
-            "type": "number"
           }
         },
-        "title": "ClassifyResponse",
-        "type": "object"
-      },
-      "SendRequest": {
-        "description": "Send an email by passing in from, to, subject, and a text or html body",
-        "properties": {
-          "from": {
-            "description": "the display name of the sender",
-            "type": "string"
-          },
-          "htmlBody": {
-            "description": "the html body",
-            "type": "string"
-          },
-          "replyTo": {
-            "description": "an optional reply to email address",
-            "type": "string"
-          },
-          "subject": {
-            "description": "the email subject",
-            "type": "string"
-          },
-          "textBody": {
-            "description": "the text body",
-            "type": "string"
-          },
-          "to": {
-            "description": "the email address of the recipient",
-            "type": "string"
-          }
-        },
-        "title": "SendRequest",
-        "type": "object"
-      },
-      "SendResponse": {
-        "title": "SendResponse",
+        "title": "TypesResponse",
         "type": "object"
       }
     },
@@ -177,7 +126,7 @@
   },
   "info": {
     "description": "Generated by protoc-gen-openapi",
-    "title": "Email",
+    "title": "Id",
     "version": "1",
     "x-logo": {
       "altText": "Micro logo",
@@ -187,7 +136,7 @@
   },
   "openapi": "3.0.0",
   "paths": {
-    "/email/Email/Classify": {
+    "/id/Id/Generate": {
       "parameters": [
         {
           "in": "header",
@@ -201,11 +150,11 @@
       ],
       "post": {
         "requestBody": {
-          "$ref": "#/components/requestBodies/EmailClassifyRequest"
+          "$ref": "#/components/requestBodies/IdGenerateRequest"
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/EmailClassifyResponse"
+            "$ref": "#/components/responses/IdGenerateResponse"
           },
           "default": {
             "$ref": "#/components/responses/MicroAPIError"
@@ -216,10 +165,10 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Email.Classify(ClassifyRequest)"
+        "summary": "Id.Generate(GenerateRequest)"
       }
     },
-    "/email/Email/Send": {
+    "/id/Id/Types": {
       "parameters": [
         {
           "in": "header",
@@ -233,11 +182,11 @@
       ],
       "post": {
         "requestBody": {
-          "$ref": "#/components/requestBodies/EmailSendRequest"
+          "$ref": "#/components/requestBodies/IdTypesRequest"
         },
         "responses": {
           "200": {
-            "$ref": "#/components/responses/EmailSendResponse"
+            "$ref": "#/components/responses/IdTypesResponse"
           },
           "default": {
             "$ref": "#/components/responses/MicroAPIError"
@@ -248,7 +197,7 @@
             "MicroAPIToken": []
           }
         ],
-        "summary": "Email.Send(SendRequest)"
+        "summary": "Id.Types(TypesRequest)"
       }
     }
   },

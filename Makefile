@@ -14,6 +14,10 @@ clean:
 build:
 	$(call make_exec, build)
 
+.PHONY: api
+api:
+	$(call make_exec, api)
+
 .PHONY: proto
 proto:
 	$(call make_exec, proto)

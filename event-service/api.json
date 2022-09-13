@@ -1,0 +1,333 @@
+{
+  "components": {
+    "requestBodies": {
+      "EventConsumeRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ConsumeRequest"
+            }
+          }
+        },
+        "description": "EventConsumeRequest"
+      },
+      "EventPublishRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublishRequest"
+            }
+          }
+        },
+        "description": "EventPublishRequest"
+      },
+      "EventReadRequest": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ReadRequest"
+            }
+          }
+        },
+        "description": "EventReadRequest"
+      }
+    },
+    "responses": {
+      "EventConsumeResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ConsumeResponse"
+            }
+          }
+        },
+        "description": "EventConsumeResponse"
+      },
+      "EventPublishResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/PublishResponse"
+            }
+          }
+        },
+        "description": "EventPublishResponse"
+      },
+      "EventReadResponse": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ReadResponse"
+            }
+          }
+        },
+        "description": "EventReadResponse"
+      },
+      "MicroAPIError": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "properties": {
+                "Code": {
+                  "description": "Error code",
+                  "example": 500,
+                  "type": "number"
+                },
+                "Detail": {
+                  "description": "Error detail",
+                  "example": "service not found",
+                  "type": "string"
+                },
+                "Id": {
+                  "description": "Error ID",
+                  "type": "string"
+                },
+                "Status": {
+                  "description": "Error status message",
+                  "example": "Internal Server Error",
+                  "type": "string"
+                }
+              },
+              "title": "MicroAPIError",
+              "type": "object"
+            }
+          }
+        },
+        "description": "Error from the Micro API"
+      }
+    },
+    "schemas": {
+      "ConsumeRequest": {
+        "properties": {
+          "group": {
+            "type": "string"
+          },
+          "offset": {
+            "type": "string"
+          },
+          "topic": {
+            "type": "string"
+          }
+        },
+        "title": "ConsumeRequest",
+        "type": "object"
+      },
+      "ConsumeResponse": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "message": {
+            "type": "object"
+          },
+          "timestamp": {
+            "type": "string"
+          },
+          "topic": {
+            "type": "string"
+          }
+        },
+        "title": "ConsumeResponse",
+        "type": "object"
+      },
+      "Ev": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "message": {
+            "type": "object"
+          },
+          "timestamp": {
+            "type": "string"
+          }
+        },
+        "title": "Ev",
+        "type": "object"
+      },
+      "PublishRequest": {
+        "description": "Publish a event to the event stream.",
+        "properties": {
+          "message": {
+            "type": "object"
+          },
+          "topic": {
+            "type": "string"
+          }
+        },
+        "title": "PublishRequest",
+        "type": "object"
+      },
+      "PublishResponse": {
+        "title": "PublishResponse",
+        "type": "object"
+      },
+      "ReadRequest": {
+        "properties": {
+          "limit": {
+            "format": "int32",
+            "type": "number"
+          },
+          "offset": {
+            "format": "int32",
+            "type": "number"
+          },
+          "topic": {
+            "type": "string"
+          }
+        },
+        "title": "ReadRequest",
+        "type": "object"
+      },
+      "ReadResponse": {
+        "properties": {
+          "events": {
+            "items": {
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "object"
+                },
+                "timestamp": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "title": "ReadResponse",
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "MicroAPIToken": {
+        "bearerFormat": "JWT",
+        "description": "Micro API token",
+        "scheme": "bearer",
+        "type": "http"
+      }
+    }
+  },
+  "info": {
+    "description": "Generated by protoc-gen-openapi",
+    "title": "Event",
+    "version": "1",
+    "x-logo": {
+      "altText": "Micro logo",
+      "backgroundColor": "#FFFFFF",
+      "url": "https://micro.dev/images/brand.png"
+    }
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/event/Event/Consume": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/EventConsumeRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/EventConsumeResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          },
+          "stream": {
+            "$ref": "#/components/responses/EventConsumeResponse"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Event.Consume(ConsumeRequest)"
+      }
+    },
+    "/event/Event/Publish": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/EventPublishRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/EventPublishResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Event.Publish(PublishRequest)"
+      }
+    },
+    "/event/Event/Read": {
+      "parameters": [
+        {
+          "in": "header",
+          "name": "Micro-Namespace",
+          "required": true,
+          "schema": {
+            "default": "micro",
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "requestBody": {
+          "$ref": "#/components/requestBodies/EventReadRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/EventReadResponse"
+          },
+          "default": {
+            "$ref": "#/components/responses/MicroAPIError"
+          }
+        },
+        "security": [
+          {
+            "MicroAPIToken": []
+          }
+        ],
+        "summary": "Event.Read(ReadRequest)"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Micro dev environment"
+    }
+  ]
+}

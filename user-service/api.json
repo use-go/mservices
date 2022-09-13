@@ -310,6 +310,9 @@
       },
       "ListRequest": {
         "properties": {
+          "email": {
+            "type": "string"
+          },
           "limit": {
             "format": "int32",
             "type": "number"
@@ -324,6 +327,9 @@
           "orderType": {
             "format": "int32",
             "type": "number"
+          },
+          "username": {
+            "type": "string"
           }
         },
         "title": "ListRequest",
@@ -479,6 +485,10 @@
           "email": {
             "type": "string"
           },
+          "expiration": {
+            "format": "int64",
+            "type": "number"
+          },
           "fromName": {
             "type": "string"
           },
@@ -604,9 +614,6 @@
       },
       "VerifyEmailRequest": {
         "properties": {
-          "email": {
-            "type": "string"
-          },
           "token": {
             "type": "string"
           }
