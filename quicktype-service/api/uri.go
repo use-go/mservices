@@ -6,11 +6,11 @@ import (
 )
 
 func MustCookie(r *http.Request, name string) string {
-	user, err := r.Cookie("user")
+	cke, err := r.Cookie(name)
 	if err != nil {
 		return ""
 	}
-	return user.Value
+	return cke.Value
 }
 
 type Uri struct {

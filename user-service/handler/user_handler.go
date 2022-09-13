@@ -42,7 +42,8 @@ func (h *Handler) Create(ctx context.Context, req *user.CreateRequest, rsp *user
 
 	session, err := db.InitDb(ctx)
 	if err != nil {
-		return errors.InternalServerError(service.GetName(), "init db error %v", err)
+		logger.Errorf(ctx, "InitDb failed. [%v]", err)
+		return err
 	}
 
 	user := model.User{}
@@ -91,7 +92,8 @@ func (h *Handler) Read(ctx context.Context, req *user.ReadRequest, rsp *user.Rea
 
 	session, err := db.InitDb(ctx)
 	if err != nil {
-		return errors.InternalServerError(service.GetName(), "init db failed %v", err)
+		logger.Errorf(ctx, "InitDb failed. [%v]", err)
+		return err
 	}
 
 	where, user := model.User{Id: req.Id, Username: req.Username, Email: req.Email}, model.User{}
@@ -119,7 +121,8 @@ func (h *Handler) Update(ctx context.Context, req *user.UpdateRequest, rsp *user
 
 	session, err := db.InitDb(ctx)
 	if err != nil {
-		return errors.InternalServerError(service.GetName(), "init db failed %v", err)
+		logger.Errorf(ctx, "InitDb failed. [%v]", err)
+		return err
 	}
 
 	if len(req.Username) > 0 {
@@ -170,7 +173,8 @@ func (h *Handler) Delete(ctx context.Context, req *user.DeleteRequest, rsp *user
 
 	session, err := db.InitDb(ctx)
 	if err != nil {
-		return errors.InternalServerError(service.GetName(), "init db error %v", err)
+		logger.Errorf(ctx, "InitDb failed. [%v]", err)
+		return err
 	}
 
 	err = h.DeleteUserDB(ctx, session, &model.User{Id: req.Id})
@@ -192,7 +196,8 @@ func (h *Handler) UpdatePassword(ctx context.Context, req *user.UpdatePasswordRe
 
 	session, err := db.InitDb(ctx)
 	if err != nil {
-		return errors.InternalServerError(service.GetName(), "init db failed %v", err)
+		logger.Errorf(ctx, "InitDb failed. [%v]", err)
+		return err
 	}
 
 	var usr model.User
@@ -232,7 +237,8 @@ func (h *Handler) List(ctx context.Context, req *user.ListRequest, rsp *user.Lis
 
 	session, err := db.InitDb(ctx)
 	if err != nil {
-		return errors.InternalServerError(service.GetName(), "init db failed %v", err)
+		logger.Errorf(ctx, "InitDb failed. [%v]", err)
+		return err
 	}
 	session = db.SetLimit(ctx, session, req)
 	session = db.SetOrder(ctx, session, req)
@@ -462,7 +468,8 @@ func (h *Handler) VerifyEmail(ctx context.Context, req *user.VerifyEmailRequest,
 
 	session, err := db.InitDb(ctx)
 	if err != nil {
-		return errors.InternalServerError(service.GetName(), "init db failed %v", err)
+		logger.Errorf(ctx, "InitDb failed. [%v]", err)
+		return err
 	}
 
 	var usr model.User
@@ -499,7 +506,8 @@ func (h *Handler) ValidPassword(ctx context.Context, req *user.ValidPasswordRequ
 
 	session, err := db.InitDb(ctx)
 	if err != nil {
-		return errors.InternalServerError(service.GetName(), "init db failed %v", err)
+		logger.Errorf(ctx, "InitDb failed. [%v]", err)
+		return err
 	}
 
 	var usr model.User

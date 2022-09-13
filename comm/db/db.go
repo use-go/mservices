@@ -74,7 +74,7 @@ func InitDb(ctx context.Context, ix ...int) (*gorm.DB, error) {
 	}
 
 	if len(dbs) < idx+1 {
-		return nil, errors.InternalServerError(service.GetName(), "initDb fail")
+		return nil, errors.InternalServerError(service.GetName(), "init db fail")
 	}
 	return dbs[idx], nil
 }

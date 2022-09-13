@@ -37,7 +37,8 @@ func (h *Handler) Delete{{.Name}}(ctx context.Context, req *xxx.Delete{{.Name}}R
 
 	session, err := db.InitDb(ctx)
 	if err != nil {
-		return errors.InternalServerError("init db error %v", err)
+		logger.Errorf(ctx, "InitDb failed. [%v]", err)
+		return err
 	}
 
 	where := model.{{.Name}}{
@@ -66,7 +67,8 @@ func (h *Handler) Update{{.Name}}(ctx context.Context, req *xxx.Update{{.Name}}R
 
 	session, err := db.InitDb(ctx)
 	if err != nil {
-		return errors.InternalServerError("init db error %v", err)
+		logger.Errorf(ctx, "InitDb failed. [%v]", err)
+		return err
 	}
 
 	info := model.{{.Name}}{}
@@ -98,7 +100,8 @@ func (h *Handler) Insert{{.Name}}(ctx context.Context, req *xxx.Insert{{.Name}}R
 
 	session, err := db.InitDb(ctx)
 	if err != nil {
-		return errors.InternalServerError("InitDb failed %v", err)
+		logger.Errorf(ctx, "InitDb failed. [%v]", err)
+		return err
 	}
 
 	info := model.{{.Name}}{}
@@ -132,7 +135,8 @@ func (h *Handler) Query{{.Name}}Detail(ctx context.Context, req *xxx.Query{{.Nam
 
 	session, err := db.InitDb(ctx)
 	if err != nil {
-		return errors.InternalServerError("InitDb failed %v", err)
+		logger.Errorf(ctx, "InitDb failed. [%v]", err)
+		return err
 	}
 
 	where := model.{{.Name}}{
@@ -161,7 +165,8 @@ func (h *Handler) Query{{.Name}}(ctx context.Context, req *xxx.Query{{.Name}}Req
 	session, err := db.InitDb(ctx)
 	session = db.SetLimit(ctx, session, req)
 	if err != nil {
-		return errors.InternalServerError("InitDb failed %v", err)
+		logger.Errorf(ctx, "InitDb failed. [%v]", err)
+		return err
 	}
 
 	var totalCount int64

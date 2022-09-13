@@ -33,7 +33,8 @@ func (h *Handler) DeleteInfo(ctx context.Context, req *helloworld.DeleteInfoRequ
 	session, err := db.InitDb(ctx)
 	timemark.Mark("InitDb")
 	if err != nil {
-		return errors.InternalServerError(service.GetName(), "init db error %v", err)
+		logger.Errorf(ctx, "InitDb failed. [%v]", err)
+		return err
 	}
 
 	where := model.Info{
@@ -106,9 +107,9 @@ func (h *Handler) InsertInfo(ctx context.Context, req *helloworld.InsertInfoRequ
 	session, err := db.InitDb(ctx)
 	timemark.Mark("InitDb")
 	if err != nil {
-		return errors.InternalServerError(service.GetName(), "InitDb failed %v", err)
+		logger.Errorf(ctx, "InitDb failed. [%v]", err)
+		return err
 	}
-
 	info := model.Info{}
 	err = info.Unmarshal(req)
 	if err != nil {
@@ -146,7 +147,8 @@ func (h *Handler) QueryInfoDetail(ctx context.Context, req *helloworld.QueryInfo
 	session, err := db.InitDb(ctx)
 	timemark.Mark("InitDb")
 	if err != nil {
-		return errors.InternalServerError(service.GetName(), "InitDb failed %v", err)
+		logger.Errorf(ctx, "InitDb failed. [%v]", err)
+		return err
 	}
 
 	where := model.Info{
@@ -181,7 +183,8 @@ func (h *Handler) QueryInfo(ctx context.Context, req *helloworld.QueryInfoReques
 	timemark.Mark("InitDb")
 	session, err := db.InitDb(ctx)
 	if err != nil {
-		return errors.InternalServerError(service.GetName(), "InitDb failed %v", err)
+		logger.Errorf(ctx, "InitDb failed. [%v]", err)
+		return err
 	}
 	session = db.SetLimit(ctx, session, req)
 	session = db.SetOrder(ctx, session, req)
