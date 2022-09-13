@@ -13,6 +13,3 @@ replace (
 	github.com/2637309949/micro/v3 => ../../micro
 	proto => ../proto
 )
-
-// fix error code PROTOCOL_ERROR
-replace google.golang.org/grpc => google.golang.org/grpc v1.40.0
