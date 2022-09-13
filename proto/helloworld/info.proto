@@ -4,6 +4,8 @@ package helloworld;
 
 option go_package = "./proto;helloworld";
 
+import "proto/helloworld/validate.proto";
+
 message InsertInfoRequest {
 	string name = 1 [json_name = "name"];
 }
@@ -21,7 +23,7 @@ message DeleteInfoResponse {
 }
 
 message UpdateInfoRequest {
-	uint32 id = 1 [json_name = "id"];
+	uint32 id = 1 [json_name = "id", (rules).uint32 = {gt: 0}];
 	string name = 2 [json_name = "name"];
 }
 
