@@ -3,7 +3,7 @@ module proto
 go 1.17
 
 require (
-	github.com/2637309949/micro/v3 v3.8.9
+	github.com/2637309949/micro/v3 v3.9.0
 	github.com/golang/protobuf v1.5.2
 	google.golang.org/protobuf v1.28.0
 )

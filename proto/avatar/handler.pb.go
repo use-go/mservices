@@ -7,10 +7,6 @@
 package avatar
 
 import (
-	context "context"
-	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -251,84 +247,4 @@ func file_proto_avatar_handler_proto_init() {
 	file_proto_avatar_handler_proto_rawDesc = nil
 	file_proto_avatar_handler_proto_goTypes = nil
 	file_proto_avatar_handler_proto_depIdxs = nil
-}
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConnInterface
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion6
-
-// AvatarClient is the client API for Avatar service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type AvatarClient interface {
-	Generate(ctx context.Context, in *GenerateRequest, opts ...grpc.CallOption) (*GenerateResponse, error)
-}
-
-type avatarClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewAvatarClient(cc grpc.ClientConnInterface) AvatarClient {
-	return &avatarClient{cc}
-}
-
-func (c *avatarClient) Generate(ctx context.Context, in *GenerateRequest, opts ...grpc.CallOption) (*GenerateResponse, error) {
-	out := new(GenerateResponse)
-	err := c.cc.Invoke(ctx, "/avatar.Avatar/Generate", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// AvatarServer is the server API for Avatar service.
-type AvatarServer interface {
-	Generate(context.Context, *GenerateRequest) (*GenerateResponse, error)
-}
-
-// UnimplementedAvatarServer can be embedded to have forward compatible implementations.
-type UnimplementedAvatarServer struct {
-}
-
-func (*UnimplementedAvatarServer) Generate(context.Context, *GenerateRequest) (*GenerateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Generate not implemented")
-}
-
-func RegisterAvatarServer(s *grpc.Server, srv AvatarServer) {
-	s.RegisterService(&_Avatar_serviceDesc, srv)
-}
-
-func _Avatar_Generate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GenerateRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AvatarServer).Generate(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/avatar.Avatar/Generate",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AvatarServer).Generate(ctx, req.(*GenerateRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _Avatar_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "avatar.Avatar",
-	HandlerType: (*AvatarServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "Generate",
-			Handler:    _Avatar_Generate_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/avatar/handler.proto",
 }
