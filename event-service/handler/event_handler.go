@@ -8,7 +8,7 @@ import (
 	"comm/auth"
 	"comm/errors"
 	"comm/logger"
-
+	"comm/service"
 	"proto/event"
 
 	"github.com/2637309949/micro/v3/service/events"
@@ -23,11 +23,12 @@ func (h *Handler) Publish(ctx context.Context, req *event.PublishRequest, rsp *e
 	}
 
 	if len(req.Topic) == 0 {
-		return errors.BadRequest("event.publish", "topic is blank")
+		return errors.BadRequest(service.GetName(), "event.publish", "topic is blank")
 	}
 
 	// create tenant based topics
-	topic := path.Join("event", req.Topic)
+	topic := path.Join("event", ".", req.Topic)
+
 	// publish the message
 	return events.Publish(topic, req.Message.AsMap())
 }
@@ -39,7 +40,7 @@ func (h *Handler) Consume(ctx context.Context, req *event.ConsumeRequest, stream
 	}
 
 	// create tenant based topics
-	topic := path.Join("event", req.Topic)
+	topic := path.Join("event", ".", req.Topic)
 
 	logger.Infof(ctx, "Subscribing to %v\n", req.Topic)
 

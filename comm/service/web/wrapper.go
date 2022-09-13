@@ -3,6 +3,7 @@ package web
 import (
 	"bytes"
 	"comm/errors"
+	cService "comm/service"
 	"comm/trace"
 	"encoding/base64"
 	"io/ioutil"
@@ -54,12 +55,12 @@ var (
 				case strings.HasPrefix(header, "Basic "):
 					b, err := base64.StdEncoding.DecodeString(strings.TrimPrefix(header, "Basic "))
 					if err != nil {
-						xhttp.WriteError(res, req, errors.Unauthorized("invalid authorization header. Incorrect format"))
+						xhttp.WriteError(res, req, errors.Unauthorized(cService.GetName(), "invalid authorization header. Incorrect format"))
 						return
 					}
 					parts := strings.SplitN(string(b), ":", 2)
 					if len(parts) != 2 {
-						xhttp.WriteError(res, req, errors.Unauthorized("invalid authorization header. Incorrect format"))
+						xhttp.WriteError(res, req, errors.Unauthorized(cService.GetName(), "invalid authorization header. Incorrect format"))
 						return
 					}
 					token = parts[1]
@@ -85,13 +86,13 @@ var (
 			// Verify the caller has access to the resource.
 			err := sAuth.Verify(acc, re, sAuth.VerifyNamespace(ns))
 			if err == sAuth.ErrForbidden && acc != nil {
-				xhttp.WriteError(res, req, errors.Forbidden("Forbidden call made to %v:%v by %v", re.Name, re.Endpoint, acc.ID))
+				xhttp.WriteError(res, req, errors.Forbidden(cService.GetName(), "Forbidden call made to %v:%v by %v", re.Name, re.Endpoint, acc.ID))
 				return
 			} else if err == sAuth.ErrForbidden {
-				xhttp.WriteError(res, req, errors.Unauthorized("Unauthorized call made to %v:%v", re.Name, re.Endpoint))
+				xhttp.WriteError(res, req, errors.Unauthorized(cService.GetName(), "Unauthorized call made to %v:%v", re.Name, re.Endpoint))
 				return
 			} else if err != nil {
-				xhttp.WriteError(res, req, errors.InternalServerError("Error authorizing request: %v", err))
+				xhttp.WriteError(res, req, errors.InternalServerError(cService.GetName(), "Error authorizing request: %v", err))
 				return
 			}
 			call(res, req)

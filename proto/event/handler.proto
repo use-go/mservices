@@ -40,8 +40,8 @@ message ConsumeResponse {
 
 message ReadRequest {
 	string topic = 1;
-	int32 limit = 2;
-	int32 offset = 3;
+	uint32 limit = 2;
+	uint32 offset = 3;
 }
 
 message ReadResponse {

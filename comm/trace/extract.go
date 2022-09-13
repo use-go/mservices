@@ -14,3 +14,8 @@ func ExtractTraceID(ctx context.Context) string {
 	traceID, _, _ := Extract(ctx)
 	return traceID
 }
+
+func ExtractSpanID(ctx context.Context) string {
+	_, spanID, _ := Extract(ctx)
+	return spanID
+}

@@ -6,17 +6,16 @@ import (
 	"strings"
 )
 
-// defaultNamespace to use if not provided as an option
-const defaultNamespace = "services"
-
 var (
 	// The directory for logs to be output
-	LogDir = filepath.Join(os.TempDir(), defaultNamespace, "logs")
+	LogDir = filepath.Join(os.TempDir(), "micro", "logs")
+	// The source directory where code lives
+	SourceDir = filepath.Join(os.TempDir(), "micro", "uploads")
 )
 
 // make the directory
 func logFile(serviceName string) string {
+	// make the directory
 	name := strings.Replace(serviceName, "/", "-", -1)
-	fp := filepath.Join(LogDir, name)
-	return fp
+	return filepath.Join(LogDir, name)
 }

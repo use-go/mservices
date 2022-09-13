@@ -31,10 +31,10 @@ func (s *Service) Run() error {
 func (s *Service) streamOutput() error {
 	// make the logs directory
 	name := s.Options().Name
-	fp := logFile(name)
+	lgFile := logFile(name)
 	out := os.Stdout
 	rotate, err := rotatelogs.New(
-		fp+"/"+name+"-%Y%m%d%H",
+		lgFile+"/"+name+"-%Y%m%d",
 		rotatelogs.WithMaxAge(24*time.Hour),
 		rotatelogs.WithRotationTime(24*time.Hour),
 	)

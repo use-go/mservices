@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"comm/errors"
+	cService "comm/service"
 
 	"github.com/2637309949/micro/v3/service/registry"
 	"github.com/2637309949/micro/v3/util/selector"
@@ -45,12 +46,12 @@ func (r *roundTripper) getService(req *http.Request) (string, error) {
 		}
 	} else {
 		// we have no way of routing the request
-		return "", errors.InternalServerError("no route found")
+		return "", errors.InternalServerError(cService.GetName(), "no route found")
 	}
 
 	// select a random node
 	if len(nodes) == 0 {
-		return "", errors.InternalServerError("no route found")
+		return "", errors.InternalServerError(cService.GetName(), "no route found")
 	}
 	node := nodes[rand.Int()%len(nodes)]
 	return fmt.Sprintf("http://%s", node.Address), nil
