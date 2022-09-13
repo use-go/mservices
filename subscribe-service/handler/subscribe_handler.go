@@ -22,6 +22,7 @@ func (h *Handler) Publish(ctx context.Context, req *subscribe.PublishRequest, rs
 		logger.Infof(ctx, "%v Do Call", acc.Name)
 	}
 	if len(req.Topic) == 0 {
+		logger.Errorf(ctx, "missing topic")
 		return errors.BadRequest(service.GetName(), "topic is blank")
 	}
 
@@ -47,6 +48,7 @@ func (h *Handler) Subscribe(ctx context.Context, req *subscribe.SubscribeRequest
 		logger.Infof(ctx, "%v Do Subscribe", acc.Name)
 	}
 	if len(req.Topic) == 0 {
+		logger.Errorf(ctx, "missing topic")
 		return errors.BadRequest(service.GetName(), "topic is blank")
 	}
 

@@ -27,6 +27,7 @@ func (h *Handler) DeleteInfo(ctx context.Context, req *helloworld.DeleteInfoRequ
 
 	err = util.IsZero(req, "id")
 	if err != nil {
+		logger.Errorf(ctx, "missing id")
 		return errors.BadRequest(service.GetName(), service.GetName(), err.Error())
 	}
 
@@ -63,6 +64,7 @@ func (h *Handler) UpdateInfo(ctx context.Context, req *helloworld.UpdateInfoRequ
 
 	err = util.IsZero(req, "id")
 	if err != nil {
+		logger.Errorf(ctx, "missing id")
 		return errors.BadRequest(service.GetName(), err.Error())
 	}
 
@@ -141,6 +143,7 @@ func (h *Handler) QueryInfoDetail(ctx context.Context, req *helloworld.QueryInfo
 
 	err = util.IsZero(req, "id")
 	if err != nil {
+		logger.Errorf(ctx, "missing id")
 		return errors.BadRequest(service.GetName(), err.Error())
 	}
 

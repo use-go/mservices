@@ -29,6 +29,7 @@ func (h *Handler) Create(ctx context.Context, req *user.CreateRequest, rsp *user
 	}
 
 	if !emailFormat.MatchString(req.Email) {
+		logger.Errorf(ctx, "missing email")
 		return errors.BadRequest(service.GetName(), "email has wrong format")
 	}
 
@@ -37,6 +38,7 @@ func (h *Handler) Create(ctx context.Context, req *user.CreateRequest, rsp *user
 	}
 
 	if len(req.Username) < 8 {
+		logger.Errorf(ctx, "missing username")
 		return errors.BadRequest(service.GetName(), "missing username")
 	}
 
@@ -50,12 +52,14 @@ func (h *Handler) Create(ctx context.Context, req *user.CreateRequest, rsp *user
 	err = h.QueryUserDetailDB(ctx, session, &model.User{Username: req.Username}, &user)
 	timemark.Mark("QueryUserDetailDB")
 	if err == nil {
+		logger.Errorf(ctx, "username already exists")
 		return errors.BadRequest(service.GetName(), "username already exists")
 	}
 
 	err = h.QueryUserDetailDB(ctx, session, &model.User{Email: req.Email}, &user)
 	timemark.Mark("QueryUserDetailDB")
 	if err == nil {
+		logger.Errorf(ctx, "email already exists")
 		return errors.BadRequest(service.GetName(), "email already exists")
 	}
 
@@ -87,6 +91,7 @@ func (h *Handler) Read(ctx context.Context, req *user.ReadRequest, rsp *user.Rea
 	}
 
 	if req.Id == 0 && len(req.Username) == 0 && len(req.Email) == 0 {
+		logger.Errorf(ctx, "missing id or username or email")
 		return errors.BadRequest(service.GetName(), "missing id or username or email")
 	}
 
@@ -116,6 +121,7 @@ func (h *Handler) Update(ctx context.Context, req *user.UpdateRequest, rsp *user
 	}
 
 	if req.Id == 0 {
+		logger.Errorf(ctx, "missing id")
 		return errors.BadRequest(service.GetName(), "missing id")
 	}
 
@@ -131,6 +137,7 @@ func (h *Handler) Update(ctx context.Context, req *user.UpdateRequest, rsp *user
 		err = h.QueryUserDetailDB(ctx, session, &model.User{Username: req.Username}, &usr)
 		timemark.Mark("QueryUserDetailDB")
 		if err == nil {
+			logger.Errorf(ctx, "username already exists")
 			return errors.BadRequest(service.GetName(), "username already exists")
 		}
 	}
@@ -141,6 +148,7 @@ func (h *Handler) Update(ctx context.Context, req *user.UpdateRequest, rsp *user
 		err = h.QueryUserDetailDB(ctx, session, &model.User{Email: req.Email}, &usr)
 		timemark.Mark("QueryUserDetailDB")
 		if err == nil {
+			logger.Errorf(ctx, "email already exists")
 			return errors.BadRequest(service.GetName(), "email already exists")
 		}
 	}
@@ -168,6 +176,7 @@ func (h *Handler) Delete(ctx context.Context, req *user.DeleteRequest, rsp *user
 	}
 
 	if req.Id == 0 {
+		logger.Errorf(ctx, "missing id")
 		return errors.BadRequest(service.GetName(), "missing id")
 	}
 
@@ -403,6 +412,7 @@ func (h *Handler) SendVerificationEmail(ctx context.Context, req *user.SendVerif
 	}
 
 	if len(req.Email) == 0 {
+		logger.Errorf(ctx, "user.sendverificationemail", "missing email")
 		return errors.BadRequest(service.GetName(), "user.sendverificationemail", "missing email")
 	}
 
@@ -456,6 +466,7 @@ func (h *Handler) VerifyEmail(ctx context.Context, req *user.VerifyEmailRequest,
 	}
 
 	if len(req.Token) == 0 {
+		logger.Errorf(ctx, "missing token")
 		return errors.BadRequest(service.GetName(), "missing token")
 	}
 
@@ -501,6 +512,7 @@ func (h *Handler) ValidPassword(ctx context.Context, req *user.ValidPasswordRequ
 	}
 
 	if req.Id == 0 {
+		logger.Errorf(ctx, "missing id")
 		return errors.BadRequest(service.GetName(), "missing id")
 	}
 
