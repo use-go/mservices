@@ -6,6 +6,7 @@ import (
 	"comm/errors"
 	"comm/logger"
 	"comm/mark"
+	"comm/service"
 	"context"
 	"path"
 	"proto/subscribe"
@@ -21,7 +22,7 @@ func (h *Handler) Publish(ctx context.Context, req *subscribe.PublishRequest, rs
 		logger.Infof(ctx, "%v Do Call", acc.Name)
 	}
 	if len(req.Topic) == 0 {
-		return errors.BadRequest("topic is blank")
+		return errors.BadRequest(service.GetName(), "topic is blank")
 	}
 
 	logger.Infof(ctx, "Publishing to %v\n", req.Topic)
@@ -30,7 +31,7 @@ func (h *Handler) Publish(ctx context.Context, req *subscribe.PublishRequest, rs
 	err = broker.Publish(topic, &broker.Message{Body: req.Message})
 	timemark.Mark("Publish")
 	if err != nil {
-		return errors.InternalServerError("Failed to publish %v", err.Error())
+		return errors.InternalServerError(service.GetName(), "Failed to publish %v", err.Error())
 	}
 	return nil
 }
@@ -46,7 +47,7 @@ func (h *Handler) Subscribe(ctx context.Context, req *subscribe.SubscribeRequest
 		logger.Infof(ctx, "%v Do Subscribe", acc.Name)
 	}
 	if len(req.Topic) == 0 {
-		return errors.BadRequest("topic is blank")
+		return errors.BadRequest(service.GetName(), "topic is blank")
 	}
 
 	logger.Infof(ctx, "Subscribing to %v\n", req.Topic)
@@ -59,7 +60,7 @@ func (h *Handler) Subscribe(ctx context.Context, req *subscribe.SubscribeRequest
 	})
 	defer bs.Unsubscribe()
 	if err != nil {
-		return errors.InternalServerError("Failed to subscribe %v", err.Error())
+		return errors.InternalServerError(service.GetName(), "Failed to subscribe %v", err.Error())
 	}
 	for msg := range sub {
 		err := stream.Send(&subscribe.SubscribeResponse{

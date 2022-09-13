@@ -15,6 +15,10 @@ $(foreach v,$(VARS),$(eval $(shell echo export $(v)="$($(v))")))
 
 all: build
 
+.MOD: mod
+mod:
+	@go mod tidy
+
 .PHONY: proto
 proto:
 	@find ../proto/ -name '*.proto' -exec protoc --proto_path=$(PROTO_PATH) $(PROTO_FLAGS) --micro_out=$(SRC_DIR) --go_out=:$(SRC_DIR) {} \;
