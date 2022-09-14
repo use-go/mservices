@@ -62,9 +62,9 @@ func (h *Handler) UpdateInfo(ctx context.Context, req *helloworld.UpdateInfoRequ
 		logger.Infof(ctx, "%v Do UpdateInfo", acc.Name)
 	}
 
-	err = req.Validate()
+	err = util.IsZero(req, "id")
 	if err != nil {
-		logger.Errorf(ctx, "validate error %v", err)
+		logger.Errorf(ctx, "missing id")
 		return errors.BadRequest(service.GetName(), err.Error())
 	}
 

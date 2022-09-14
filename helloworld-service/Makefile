@@ -21,7 +21,7 @@ mod:
 
 .PHONY: proto
 proto: 
-	@find ../proto/ -name '*.proto' -exec protoc --proto_path=$(PROTO_PATH) $(PROTO_FLAGS) --micro_out=$(SRC_DIR) --validate_out=paths=source_relative,lang=go:$(SRC_DIR) --go_out=plugins=grpc:$(SRC_DIR) {} \;
+	@find ../proto/ -name '*.proto' -exec protoc --proto_path=$(PROTO_PATH) $(PROTO_FLAGS) --micro_out=$(SRC_DIR) --go_out=plugins=grpc:$(SRC_DIR) {} \;
 
 .PHONY: api
 api:

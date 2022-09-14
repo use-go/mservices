@@ -14,7 +14,6 @@ rm -f $PROTOC_ZIP
 
 ```shell
 go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
-go install github.com/envoyproxy/protoc-gen-validate@latest
 wget -q  https://raw.githubusercontent.com/2637309949/micro/master/scripts/install.sh -O - | /bin/bash
 ```
 
