@@ -34,11 +34,11 @@ micro new test && cd test-service && make proto && make up
 ### VerifyAccess
 
 ```shell
-micro auth delete rule default
 micro auth create rule --access=granted --scope='*' --resource="*:*:*" onlyloggedin
 micro auth create rule --access=granted --resource="service:auth:*" auth
 micro auth create rule --access=granted --resource="service:micro.:*" micro
 micro auth create rule --access=granted --resource="service:assert:*" assert
 micro auth create rule --access=granted --resource="service:quicktype:Quicktype.Call" quicktype
 micro auth create rule --access=granted --resource="service:cas:*" cas
+micro auth delete rule default
 ```

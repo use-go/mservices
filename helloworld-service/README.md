@@ -1,4 +1,14 @@
-### Usage
+## Usage
+
+### Setting config
+```shell
+micro config set helloworld.db.spamd_address 127.0.0.1:783
+micro config set helloworld.db.addr smtp.qq.com:25
+micro config set helloworld.db.username 2637309949@qq.com
+micro config set helloworld.db.identity 
+micro config set helloworld.db.password jhprqpetmlfteabe
+micro config set helloworld.db.host smtp.qq.com
+```
 
 Generate the proto code
 

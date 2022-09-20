@@ -11,6 +11,8 @@ import (
 	"strings"
 
 	"github.com/2637309949/micro/v3/service/api"
+	"github.com/2637309949/micro/v3/service/api/resolver"
+	"github.com/2637309949/micro/v3/service/api/server"
 	sAuth "github.com/2637309949/micro/v3/service/auth"
 	"github.com/2637309949/micro/v3/util/auth"
 	cx "github.com/2637309949/micro/v3/util/ctx"
@@ -76,15 +78,23 @@ var (
 				*req = *req.Clone(ctx)
 				acc = a
 			}
-
+			ropts := []resolver.Option{
+				resolver.WithHandler("meta"),
+			}
+			rr := server.NewResolver(ropts...)
+			rs, err := rr.Resolve(req)
+			if err != nil {
+				xhttp.WriteError(res, req, errors.InternalServerError(cService.GetName(), "Error resolve: %v", err))
+				return
+			}
 			// construct the resource
 			re := &sAuth.Resource{
 				Type:     "service",
-				Name:     "",
-				Endpoint: "",
+				Name:     rs.Name,
+				Endpoint: rs.Method,
 			}
 			// Verify the caller has access to the resource.
-			err := sAuth.Verify(acc, re, sAuth.VerifyNamespace(ns))
+			err = sAuth.Verify(acc, re, sAuth.VerifyNamespace(ns))
 			if err == sAuth.ErrForbidden && acc != nil {
 				xhttp.WriteError(res, req, errors.Forbidden(cService.GetName(), "Forbidden call made to %v:%v by %v", re.Name, re.Endpoint, acc.ID))
 				return

@@ -18,6 +18,7 @@ import (
 	"github.com/jinzhu/copier"
 )
 
+// Create defined todo
 func (h *Handler) Create(ctx context.Context, req *user.CreateRequest, rsp *user.CreateResponse) error {
 	var err error
 	var timemark mark.TimeMark
@@ -80,6 +81,7 @@ func (h *Handler) Create(ctx context.Context, req *user.CreateRequest, rsp *user
 	return nil
 }
 
+// Read defined todo
 func (h *Handler) Read(ctx context.Context, req *user.ReadRequest, rsp *user.ReadResponse) error {
 	var err error
 	var timemark mark.TimeMark
@@ -110,6 +112,7 @@ func (h *Handler) Read(ctx context.Context, req *user.ReadRequest, rsp *user.Rea
 	return nil
 }
 
+// Update defined todo
 func (h *Handler) Update(ctx context.Context, req *user.UpdateRequest, rsp *user.UpdateResponse) error {
 	var err error
 	var timemark mark.TimeMark
@@ -165,6 +168,7 @@ func (h *Handler) Update(ctx context.Context, req *user.UpdateRequest, rsp *user
 	return nil
 }
 
+// Delete defined todo
 func (h *Handler) Delete(ctx context.Context, req *user.DeleteRequest, rsp *user.DeleteResponse) error {
 	var err error
 	var timemark mark.TimeMark
@@ -193,6 +197,7 @@ func (h *Handler) Delete(ctx context.Context, req *user.DeleteRequest, rsp *user
 	return nil
 }
 
+// UpdatePassword defined todo
 func (h *Handler) UpdatePassword(ctx context.Context, req *user.UpdatePasswordRequest, rsp *user.UpdatePasswordResponse) error {
 	var err error
 	var timemark mark.TimeMark
@@ -234,6 +239,7 @@ func (h *Handler) UpdatePassword(ctx context.Context, req *user.UpdatePasswordRe
 	return nil
 }
 
+// List defined todo
 func (h *Handler) List(ctx context.Context, req *user.ListRequest, rsp *user.ListResponse) error {
 	var err error
 	var timemark mark.TimeMark

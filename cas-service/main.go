@@ -10,8 +10,8 @@ import (
 	"encoding/gob"
 	"net/url"
 
-	sAuth "github.com/2637309949/micro/v3/service/auth"
 	"github.com/2637309949/micro/v3/util/auth/token"
+	"github.com/2637309949/micro/v3/util/user"
 	"github.com/go-oauth2/oauth2/v4/errors"
 	"github.com/go-oauth2/oauth2/v4/manage"
 	"github.com/go-oauth2/oauth2/v4/server"
@@ -30,7 +30,8 @@ func main() {
 	// Create oauth2 server
 	manager := manage.NewDefaultManager()
 	// Adapter grpc apigateway jwt check
-	manager.MapAccessGenerate(auth.NewJWTAccessGenerate(token.WithPublicKey(sAuth.DefaultAuth.Options().PublicKey), token.WithPrivateKey(sAuth.DefaultAuth.Options().PrivateKey)))
+	privKey, pubKey, _ := user.GetJWTCerts()
+	manager.MapAccessGenerate(auth.NewJWTAccessGenerate(token.WithPublicKey(string(pubKey)), token.WithPrivateKey(string(privKey))))
 	manager.MustTokenStorage(store.NewMemoryTokenStore())
 	clientStore := store.NewClientStore()
 	manager.MapClientStorage(clientStore)
