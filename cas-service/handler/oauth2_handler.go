@@ -3,6 +3,7 @@ package handler
 import (
 	"comm/auth"
 	"comm/logger"
+	"comm/mark"
 	whttp "comm/service/web/http"
 	"fmt"
 	"net/http"
@@ -12,6 +13,9 @@ import (
 )
 
 func (h *Handler) OAuth2Authorize(rw http.ResponseWriter, r *http.Request) {
+	var timemark mark.TimeMark
+	defer timemark.Init(r.Context(), "OAuth2Authorize")()
+
 	acc, ok := auth.FromContext(r.Context())
 	if ok {
 		logger.Infof(r.Context(), "%v Do OAuth2Authorize", acc.Name)
@@ -37,6 +41,7 @@ func (h *Handler) OAuth2Authorize(rw http.ResponseWriter, r *http.Request) {
 	store.Delete("ReturnUri")
 	store.Save()
 
+	timemark.Mark("HandleAuthorizeRequest")
 	err = h.OAuthServer.HandleAuthorizeRequest(rw, r)
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusBadRequest)
@@ -44,10 +49,15 @@ func (h *Handler) OAuth2Authorize(rw http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) OAuth2Token(rw http.ResponseWriter, r *http.Request) {
+	var timemark mark.TimeMark
+	defer timemark.Init(r.Context(), "OAuth2Token")()
+
 	acc, ok := auth.FromContext(r.Context())
 	if ok {
 		logger.Infof(r.Context(), "%v Do OAuth2Token", acc.Name)
 	}
+
+	timemark.Mark("HandleTokenRequest")
 	err := h.OAuthServer.HandleTokenRequest(rw, r)
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
@@ -55,6 +65,9 @@ func (h *Handler) OAuth2Token(rw http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) OAuth2Affirm(rw http.ResponseWriter, r *http.Request) {
+	var timemark mark.TimeMark
+	defer timemark.Init(r.Context(), "OAuth2Affirm")()
+
 	store, err := session.Start(r.Context(), rw, r)
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
@@ -71,6 +84,9 @@ func (h *Handler) OAuth2Affirm(rw http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) UserAuthorizeHandler(rw http.ResponseWriter, r *http.Request) (userID string, err error) {
+	var timemark mark.TimeMark
+	defer timemark.Init(r.Context(), "UserAuthorizeHandler")()
+
 	store, err := session.Start(r.Context(), rw, r)
 	if err != nil {
 		return

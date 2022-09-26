@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"comm/mark"
 	"crypto/sha256"
 	"encoding/base64"
 	"fmt"
@@ -17,6 +18,9 @@ func codeChallengeS256(s string) string {
 }
 
 func (h *Handler) ClientAuthorize(rw http.ResponseWriter, r *http.Request) {
+	var timemark mark.TimeMark
+	defer timemark.Init(r.Context(), "ClientAuthorize")()
+
 	redirectUri, _ := url.QueryUnescape(r.URL.Query().Get("redirect_uri"))
 	state, _ := url.QueryUnescape(r.URL.Query().Get("state"))
 	base, err := url.Parse(redirectUri)
@@ -46,6 +50,9 @@ func (h *Handler) ClientAuthorize(rw http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) ClientToken(rw http.ResponseWriter, r *http.Request) {
+	var timemark mark.TimeMark
+	defer timemark.Init(r.Context(), "ClientToken")()
+
 	r.ParseForm()
 	redirectUri, _ := url.QueryUnescape(r.Form.Get("redirect_uri"))
 	if len(redirectUri) == 0 {
