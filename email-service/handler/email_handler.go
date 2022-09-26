@@ -18,6 +18,7 @@ import (
 	"gopkg.in/gomail.v2"
 )
 
+// validEmail defined todo
 func validEmail(email string) bool {
 	if len(email) == 0 {
 		return false
@@ -29,6 +30,7 @@ func validEmail(email string) bool {
 	return m
 }
 
+// Send defined todo
 func (h *Handler) Send(ctx context.Context, request *email.SendRequest, response *email.SendResponse) error {
 	var err error
 	var timemark mark.TimeMark
@@ -72,6 +74,7 @@ func (h *Handler) Send(ctx context.Context, request *email.SendRequest, response
 	return nil
 }
 
+// Classify defined todo
 func (h *Handler) Classify(ctx context.Context, request *email.ClassifyRequest, response *email.ClassifyResponse) error {
 	var err error
 	var timemark mark.TimeMark
@@ -129,6 +132,7 @@ func (h *Handler) Classify(ctx context.Context, request *email.ClassifyRequest, 
 	return nil
 }
 
+// sendEmail defined todo
 func (h *Handler) sendEmail(ctx context.Context, req *email.SendRequest) error {
 	fromName := h.Smtp.UserName
 	if len(req.From) > 0 {
