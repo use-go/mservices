@@ -8,6 +8,7 @@ import (
 	"comm/auth"
 	"comm/errors"
 	"comm/logger"
+	"comm/mark"
 	"comm/service"
 	"proto/event"
 
@@ -17,6 +18,10 @@ import (
 
 // DeleteInfo defined TODO
 func (h *Handler) Publish(ctx context.Context, req *event.PublishRequest, rsp *event.PublishResponse) error {
+	var err error
+	var timemark mark.TimeMark
+	defer timemark.Init(ctx, "Publish")()
+
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Publish", acc.Name)
@@ -34,6 +39,10 @@ func (h *Handler) Publish(ctx context.Context, req *event.PublishRequest, rsp *e
 }
 
 func (h *Handler) Consume(ctx context.Context, req *event.ConsumeRequest, stream event.Event_ConsumeStream) error {
+	var err error
+	var timemark mark.TimeMark
+	defer timemark.Init(ctx, "Consume")()
+
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Consume", acc.Name)
@@ -84,6 +93,10 @@ func (h *Handler) Consume(ctx context.Context, req *event.ConsumeRequest, stream
 }
 
 func (h *Handler) Read(ctx context.Context, req *event.ReadRequest, rsp *event.ReadResponse) error {
+	var err error
+	var timemark mark.TimeMark
+	defer timemark.Init(ctx, "Read")()
+
 	acc, ok := auth.FromContext(ctx)
 	if ok {
 		logger.Infof(ctx, "%v Do Read", acc.Name)

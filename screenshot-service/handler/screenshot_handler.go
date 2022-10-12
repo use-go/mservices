@@ -13,6 +13,7 @@ import (
 	"comm/errors"
 	"comm/logger"
 	"comm/mark"
+	"comm/service"
 	"proto/screenshot"
 
 	"github.com/google/uuid"
@@ -32,9 +33,7 @@ func (h *Handler) Screenshot(ctx context.Context, req *screenshot.ScreenshotRequ
 
 	imageName := uuid.New().String() + ".png"
 	imagePath := filepath.Join(screenshotPath, imageName)
-	defer func() {
-		os.Remove(imagePath)
-	}()
+	defer func() { os.Remove(imagePath) }()
 	width := "800"
 	height := "600"
 	if req.Width != 0 {
@@ -52,12 +51,12 @@ func (h *Handler) Screenshot(ctx context.Context, req *screenshot.ScreenshotRequ
 	logger.Info(ctx, string(outp))
 	if err != nil {
 		logger.Error(ctx, string(outp)+err.Error())
-		return errors.InternalServerError("error taking screenshot")
+		return errors.InternalServerError(service.GetName(), "error taking screenshot")
 	}
 	file, err := ioutil.ReadFile(imagePath)
 	if err != nil {
 		logger.Errorf(ctx, "error reading file %s", err)
-		return errors.InternalServerError("error taking screenshot")
+		return errors.InternalServerError(service.GetName(), "error taking screenshot")
 	}
 	base := base64.StdEncoding.EncodeToString(file)
 	rsp.Data = []byte("data:image/png;base64, " + base)
