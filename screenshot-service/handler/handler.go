@@ -1,3 +1,9 @@
 package handler
 
-type Handler struct{}
+import (
+	"proto/id"
+)
+
+type Handler struct {
+	IdService id.IdService
+}

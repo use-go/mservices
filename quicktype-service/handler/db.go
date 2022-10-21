@@ -3,7 +3,7 @@ package handler
 import (
 	"fmt"
 	"net/http"
-	"quicktype-service/api"
+	"quicktype-service/model/api"
 
 	"github.com/xormplus/xorm"
 )

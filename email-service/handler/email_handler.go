@@ -114,7 +114,6 @@ func (h *Handler) Classify(ctx context.Context, request *email.ClassifyRequest, 
 			logger.Errorf(ctx, "Error classifying email %v", err)
 			return errors.InternalServerError("email", "spam.Classify %v", err)
 		}
-
 	}
 	rc, err := h.Spamc.Report(ctx, &bf, spamc.Header{}.Set("Content-Length", fmt.Sprintf("%d", bf.Len())))
 	if err != nil {

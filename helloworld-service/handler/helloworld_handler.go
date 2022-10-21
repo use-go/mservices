@@ -38,16 +38,16 @@ func (h *Handler) DeleteInfo(ctx context.Context, req *helloworld.DeleteInfoRequ
 		return err
 	}
 
-	where := model.Info{
+	infoFilter := model.Info{
 		Id: req.Id,
 	}
-	err = h.DeleteInfoDB(ctx, session, &where)
+	err = h.DeleteInfoDB(ctx, session, &infoFilter)
 	timemark.Mark("DeleteInfoDB")
 	if err != nil {
 		logger.Errorf(ctx, "DeleteInfoDB failed. [%v]", err)
 		return errors.InternalServerError("deleteInfoDB failed %v", err.Error())
 	}
-	rsp.Id = where.Id
+	rsp.Id = infoFilter.Id
 	return nil
 }
 
@@ -154,11 +154,11 @@ func (h *Handler) QueryInfoDetail(ctx context.Context, req *helloworld.QueryInfo
 		return err
 	}
 
-	where := model.Info{
+	infoFilter := model.Info{
 		Id: req.Id,
 	}
 	info := model.Info{}
-	err = h.QueryInfoDetailDB(ctx, session, &where, &info)
+	err = h.QueryInfoDetailDB(ctx, session, &infoFilter, &info)
 	timemark.Mark("QueryInfoDetailDB")
 	if err != nil {
 		return errors.InternalServerError(service.GetName(), "QueryInfoDetailDB failed %v", err)
@@ -194,10 +194,10 @@ func (h *Handler) QueryInfo(ctx context.Context, req *helloworld.QueryInfoReques
 
 	var totalCount int64
 	var lst []*model.Info
-	where := model.Info{
+	infoFilter := model.Info{
 		Name: req.GetName(),
 	}
-	err = h.QueryInfoDB(ctx, session, &where, &lst, &totalCount)
+	err = h.QueryInfoDB(ctx, session, &infoFilter, &lst, &totalCount)
 	timemark.Mark("QueryInfoDB")
 	if err != nil {
 		return errors.InternalServerError(service.GetName(), "QueryInfoDB failed %v", err)

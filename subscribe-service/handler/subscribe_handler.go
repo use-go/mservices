@@ -27,7 +27,6 @@ func (h *Handler) Publish(ctx context.Context, req *subscribe.PublishRequest, rs
 	}
 
 	logger.Infof(ctx, "Publishing to %v\n", req.Topic)
-
 	topic := path.Join("event", req.Topic)
 	err = broker.Publish(topic, &broker.Message{Body: req.Message})
 	timemark.Mark("Publish")

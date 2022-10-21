@@ -5,6 +5,7 @@ import (
 	"comm/logger"
 	"comm/service"
 
+	"proto/id"
 	"proto/screenshot"
 	"screenshot-service/handler"
 )
@@ -14,7 +15,9 @@ func main() {
 	srv := service.New(service.Name("screenshot"))
 
 	// Create handler
-	hdl := handler.Handler{}
+	hdl := handler.Handler{
+		IdService: id.NewIdService("id", srv.Client()),
+	}
 
 	// Register handler
 	screenshot.RegisterScreenshotHandler(srv.Server(), &hdl)

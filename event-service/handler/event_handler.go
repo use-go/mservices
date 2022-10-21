@@ -18,7 +18,6 @@ import (
 
 // DeleteInfo defined TODO
 func (h *Handler) Publish(ctx context.Context, req *event.PublishRequest, rsp *event.PublishResponse) error {
-	var err error
 	var timemark mark.TimeMark
 	defer timemark.Init(ctx, "Publish")()
 
@@ -66,7 +65,6 @@ func (h *Handler) Consume(ctx context.Context, req *event.ConsumeRequest, stream
 		}
 	}
 	opts = append(opts, events.WithOffset(offset))
-
 	sub, err := events.Consume(topic, opts...)
 	if err != nil {
 		return errors.InternalServerError("event.subscribe", "failed to subscribe to event")
@@ -104,10 +102,7 @@ func (h *Handler) Read(ctx context.Context, req *event.ReadRequest, rsp *event.R
 
 	// create tenant based topics
 	topic := path.Join("event", req.Topic)
-
-	//limit := uint(25)
-	//offset := uint(0)
-	var opts []events.ReadOption
+	opts := []events.ReadOption{}
 
 	if req.Limit > 0 {
 		opts = append(opts, events.ReadLimit(uint(req.Limit)))
@@ -118,19 +113,16 @@ func (h *Handler) Read(ctx context.Context, req *event.ReadRequest, rsp *event.R
 	}
 
 	logger.Infof(ctx, "Reading %v limit: %v offset: %v\n", req.Topic, req.Limit, req.Offset)
-
 	events, err := events.Read(topic, opts...)
 	if err != nil {
 		return err
 	}
 
 	logger.Infof(ctx, "Events read %v", len(events))
-
+	// unmarshal the message into a struct
 	for _, ev := range events {
-		// unmarshal the message into a struct
 		d := &structpb.Struct{}
 		d.UnmarshalJSON(ev.Payload)
-
 		rsp.Events = append(rsp.Events, &event.Ev{
 			Id:        ev.ID,
 			Timestamp: ev.Timestamp.Format(time.RFC3339Nano),

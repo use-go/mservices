@@ -14,13 +14,15 @@ import (
 	"comm/logger"
 	"comm/mark"
 	"comm/service"
+	"proto/id"
 	"proto/screenshot"
-
-	"github.com/google/uuid"
 )
 
-const screenshotPath = "/usr/src/app"
+var (
+	screenshotPath = "/usr/src/app"
+)
 
+// Screenshot defined todo
 func (h *Handler) Screenshot(ctx context.Context, req *screenshot.ScreenshotRequest, rsp *screenshot.ScreenshotResponse) error {
 	var err error
 	var timemark mark.TimeMark
@@ -31,11 +33,15 @@ func (h *Handler) Screenshot(ctx context.Context, req *screenshot.ScreenshotRequ
 		logger.Infof(ctx, "%v Do Screenshot", acc.Name)
 	}
 
-	imageName := uuid.New().String() + ".png"
+	gtResp, err := h.IdService.Generate(ctx, &id.GenerateRequest{Type: "uuid"})
+	if err != nil {
+		logger.Error(ctx, err.Error())
+		return errors.InternalServerError(service.GetName(), "generate id error")
+	}
+	imageName := gtResp.Id + ".png"
 	imagePath := filepath.Join(screenshotPath, imageName)
 	defer func() { os.Remove(imagePath) }()
-	width := "800"
-	height := "600"
+	width, height := "800", "600"
 	if req.Width != 0 {
 		width = fmt.Sprintf("%v", req.Width)
 	}

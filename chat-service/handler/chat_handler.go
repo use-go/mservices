@@ -15,7 +15,7 @@ import (
 	"github.com/google/uuid"
 )
 
-const (
+var (
 	chatStoreKeyPrefix    = "chats/"
 	chatEventKeyPrefix    = "chats/"
 	messageStoreKeyPrefix = "messages/"
@@ -29,8 +29,6 @@ func (h *Handler) Create(ctx context.Context, req *chat.CreateRequest, rsp *chat
 
 	// generate a unique id for the chat
 	groupId := uuid.New().String()
-
-	// create a new group
 	group := &chat.Group{
 		Id:          groupId,
 		Name:        req.Name,
@@ -54,7 +52,6 @@ func (h *Handler) Create(ctx context.Context, req *chat.CreateRequest, rsp *chat
 
 	// return the group
 	rsp.Group = group
-
 	return nil
 }
 
@@ -109,7 +106,6 @@ func (h *Handler) Delete(ctx context.Context, req *chat.DeleteRequest, rsp *chat
 	}
 
 	// TODO: notify users of the event that the group is deleted
-
 	return nil
 }
 
@@ -248,7 +244,6 @@ func (h *Handler) Invite(ctx context.Context, req *chat.InviteRequest, rsp *chat
 	}
 
 	rsp.Group = group
-
 	return nil
 }
 
@@ -326,7 +321,6 @@ func (h *Handler) Send(ctx context.Context, req *chat.SendRequest, rsp *chat.Sen
 
 	// return the response
 	rsp.Message = msg
-
 	return nil
 }
 
@@ -480,7 +474,6 @@ func (h *Handler) Kick(ctx context.Context, req *chat.KickRequest, rsp *chat.Kic
 	// TODO: send leave message
 	// TODO: disconnect the actual event consumption
 	rsp.Group = group
-
 	return nil
 }
 
@@ -536,7 +529,6 @@ func (h *Handler) Leave(ctx context.Context, req *chat.LeaveRequest, rsp *chat.L
 	// TODO: send leave message
 	// TODO: disconnect the actual event consumption
 	rsp.Group = group
-
 	return nil
 }
 
@@ -552,8 +544,7 @@ func (h *Handler) createMessage(msg *chat.Message) error {
 	}
 
 	// create a new record
-	rec := store.NewRecord(storekey, msg)
-
 	// record the messages client id
+	rec := store.NewRecord(storekey, msg)
 	return store.Write(rec)
 }

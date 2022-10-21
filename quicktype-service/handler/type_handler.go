@@ -7,7 +7,7 @@ import (
 	whttp "comm/service/web/http"
 	"errors"
 	"net/http"
-	"quicktype-service/api"
+	"quicktype-service/model/api"
 )
 
 // Index defined TODO

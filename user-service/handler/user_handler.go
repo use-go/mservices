@@ -103,8 +103,8 @@ func (h *Handler) Read(ctx context.Context, req *user.ReadRequest, rsp *user.Rea
 		return err
 	}
 
-	where, user := model.User{Id: req.Id, Username: req.Username, Email: req.Email}, model.User{}
-	err = h.QueryUserDetailDB(ctx, session, &where, &user)
+	userFilter, user := model.User{Id: req.Id, Username: req.Username, Email: req.Email}, model.User{}
+	err = h.QueryUserDetailDB(ctx, session, &userFilter, &user)
 	if err != nil {
 		return err
 	}
@@ -259,11 +259,11 @@ func (h *Handler) List(ctx context.Context, req *user.ListRequest, rsp *user.Lis
 	session = db.SetOrder(ctx, session, req)
 
 	list := []model.User{}
-	where := model.User{
+	userFilter := model.User{
 		Username: req.Username,
 		Email:    req.Email,
 	}
-	err = h.QueryUserDB(ctx, session, &where, &list)
+	err = h.QueryUserDB(ctx, session, &userFilter, &list)
 	if err != nil {
 		return errors.InternalServerError(service.GetName(), "QueryUserDB failed %v", err.Error())
 	}
